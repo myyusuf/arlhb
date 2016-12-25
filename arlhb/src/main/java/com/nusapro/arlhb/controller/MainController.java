@@ -14,6 +14,6 @@ public class MainController {
 	@RequestMapping("/")
     @ResponseBody
     String home() {
-        return "Info : Arlhb ";
+        return "Info : Arlhb. ";
     }
 }
