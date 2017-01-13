@@ -2313,7 +2313,7 @@
 	      onValidationSuccess: function onValidationSuccess(formValue) {
 	        $.ajax({
 	          method: "PUT",
-	          url: "/roles/" + role.code,
+	          url: "/roles/" + role.roleId,
 	          data: JSON.stringify(formValue),
 	          beforeSend: function beforeSend(xhr) {
 	            xhr.setRequestHeader('Accept', 'application/json');
@@ -2351,7 +2351,7 @@
 	        if (r == true) {
 	          $.ajax({
 	            method: "DELETE",
-	            url: "/roles/" + role.code,
+	            url: "/roles/" + role.roleId,
 	            data: {}
 	          }).done(function () {
 	            $("#successNotification").jqxNotification("open");
