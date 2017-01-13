@@ -22,9 +22,9 @@ public interface RoleMapper {
 	@Insert("INSERT into role(roleId, roleName) VALUES(#{roleId}, #{roleName})")
 	void insertRole(Role role);
 	
-	@Update("UPDATE role SET roleName=#{roleName} WHERE roleId =#{roleId}")
+	@Update("UPDATE role SET roleName=#{roleName} WHERE roleId = #{roleId}")
 	void updateRole(Role role);
 	
-	@Delete("DELETE FROM role WHERE roleId =#{roleId}")
+	@Delete("DELETE FROM role WHERE roleId = #{roleId}")
 	void deleteRole(int id);
 }
