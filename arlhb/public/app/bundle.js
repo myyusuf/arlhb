@@ -76,21 +76,25 @@
 
 	var _UserList2 = _interopRequireDefault(_UserList);
 
+	var _RoleList = __webpack_require__(20);
+
+	var _RoleList2 = _interopRequireDefault(_RoleList);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var splitter = new _Splitter2.default();
 	splitter.render($('#content-inside'));
 
 	var data = [{
-	  label: "User",
+	  label: "Security",
 	  expanded: true,
 	  items: [{
-	    id: 'user_list',
-	    label: "Daftar User",
+	    id: 'role_list',
+	    label: "Roles",
 	    selected: true
 	  }]
 	}, {
-	  label: "Laporan",
+	  label: "Report",
 	  expanded: true,
 	  items: [{
 	    id: 'report1',
@@ -103,14 +107,15 @@
 	  onClick: function onClick(item) {
 
 	    if (!tabs.selectTabByTitle(item.label)) {
-	      if (item.id == 'user_list') {
-	        tabs.add(item.id, item.label, userList);
+	      if (item.id == 'role_list') {
+	        tabs.add(item.id, item.label, roleList);
 	      }
 	    }
 	  }
 	});
 
 	var userList = new _UserList2.default();
+	var roleList = new _RoleList2.default();
 
 	var navigationBar = new _NavigationBar2.default([{
 	  title: 'Application',
@@ -123,9 +128,9 @@
 	// var workspaceView = new WorkspaceView();
 
 	var tabs = new _Tabs2.default([{
-	  id: 'user_list',
-	  title: 'Daftar User',
-	  content: userList
+	  id: 'role_list',
+	  title: 'Roles',
+	  content: roleList
 	}]);
 
 	tabs.render($('#right-content'));
@@ -1920,6 +1925,467 @@
 	}();
 
 	exports.default = EditWindow;
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Utils = __webpack_require__(3);
+
+	var _Button = __webpack_require__(8);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _ToggleButton = __webpack_require__(10);
+
+	var _ToggleButton2 = _interopRequireDefault(_ToggleButton);
+
+	var _TextBox = __webpack_require__(11);
+
+	var _TextBox2 = _interopRequireDefault(_TextBox);
+
+	var _DataGrid = __webpack_require__(12);
+
+	var _DataGrid2 = _interopRequireDefault(_DataGrid);
+
+	var _AddRoleWindow = __webpack_require__(21);
+
+	var _AddRoleWindow2 = _interopRequireDefault(_AddRoleWindow);
+
+	var _EditRoleWindow = __webpack_require__(22);
+
+	var _EditRoleWindow2 = _interopRequireDefault(_EditRoleWindow);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var RoleList = function () {
+	  function RoleList() {
+	    _classCallCheck(this, RoleList);
+
+	    this.id = (0, _Utils.guid)();
+	  }
+
+	  _createClass(RoleList, [{
+	    key: 'render',
+	    value: function render(container) {
+
+	      var _this = this;
+
+	      var url = "/roles";
+
+	      var source = {
+	        datatype: "json",
+	        datafields: [{ name: 'roleId', type: 'int' }, { name: 'roleName', type: 'string' }],
+	        id: "roleId",
+	        url: url
+	      };
+
+	      var onSearch = function onSearch(data) {
+	        data['searchTxt'] = searchTextBox.getValue();
+	        return data;
+	      };
+
+	      var cellsrenderer = function cellsrenderer(row, columnfield, value, defaulthtml, columnproperties) {
+	        var roleTypeDescription = "";
+
+	        if (value == 1) {
+	          roleTypeDescription = "Role Type";
+	        }
+
+	        return '<span style="margin: 4px; float: ' + columnproperties.cellsalign + ';">' + roleTypeDescription + '</span>';
+	      };
+
+	      var dataGridOptions = {
+	        width: '100%',
+	        height: '100%',
+	        pageable: true,
+	        altrows: true,
+	        theme: 'metro',
+	        virtualmode: true,
+	        rendergridrows: function rendergridrows(params) {
+	          return params.data;
+	        },
+	        columns: [{ text: 'Role Id', datafield: 'roleId', width: '50%' }, { text: 'Role Name', datafield: 'roleName', width: '50%' }],
+	        groups: []
+	      };
+
+	      this.dataGrid = new _DataGrid2.default({
+	        source: source,
+	        onSearch: onSearch,
+	        onRowDoubleClick: function onRowDoubleClick(data) {
+	          var editRoleWindow = new _EditRoleWindow2.default({
+	            data: data,
+	            onSaveSuccess: function onSaveSuccess() {
+	              _this.dataGrid.refresh();
+	            }
+	          });
+	          editRoleWindow.render($('#dialogWindowContainer'));
+	          editRoleWindow.open();
+	        },
+	        dataGridOptions: dataGridOptions
+	      });
+
+	      var searchTextBox = new _TextBox2.default({ placeHolder: 'Role Name', width: 250, height: 24 });
+	      var searchButton = new _Button2.default({
+	        imgSrc: '/arlhb_assets/images/search.png',
+	        theme: 'metro',
+	        width: 30,
+	        height: 26,
+	        onClick: function onClick() {
+	          _this.dataGrid.refresh();
+	        }
+	      });
+
+	      var addRoleButton = new _Button2.default({
+	        title: 'Add Role',
+	        template: 'primary',
+	        height: 26,
+	        onClick: function onClick() {
+	          var addRoleWindow = new _AddRoleWindow2.default({
+	            onSaveSuccess: function onSaveSuccess() {
+	              _this.dataGrid.refresh();
+	            }
+	          });
+	          addRoleWindow.render($('#dialogWindowContainer'));
+	          addRoleWindow.open();
+	        }
+	      });
+
+	      var table = $('<table style="height: 100%; width: 100%; margin: -3px; "></table>');
+	      var tr = $('<tr></tr>');
+	      var td = $('<td style="padding: 0; height: 40px;"></td>');
+	      table.appendTo(container);
+	      tr.appendTo(table);
+	      td.appendTo(tr);
+
+	      var innerTable = $('<table style="height: 100%; width: 100%;"></table>');
+	      var innerTr = $('<tr></tr>');
+	      var innerTd = $('<td style="padding-top: 6px; padding-left: 10px; padding-right: 8px; width: 50px; height: 100%;"></td>');
+	      innerTable.appendTo(td);
+	      innerTr.appendTo(innerTable);
+	      innerTd.appendTo(innerTr);
+	      addRoleButton.render(innerTd);
+
+	      innerTd = $('<td style="padding-top: 6px; width: 200px; height: 100%;"></td>');
+	      innerTd.appendTo(innerTr);
+	      searchTextBox.render(innerTd);
+
+	      innerTd = $('<td style="padding-top: 6px; height: 100%; "></td>');
+	      var _tempContainer = $('<div style="margin-left: -5px;"></div>');
+	      _tempContainer.appendTo(innerTd);
+	      innerTd.appendTo(innerTr);
+	      searchButton.render(_tempContainer);
+
+	      tr = $('<tr></tr>');
+	      td = $('<td style="padding: 0;"></td>');
+	      tr.appendTo(table);
+	      td.appendTo(tr);
+
+	      this.dataGrid.render(td);
+	    }
+	  }]);
+
+	  return RoleList;
+	}();
+
+	exports.default = RoleList;
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Utils = __webpack_require__(3);
+
+	var _Button = __webpack_require__(8);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _Form = __webpack_require__(14);
+
+	var _Form2 = _interopRequireDefault(_Form);
+
+	var _AddWindow = __webpack_require__(15);
+
+	var _AddWindow2 = _interopRequireDefault(_AddWindow);
+
+	var _TextBox = __webpack_require__(11);
+
+	var _TextBox2 = _interopRequireDefault(_TextBox);
+
+	var _TextArea = __webpack_require__(16);
+
+	var _TextArea2 = _interopRequireDefault(_TextArea);
+
+	var _Label = __webpack_require__(17);
+
+	var _Label2 = _interopRequireDefault(_Label);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var AddRoleWindow = function () {
+	  function AddRoleWindow(options) {
+	    _classCallCheck(this, AddRoleWindow);
+
+	    var _this = this;
+
+	    this.id = (0, _Utils.guid)();
+
+	    var role = options.data;
+	    this.onSaveSuccess = options.onSaveSuccess;
+
+	    var roleIdTextBox = new _TextBox2.default({ height: 25, width: '90%' });
+	    var roleNameTextBox = new _TextBox2.default({ height: 25, width: '90%' });
+
+	    var formItems = [{
+	      name: 'roleId',
+	      label: 'Role ID',
+	      content: roleIdTextBox,
+	      validation: {
+	        type: 'TEXTBOX',
+	        rule: 'required'
+	      }
+	    }, {
+	      name: 'roleName',
+	      label: 'Role Name',
+	      content: roleNameTextBox,
+	      validation: {
+	        type: 'TEXTBOX',
+	        rule: 'required'
+	      }
+	    }];
+	    var formOptions = {
+	      items: formItems,
+	      labelColumnWidth: '120px',
+	      onValidationSuccess: function onValidationSuccess(formValue) {
+	        $.ajax({
+	          method: "POST",
+	          url: "/roles",
+	          data: JSON.stringify(formValue),
+	          beforeSend: function beforeSend(xhr) {
+	            xhr.setRequestHeader('Accept', 'application/json');
+	            xhr.setRequestHeader('Content-Type', 'application/json');
+	          }
+	        }).done(function () {
+	          $("#successNotification").jqxNotification("open");
+	          _this.window.close();
+	          if (_this.onSaveSuccess) {
+	            _this.onSaveSuccess();
+	          }
+	        }).fail(function (jqXHR, textStatus, errorThrown) {
+	          var errorMessage = 'Proses gagal. Status : ' + jqXHR.status + ' [' + jqXHR.statusText + '] : ' + jqXHR.responseText;
+	          $("#errorNotification").html('<div>' + errorMessage + '</div>');
+	          $("#errorNotification").jqxNotification("open");
+	        });
+	      }
+	    };
+
+	    var form = new _Form2.default(formOptions);
+
+	    this.window = new _AddWindow2.default({
+	      width: 340,
+	      height: 180,
+	      title: 'Add Role',
+	      content: form,
+	      onSave: function onSave() {
+	        form.validate();
+	      },
+	      onCancel: function onCancel() {
+	        _this.window.close();
+	      }
+	    });
+	  }
+
+	  _createClass(AddRoleWindow, [{
+	    key: 'render',
+	    value: function render(container) {
+
+	      var _this = this;
+	      this.window.render(container);
+	    }
+	  }, {
+	    key: 'open',
+	    value: function open() {
+	      this.window.open();
+	    }
+	  }]);
+
+	  return AddRoleWindow;
+	}();
+
+	exports.default = AddRoleWindow;
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Utils = __webpack_require__(3);
+
+	var _Button = __webpack_require__(8);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _Form = __webpack_require__(14);
+
+	var _Form2 = _interopRequireDefault(_Form);
+
+	var _EditWindow = __webpack_require__(19);
+
+	var _EditWindow2 = _interopRequireDefault(_EditWindow);
+
+	var _TextBox = __webpack_require__(11);
+
+	var _TextBox2 = _interopRequireDefault(_TextBox);
+
+	var _TextArea = __webpack_require__(16);
+
+	var _TextArea2 = _interopRequireDefault(_TextArea);
+
+	var _Label = __webpack_require__(17);
+
+	var _Label2 = _interopRequireDefault(_Label);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var EditRoleWindow = function () {
+	  function EditRoleWindow(options) {
+	    _classCallCheck(this, EditRoleWindow);
+
+	    var _this = this;
+
+	    this.id = (0, _Utils.guid)();
+
+	    var role = options.data;
+	    this.onSaveSuccess = options.onSaveSuccess;
+
+	    var roleIdTextBox = new _TextBox2.default({ value: role.roleId, height: 25, width: '90%' });
+	    var roleNameTextBox = new _TextBox2.default({ value: role.roleName, height: 25, width: '90%' });
+
+	    var formItems = [{
+	      name: 'roleId',
+	      label: 'Role ID',
+	      content: roleIdTextBox,
+	      validation: {
+	        type: 'TEXTBOX',
+	        rule: 'required'
+	      }
+	    }, {
+	      name: 'roleName',
+	      label: 'Role Name',
+	      content: roleNameTextBox,
+	      validation: {
+	        type: 'TEXTBOX',
+	        rule: 'required'
+	      }
+	    }];
+	    var formOptions = {
+	      items: formItems,
+	      labelColumnWidth: '120px',
+	      onValidationSuccess: function onValidationSuccess(formValue) {
+	        $.ajax({
+	          method: "PUT",
+	          url: "/roles/" + role.code,
+	          data: JSON.stringify(formValue),
+	          beforeSend: function beforeSend(xhr) {
+	            xhr.setRequestHeader('Accept', 'application/json');
+	            xhr.setRequestHeader('Content-Type', 'application/json');
+	          }
+	        }).done(function () {
+	          $("#successNotification").jqxNotification("open");
+	          _this.window.close();
+	          if (_this.onSaveSuccess) {
+	            _this.onSaveSuccess();
+	          }
+	        }).fail(function (jqXHR, textStatus, errorThrown) {
+	          var errorMessage = 'Proses gagal. Status : ' + jqXHR.status + ' [' + jqXHR.statusText + '] : ' + jqXHR.responseText;
+	          $("#errorNotification").html('<div>' + errorMessage + '</div>');
+	          $("#errorNotification").jqxNotification("open");
+	        });
+	      }
+	    };
+
+	    var form = new _Form2.default(formOptions);
+
+	    this.window = new _EditWindow2.default({
+	      width: 340,
+	      height: 180,
+	      title: 'Edit Role',
+	      content: form,
+	      onSave: function onSave() {
+	        form.validate();
+	      },
+	      onCancel: function onCancel() {
+	        _this.window.close();
+	      },
+	      onDelete: function onDelete() {
+	        var r = confirm("Proses hapus data akan dilakukan!");
+	        if (r == true) {
+	          $.ajax({
+	            method: "DELETE",
+	            url: "/roles/" + role.code,
+	            data: {}
+	          }).done(function () {
+	            $("#successNotification").jqxNotification("open");
+	            _this.window.close();
+	            if (_this.onSaveSuccess) {
+	              _this.onSaveSuccess();
+	            }
+	          }).fail(function () {
+	            var errorMessage = 'Proses gagal. Status : ' + jqXHR.status + ' [' + jqXHR.statusText + '] : ' + jqXHR.responseText;
+	            $("#errorNotification").html('<div>' + errorMessage + '</div>');
+	            $("#errorNotification").jqxNotification("open");
+	          });
+	        }
+	      }
+	    });
+	  }
+
+	  _createClass(EditRoleWindow, [{
+	    key: 'render',
+	    value: function render(container) {
+	      var _this = this;
+	      this.window.render(container);
+	    }
+	  }, {
+	    key: 'open',
+	    value: function open() {
+	      this.window.open();
+	    }
+	  }]);
+
+	  return EditRoleWindow;
+	}();
+
+	exports.default = EditRoleWindow;
 
 /***/ }
 /******/ ]);
