@@ -114,7 +114,28 @@
 	  }
 	});
 
-	var menu = new _Menu2.default({ data: (0, _ApplicationData.getMenuData)() });
+	var menu = new _Menu2.default({
+	  data: (0, _ApplicationData.getMenuData)(),
+	  onClick: function onClick(id) {
+
+	    var label = '';
+
+	    if (id == '58') {
+	      label = 'Roles';
+	    } else if (id == '59') {
+	      label = 'User';
+	    }
+
+	    if (!tabs.selectTabByTitle(label)) {
+	      if (id == '58') {
+	        tabs.add(id, label, roleList);
+	      } else if (id == '59') {
+	        tabs.add(id, label, userList);
+	      }
+	    }
+	  }
+
+	});
 	menu.render($('#top-menu'));
 
 	var userList = new _UserList2.default();
@@ -696,7 +717,7 @@
 
 	      var source = {
 	        datatype: "json",
-	        datafields: [{ name: 'id', type: 'int' }, { name: 'code', type: 'string' }, { name: 'name', type: 'string' }, { name: 'userType', type: 'int' }, { name: 'description', type: 'string' }],
+	        datafields: [{ name: 'id', type: 'int' }, { name: 'firstName', type: 'string' }, { name: 'lastName', type: 'string' }, { name: 'status', type: 'String' }, { name: 'depo', type: 'string' }, { name: 'time', type: 'date' }, { name: 'role', type: 'date' }],
 	        id: "id",
 	        url: url
 	      };
@@ -706,15 +727,7 @@
 	        return data;
 	      };
 
-	      var cellsrenderer = function cellsrenderer(row, columnfield, value, defaulthtml, columnproperties) {
-	        var userTypeDescription = "";
-
-	        if (value == 1) {
-	          userTypeDescription = "User Type";
-	        }
-
-	        return '<span style="margin: 4px; float: ' + columnproperties.cellsalign + ';">' + userTypeDescription + '</span>';
-	      };
+	      var columnWidth = 100 / 7 + '%';
 
 	      var dataGridOptions = {
 	        width: '100%',
@@ -726,7 +739,7 @@
 	        rendergridrows: function rendergridrows(params) {
 	          return params.data;
 	        },
-	        columns: [{ text: 'Kode', datafield: 'code', width: '20%' }, { text: 'Nama', datafield: 'name', width: '20%' }, { text: 'Tipe', datafield: 'userType', cellsrenderer: cellsrenderer, width: '30%' }, { text: 'Deskripsi', datafield: 'description', width: '30%' }],
+	        columns: [{ text: 'id', datafield: 'id', width: columnWidth }, { text: 'First Name', datafield: 'firstName', width: columnWidth }, { text: 'Last Name', datafield: 'lastName', width: columnWidth }, { text: 'Status', datafield: 'status', width: columnWidth }, { text: 'Depo', datafield: 'depo', width: columnWidth }, { text: 'Time', datafield: 'time', width: columnWidth }, { text: 'Role', datafield: 'role', width: columnWidth }],
 	        groups: []
 	      };
 
@@ -2032,7 +2045,7 @@
 
 	      var source = {
 	        datatype: "json",
-	        datafields: [{ name: 'roleId', type: 'int' }, { name: 'roleName', type: 'string' }],
+	        datafields: [{ name: 'roleId', type: 'int' }, { name: 'roleName', type: 'string' }, { name: 'description', type: 'string' }],
 	        id: "roleId",
 	        url: url
 	      };
@@ -2062,7 +2075,7 @@
 	        rendergridrows: function rendergridrows(params) {
 	          return params.data;
 	        },
-	        columns: [{ text: 'Role Id', datafield: 'roleId', width: '50%' }, { text: 'Role Name', datafield: 'roleName', width: '50%' }],
+	        columns: [{ text: 'Role Id', datafield: 'roleId', width: '30%' }, { text: 'Role Name', datafield: 'roleName', width: '30%' }, { text: 'Description', datafield: 'description', width: '40%' }],
 	        groups: []
 	      };
 
