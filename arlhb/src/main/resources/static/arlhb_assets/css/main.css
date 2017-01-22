@@ -15,16 +15,16 @@ body, #header, #top-menu, #menu, #footer, #content {
 }
 #top-menu {
   background-color: #f1f3fa;
-  top:0px;
+  top: 40px;
   left:0;
   right:0;
   width:auto;
-  height:0px;
+  height: 30px;
 }
 #menu {
   background-color: black;
   left:0;
-  top:40px;
+  top: 70px;
   bottom:25px;
   height:auto;
   width:200px;
@@ -40,7 +40,7 @@ body, #header, #top-menu, #menu, #footer, #content {
 #content {
   background-color: gray;
   right:0;
-  top:40px;
+  top: 70px;
   bottom:25px;
   left: 0px;
   min-width:200px;

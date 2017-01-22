@@ -20,22 +20,22 @@ public interface RoleMapper {
         @Result(property = "roleId", column = "role_id"),
         @Result(property = "roleName", column = "role_name")
       })
-	@Select("SELECT * FROM tblrole WHERE role_id = #{roleId}")
+	@Select("SELECT * FROM role WHERE role_id = #{roleId}")
     Role findById(@Param("roleId") int roleId);
 	
 	@Results({
         @Result(property = "roleId", column = "role_id"),
         @Result(property = "roleName", column = "role_name")
       })
-	@Select("SELECT * FROM tblrole")
+	@Select("SELECT * FROM role")
 	List<Role> findAll();
 	
-	@Insert("INSERT into tblrole(role_id, role_name) VALUES(#{roleId}, #{roleName})")
+	@Insert("INSERT into role(role_id, role_name) VALUES(#{roleId}, #{roleName})")
 	void create(Role role);
 	
-	@Update("UPDATE tblrole SET role_name=#{roleName} WHERE role_id = #{roleId}")
+	@Update("UPDATE role SET role_name=#{roleName} WHERE role_id = #{roleId}")
 	void update(Role role);
 	
-	@Delete("DELETE FROM tblrole WHERE role_id = #{roleId}")
+	@Delete("DELETE FROM role WHERE role_id = #{roleId}")
 	void delete(int id);
 }
