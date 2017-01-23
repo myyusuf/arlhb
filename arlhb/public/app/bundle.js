@@ -82,37 +82,45 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var splitter = new _Splitter2.default();
-	splitter.render($('#content-inside'));
+	// var splitter = new Splitter();
+	// splitter.render($('#content-inside'));
 
-	var data = [{
-	  label: "Security",
-	  expanded: true,
-	  items: [{
-	    id: 'role_list',
-	    label: "Roles",
-	    selected: true
-	  }]
-	}, {
-	  label: "Report",
-	  expanded: true,
-	  items: [{
-	    id: 'report1',
-	    label: "Report 1"
-	  }]
-	}];
+	// var data = [
+	//   {
+	//     label: "Security",
+	//     expanded: true,
+	//     items: [
+	//       {
+	//         id: 'role_list',
+	//         label: "Role",
+	//         selected: true
+	//       }
+	//     ]
+	//   },
+	//   {
+	//     label: "Report",
+	//     expanded: true,
+	//     items: [
+	//       {
+	//         id: 'report1',
+	//         label: "Report 1"
+	//       }
+	//     ]
+	//   }
+	// ];
 
-	var tree = new _Tree2.default({
-	  data: data,
-	  onClick: function onClick(item) {
-
-	    if (!tabs.selectTabByTitle(item.label)) {
-	      if (item.id == 'role_list') {
-	        tabs.add(item.id, item.label, roleList);
-	      }
-	    }
-	  }
-	});
+	// var tree = new Tree({
+	//   data: data,
+	//   onClick: function(item){
+	//
+	//    if(!tabs.selectTabByTitle(item.label)){
+	//     if(item.id == 'role_list'){
+	//       tabs.add(item.id, item.label, roleList);
+	//     }
+	//    }
+	//
+	//   }
+	// });
 
 	var menu = new _Menu2.default({
 	  data: (0, _ApplicationData.getMenuData)(),
@@ -121,7 +129,7 @@
 	    var label = '';
 
 	    if (id == '58') {
-	      label = 'Roles';
+	      label = 'Role';
 	    } else if (id == '59') {
 	      label = 'User';
 	    }
@@ -141,23 +149,24 @@
 	var userList = new _UserList2.default();
 	var roleList = new _RoleList2.default();
 
-	var navigationBar = new _NavigationBar2.default([{
-	  title: 'Application',
-	  content: tree
-	}, {
-	  title: 'Settings'
-	}]);
-	navigationBar.render($('#left-content'));
+	// var navigationBar = new NavigationBar([{
+	//   title: 'Application',
+	//   content: tree
+	// }, {
+	//   title: 'Settings'
+	// }]);
+	// navigationBar.render($('#left-content'));
 
 	// var workspaceView = new WorkspaceView();
 
 	var tabs = new _Tabs2.default([{
 	  id: 'role_list',
-	  title: 'Roles',
+	  title: 'Role',
 	  content: roleList
 	}]);
 
-	tabs.render($('#right-content'));
+	// tabs.render($('#right-content'));
+	tabs.render($('#content'));
 
 /***/ },
 /* 1 */
@@ -770,21 +779,6 @@
 	        }
 	      });
 
-	      var addUserButton = new _Button2.default({
-	        title: 'Tambah Proyek',
-	        template: 'primary',
-	        height: 26,
-	        onClick: function onClick() {
-	          var addUserWindow = new _AddUserWindow2.default({
-	            onSaveSuccess: function onSaveSuccess() {
-	              _this.dataGrid.refresh();
-	            }
-	          });
-	          addUserWindow.render($('#dialogWindowContainer'));
-	          addUserWindow.open();
-	        }
-	      });
-
 	      var table = $('<table style="height: 100%; width: 100%; margin: -3px; "></table>');
 	      var tr = $('<tr></tr>');
 	      var td = $('<td style="padding: 0; height: 40px;"></td>');
@@ -798,10 +792,10 @@
 	      innerTable.appendTo(td);
 	      innerTr.appendTo(innerTable);
 	      innerTd.appendTo(innerTr);
-	      addUserButton.render(innerTd);
+	      // addUserButton.render(innerTd);
 
-	      innerTd = $('<td style="padding-top: 6px; width: 200px; height: 100%;"></td>');
-	      innerTd.appendTo(innerTr);
+	      // innerTd = $('<td style="padding-top: 6px; width: 200px; height: 100%;"></td>');
+	      // innerTd.appendTo(innerTr);
 	      searchTextBox.render(innerTd);
 
 	      innerTd = $('<td style="padding-top: 6px; height: 100%; "></td>');
