@@ -35,5 +35,45 @@ public class RoleMapperTest {
         List<Role> roles = roleMapper.findAll();
         assertEquals(1, roles.size());
     }
+	
+	@Test
+	@DatabaseSetup("/META-INF/roleData.xml")
+    public void findById() {
+        Role role = roleMapper.findById(1);
+        assertEquals(1, role.getRoleId());
+    }
+	
+	@Test
+	@DatabaseSetup("/META-INF/roleDataClean.xml")
+    public void create() {
+		Role newRole = new Role();
+		newRole.setRoleId(1);
+		newRole.setRoleName("Admin");
+        roleMapper.create(newRole);
+        
+        Role role = roleMapper.findById(1);
+        assertEquals(1, role.getRoleId());
+        
+    }
+	
+	@Test
+	@DatabaseSetup("/META-INF/roleData.xml")
+    public void update() {
+        Role role = roleMapper.findById(1);
+        role.setRoleName("User");
+        
+        roleMapper.update(role);
+        
+        role = roleMapper.findById(1);
+        assertEquals("User", role.getRoleName());
+    }
+	
+	@Test
+	@DatabaseSetup("/META-INF/roleData.xml")
+    public void delete() {
+		roleMapper.delete(1);
+        List<Role> roles = roleMapper.findAll();
+        assertEquals(0, roles.size());
+    }
 
 }
