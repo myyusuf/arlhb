@@ -21509,13 +21509,9 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _react_jqxmenu = __webpack_require__(179);
+	var _MainMenu = __webpack_require__(179);
 	
-	var _react_jqxmenu2 = _interopRequireDefault(_react_jqxmenu);
-	
-	var _react_jqxcheckbox = __webpack_require__(180);
-	
-	var _react_jqxcheckbox2 = _interopRequireDefault(_react_jqxcheckbox);
+	var _MainMenu2 = _interopRequireDefault(_MainMenu);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -21524,6 +21520,9 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	//import JqxMenu from 'jqwidgets-framework/jqwidgets-react/react_jqxmenu.js';
+	//import JqxCheckBox from 'jqwidgets-framework/jqwidgets-react/react_jqxcheckbox.js';
 	
 	var App = function (_React$Component) {
 	    _inherits(App, _React$Component);
@@ -21536,112 +21535,19 @@
 	
 	    _createClass(App, [{
 	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            var _this2 = this;
-	
-	            this.refs.animation.on('change', function (event) {
-	                var value = event.args.checked;
-	                // enable or disable the menu's animation
-	                if (!value) {
-	                    _this2.refs.myMenu.setOptions({ animationShowDuration: 0, animationHideDuration: 0, animationShowDelay: 0 });
-	                } else {
-	                    _this2.refs.myMenu.setOptions({ animationShowDuration: 200, animationHideDuration: 200, animationShowDelay: 200 });
-	                }
-	            });
-	
-	            this.refs.disabled.on('change', function (event) {
-	                var value = event.args.checked;
-	                // enable or disable the menu
-	                if (!value) {
-	                    _this2.refs.myMenu.disabled(false);
-	                } else {
-	                    _this2.refs.myMenu.disabled(true);
-	                }
-	            });
-	
-	            this.refs.hover.on('change', function (event) {
-	                var value = event.args.checked;
-	                // enable or disable the menu's hover effect
-	                if (!value) {
-	                    _this2.refs.myMenu.enableHover(false);
-	                } else {
-	                    _this2.refs.myMenu.enableHover(true);
-	                }
-	            });
-	
-	            this.refs.open.on('change', function (event) {
-	                var value = event.args.checked;
-	                // enable or disable the opening of the top level menu items when the user hovers them.
-	                if (!value) {
-	                    _this2.refs.myMenu.autoOpen(false);
-	                } else {
-	                    _this2.refs.myMenu.autoOpen(true);
-	                }
-	            });
-	
-	            this.refs.topLevelArrows.on('change', function (event) {
-	                var value = event.args.checked;
-	                // enable or disable the top level arrows.
-	                if (!value) {
-	                    _this2.refs.myMenu.showTopLevelArrows(false);
-	                } else {
-	                    _this2.refs.myMenu.showTopLevelArrows(true);
-	                }
-	            });
-	        }
+	        value: function componentDidMount() {}
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var styleSpace = {
-	                marginTop: '20px',
-	                marginLeft: '60px',
-	                fontSize: '14px',
-	                fontFamily: 'Verdana Arial',
-	                float: 'left'
+	
+	            var onMenuClick = function onMenuClick(e) {
+	                console.log('Mantap..');
 	            };
 	
-	            var menuInnerHtml = '<ul>' + '<li><a href="#Home">Home</a></li>' + '<li>Solutions' + '<ul style="width: 250px;">' + '<li><a href="#Education">Education</a></li>' + '<li><a href="#Financial">Financial services</a></li>' + '<li><a href="#Government">Government</a></li>' + '<li><a href="#Manufacturing">Manufacturing</a></li>' + '<li type="separator"></li>' + '<li>Software Solutions' + '<ul style="width: 220px;">' + '<li><a href="#ConsumerPhoto">Consumer photo and video</a></li>' + '<li><a href="#Mobile">Mobile</a></li>' + '<li><a href="#RIA">Rich Internet applications</a></li>' + '<li><a href="#TechnicalCommunication">Technical communication</a></li>' + '<li><a href="#Training">Training and eLearning</a></li>' + '<li><a href="#WebConferencing">Web conferencing</a></li>' + '</ul>' + '</li>' + '<li><a href="#">All industries and solutions</a></li>' + '</ul>' + '</li>' + '<li>Products' + '<ul>' + '<li><a href="#PCProducts">PC products</a></li>' + '<li><a href="#MobileProducts">Mobile products</a></li>' + '<li><a href="#AllProducts">All products</a></li>' + '</ul>' + '</li>' + '<li>Support' + '<ul style="width: 200px;">' + '<li><a href="#SupportHome">Support home</a></li>' + '<li><a href="#CustomerService">Customer Service</a></li>' + '<li><a href="#KB">Knowledge base</a></li>' + '<li><a href="#Books">Books</a></li>' + '<li><a href="#Training">Training and certification</a></li>' + '<li><a href="#SupportPrograms">Support programs</a></li>' + '<li><a href="#Forums">Forums</a></li>' + '<li><a href="#Documentation">Documentation</a></li>' + '<li><a href="#Updates">Updates</a></li>' + '</ul>' + '</li>' + '<li>Communities' + '<ul style="width: 200px;">' + '<li><a href="#Designers">Designers</a></li>' + '<li><a href="#Developers">Developers</a></li>' + '<li><a href="#Educators">Educators and students</a></li>' + '<li><a href="#Partners">Partners</a></li>' + '<li type="separator"></li>' + '<li>By resource' + '<ul>' + '<li><a href="#Labs">Labs</a></li>' + '<li><a href="#TV">TV</a></li>' + '<li><a href="#Forums">Forums</a></li>' + '<li><a href="#Exchange">Exchange</a></li>' + '<li><a href="#Blogs">Blogs</a></li>' + '<li><a href="#Experience Design">Experience Design</a></li>' + '</ul>' + '</li>' + '</ul>' + '</li>' + '<li>Company' + '<ul style="width: 180px;">' + '<li><a href="#About">About Us</a></li>' + '<li><a href="#Press">Press</a></li>' + '<li><a href="#Investor">Investor Relations</a></li>' + '<li><a href="#CorporateAffairs">Corporate Affairs</a></li>' + '<li><a href="#Careers">Careers</a></li>' + '<li><a href="#Showcase">Showcase</a></li>' + '<li><a href="#Events">Events</a></li>' + '<li><a href="#ContactUs">Contact Us</a></li>' + '<li><a href="#Become an affiliate">Become an affiliate</a></li>' + '</ul>' + '</li>' + '</ul>';
 	            return _react2.default.createElement(
 	                'div',
 	                { style: { height: '300px' } },
-	                _react2.default.createElement(_react_jqxmenu2.default, { ref: 'myMenu', template: menuInnerHtml, width: 670, height: 30, theme: 'metro' }),
-	                _react2.default.createElement('br', null),
-	                _react2.default.createElement(
-	                    'div',
-	                    { style: { marginLeft: '60px', marginTop: '120px' } },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { style: { fontSize: '16px', fontFamily: 'Verdana Arial' } },
-	                        'Settings'
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { style: { marginTop: '20px', fontSize: '14px', fontFamily: 'Verdana Arial', float: 'left' } },
-	                        _react2.default.createElement(_react_jqxcheckbox2.default, { ref: 'animation', value: 'Enable Animation',
-	                            width: 150, height: 20, checked: true
-	                        }),
-	                        _react2.default.createElement(_react_jqxcheckbox2.default, { ref: 'disabled', value: 'Disabled',
-	                            width: 150, height: 20
-	                        })
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { style: styleSpace },
-	                        _react2.default.createElement(_react_jqxcheckbox2.default, { ref: 'hover', value: 'Enable Hover',
-	                            width: 150, height: 20, checked: true
-	                        }),
-	                        _react2.default.createElement(_react_jqxcheckbox2.default, { ref: 'open', value: 'Auto Open',
-	                            width: 150, height: 20, checked: true
-	                        })
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { style: styleSpace },
-	                        _react2.default.createElement(_react_jqxcheckbox2.default, { ref: 'topLevelArrows', value: 'Show Top-Level Arrows',
-	                            width: 200, height: 20
-	                        })
-	                    )
-	                )
+	                _react2.default.createElement(_MainMenu2.default, { onMenuClick: onMenuClick })
 	            );
 	        }
 	    }]);
@@ -21650,15 +21556,151 @@
 	}(_react2.default.Component);
 	
 	exports.default = App;
-	
-	
-	console.log("b4 render");
-	//ReactDOM.render(<App />, document.getElementById('app'));
-	
-	console.log("after render");
 
 /***/ },
 /* 179 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _react_jqxmenu = __webpack_require__(180);
+	
+	var _react_jqxmenu2 = _interopRequireDefault(_react_jqxmenu);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var MainMenu = function (_React$Component) {
+	    _inherits(MainMenu, _React$Component);
+	
+	    function MainMenu(props) {
+	        _classCallCheck(this, MainMenu);
+	
+	        var _this = _possibleConstructorReturn(this, (MainMenu.__proto__ || Object.getPrototypeOf(MainMenu)).call(this, props));
+	
+	        var data = [{
+	            "id": "1",
+	            "text": "Home",
+	            "parentid": "-1",
+	            "subMenuWidth": '250px'
+	        }, {
+	            "id": "2",
+	            "text": "Customer Payment",
+	            "parentid": "-1",
+	            "subMenuWidth": '250px'
+	        }, {
+	            "id": "3",
+	            "text": "Customer Transaction",
+	            "parentid": "-1"
+	        }, {
+	            "id": "4",
+	            "text": "Bank Transaction",
+	            "parentid": "-1"
+	        }, {
+	            "id": "5",
+	            "text": "Administration",
+	            "parentid": "-1"
+	        }, {
+	            "id": "51",
+	            "text": "Active Sessions",
+	            "parentid": "5"
+	        }, {
+	            "id": "52",
+	            "text": "Corporate Entity",
+	            "parentid": "5"
+	        }, {
+	            "id": "53",
+	            "text": "Country Zone",
+	            "parentid": "5"
+	        }, {
+	            "id": "54",
+	            "text": "Customer",
+	            "parentid": "5"
+	        }, {
+	            "id": "55",
+	            "text": "Holidays",
+	            "parentid": "5"
+	        }, {
+	            "id": "56",
+	            "text": "Location",
+	            "parentid": "5"
+	        }, {
+	            "id": "57",
+	            "text": "Operational Time",
+	            "parentid": "5"
+	        }, {
+	            "id": "58",
+	            "text": "Role",
+	            "parentid": "5"
+	        }, {
+	            "id": "59",
+	            "text": "User",
+	            "parentid": "5"
+	        }, {
+	            "id": "6",
+	            "text": "Report",
+	            "parentid": "-1"
+	        }];
+	
+	        var source = {
+	            datatype: "json",
+	            datafields: [{ name: 'id' }, { name: 'parentid' }, { name: 'text' }, { name: 'subMenuWidth' }],
+	            id: 'id',
+	            localdata: data
+	        };
+	
+	        var dataAdapter = new $.jqx.dataAdapter(source);
+	        dataAdapter.dataBind();
+	
+	        var records = dataAdapter.getRecordsHierarchy('id', 'parentid', 'items', [{ name: 'text', map: 'label' }]);
+	
+	        _this.state = { records: records, text: '' };
+	        return _this;
+	    }
+	
+	    _createClass(MainMenu, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+	
+	            this.refs.myMenu.on('itemclick', function (e) {
+	                console.log('test');
+	                _this2.props.onMenuClick(e);
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { style: { height: '300px', width: '100%' } },
+	                _react2.default.createElement(_react_jqxmenu2.default, { ref: 'myMenu', source: this.state.records, theme: 'metro', width: '100%', height: 30 })
+	            );
+	        }
+	    }]);
+	
+	    return MainMenu;
+	}(_react2.default.Component);
+	
+	exports.default = MainMenu;
+
+/***/ },
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21942,230 +21984,6 @@
 	
 	
 	module.exports = jqxMenu;
-
-/***/ },
-/* 180 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var jqxCheckBox = _react2.default.createClass({
-	  displayName: 'jqxCheckBox',
-	
-	  getInitialState: function getInitialState() {
-	    return { value: '' };
-	  },
-	  componentDidMount: function componentDidMount() {
-	    var options = this.manageAttributes();
-	    this.createComponent(options);
-	  },
-	  manageAttributes: function manageAttributes() {
-	    var properties = ['animationShowDelay', 'animationHideDelay', 'boxSize', 'checked', 'disabled', 'enableContainerClick', 'groupName', 'height', 'hasThreeStates', 'locked', 'rtl', 'theme', 'width'];
-	    var options = {};
-	    for (var item in this.props) {
-	      if (item === 'settings') {
-	        for (var itemTwo in this.props[item]) {
-	          options[itemTwo] = this.props[item][itemTwo];
-	        }
-	      } else {
-	        if (properties.indexOf(item) !== -1) {
-	          options[item] = this.props[item];
-	        }
-	      }
-	    }
-	    return options;
-	  },
-	  createComponent: function createComponent(options) {
-	    if (!this.style) {
-	      for (var style in this.props.style) {
-	        $('#' + this.componentSelector).css(style, this.props.style[style]);
-	      }
-	    }
-	    if (this.props.className !== undefined) {
-	      var classes = this.props.className.split(' ');
-	      for (var i = 0; i < classes.length; i++) {
-	        $('#' + this.componentSelector).addClass(classes[i]);
-	      }
-	    }
-	    if (!this.template) {
-	      $('#' + this.componentSelector).html(this.props.template);
-	    }
-	    $('#' + this.componentSelector).jqxCheckBox(options);
-	  },
-	  generateID: function generateID() {
-	    return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
-	  },
-	  setOptions: function setOptions(options) {
-	    $('#' + this.componentSelector).jqxCheckBox('setOptions', options);
-	  },
-	  getOptions: function getOptions() {
-	    if (arguments.length === 0) {
-	      throw Error('At least one argument expected in getOptions()!');
-	    }
-	    var resultToReturn = {};
-	    for (var i = 0; i < arguments.length; i++) {
-	      resultToReturn[arguments[i]] = $('#' + this.componentSelector).jqxCheckBox(arguments[i]);
-	    }
-	    return resultToReturn;
-	  },
-	  on: function on(name, callbackFn) {
-	    $('#' + this.componentSelector).on(name, callbackFn);
-	  },
-	  off: function off(name) {
-	    $('#' + this.componentSelector).off(name);
-	  },
-	  animationShowDelay: function animationShowDelay(arg) {
-	    if (arg !== undefined) {
-	      $("#" + this.componentSelector).jqxCheckBox("animationShowDelay", arg);
-	    } else {
-	      return $("#" + this.componentSelector).jqxCheckBox("animationShowDelay");
-	    }
-	  },
-	  animationHideDelay: function animationHideDelay(arg) {
-	    if (arg !== undefined) {
-	      $("#" + this.componentSelector).jqxCheckBox("animationHideDelay", arg);
-	    } else {
-	      return $("#" + this.componentSelector).jqxCheckBox("animationHideDelay");
-	    }
-	  },
-	  boxSize: function boxSize(arg) {
-	    if (arg !== undefined) {
-	      $("#" + this.componentSelector).jqxCheckBox("boxSize", arg);
-	    } else {
-	      return $("#" + this.componentSelector).jqxCheckBox("boxSize");
-	    }
-	  },
-	  checked: function checked(arg) {
-	    if (arg !== undefined) {
-	      $("#" + this.componentSelector).jqxCheckBox("checked", arg);
-	    } else {
-	      return $("#" + this.componentSelector).jqxCheckBox("checked");
-	    }
-	  },
-	  disabled: function disabled(arg) {
-	    if (arg !== undefined) {
-	      $("#" + this.componentSelector).jqxCheckBox("disabled", arg);
-	    } else {
-	      return $("#" + this.componentSelector).jqxCheckBox("disabled");
-	    }
-	  },
-	  enableContainerClick: function enableContainerClick(arg) {
-	    if (arg !== undefined) {
-	      $("#" + this.componentSelector).jqxCheckBox("enableContainerClick", arg);
-	    } else {
-	      return $("#" + this.componentSelector).jqxCheckBox("enableContainerClick");
-	    }
-	  },
-	  groupName: function groupName(arg) {
-	    if (arg !== undefined) {
-	      $("#" + this.componentSelector).jqxCheckBox("groupName", arg);
-	    } else {
-	      return $("#" + this.componentSelector).jqxCheckBox("groupName");
-	    }
-	  },
-	  height: function height(arg) {
-	    if (arg !== undefined) {
-	      $("#" + this.componentSelector).jqxCheckBox("height", arg);
-	    } else {
-	      return $("#" + this.componentSelector).jqxCheckBox("height");
-	    }
-	  },
-	  hasThreeStates: function hasThreeStates(arg) {
-	    if (arg !== undefined) {
-	      $("#" + this.componentSelector).jqxCheckBox("hasThreeStates", arg);
-	    } else {
-	      return $("#" + this.componentSelector).jqxCheckBox("hasThreeStates");
-	    }
-	  },
-	  locked: function locked(arg) {
-	    if (arg !== undefined) {
-	      $("#" + this.componentSelector).jqxCheckBox("locked", arg);
-	    } else {
-	      return $("#" + this.componentSelector).jqxCheckBox("locked");
-	    }
-	  },
-	  rtl: function rtl(arg) {
-	    if (arg !== undefined) {
-	      $("#" + this.componentSelector).jqxCheckBox("rtl", arg);
-	    } else {
-	      return $("#" + this.componentSelector).jqxCheckBox("rtl");
-	    }
-	  },
-	  theme: function theme(arg) {
-	    if (arg !== undefined) {
-	      $("#" + this.componentSelector).jqxCheckBox("theme", arg);
-	    } else {
-	      return $("#" + this.componentSelector).jqxCheckBox("theme");
-	    }
-	  },
-	  width: function width(arg) {
-	    if (arg !== undefined) {
-	      $("#" + this.componentSelector).jqxCheckBox("width", arg);
-	    } else {
-	      return $("#" + this.componentSelector).jqxCheckBox("width");
-	    }
-	  },
-	  check: function check() {
-	    $("#" + this.componentSelector).jqxCheckBox("check");
-	  },
-	  disable: function disable() {
-	    $("#" + this.componentSelector).jqxCheckBox("disable");
-	  },
-	  destroy: function destroy() {
-	    $("#" + this.componentSelector).jqxCheckBox("destroy");
-	  },
-	  enable: function enable() {
-	    $("#" + this.componentSelector).jqxCheckBox("enable");
-	  },
-	  focus: function focus() {
-	    $("#" + this.componentSelector).jqxCheckBox("focus");
-	  },
-	  indeterminate: function indeterminate() {
-	    $("#" + this.componentSelector).jqxCheckBox("indeterminate");
-	  },
-	  performRender: function performRender() {
-	    $("#" + this.componentSelector).jqxCheckBox("render");
-	  },
-	  toggle: function toggle() {
-	    $("#" + this.componentSelector).jqxCheckBox("toggle");
-	  },
-	  uncheck: function uncheck() {
-	    $("#" + this.componentSelector).jqxCheckBox("uncheck");
-	  },
-	  val: function val(value) {
-	    if (value !== undefined) {
-	      $("#" + this.componentSelector).jqxCheckBox("val", value);
-	    } else {
-	      return $("#" + this.componentSelector).jqxCheckBox("val");
-	    }
-	  },
-	
-	  render: function render() {
-	    var id = 'jqxCheckBox' + this.generateID() + this.generateID();
-	    this.componentSelector = id;return _react2.default.createElement(
-	      'div',
-	      { id: id },
-	      _react2.default.createElement(
-	        'span',
-	        null,
-	        this.value ? null : this.props.value
-	      )
-	    );
-	  }
-	}); /*
-	    jQWidgets v4.5.0 (2017-Jan)
-	    Copyright (c) 2011-2017 jQWidgets.
-	    License: http://jqwidgets.com/license/
-	    */
-	
-	
-	module.exports = jqxCheckBox;
 
 /***/ }
 /******/ ]);
