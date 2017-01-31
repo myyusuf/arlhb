@@ -5,6 +5,7 @@ public class Employee {
 	private String employeeId;
 	private String firstName;
 	private String lastName;
+	private Role role;
 
 	public String getEmployeeId() {
 		return employeeId;
@@ -28,6 +29,14 @@ public class Employee {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 }

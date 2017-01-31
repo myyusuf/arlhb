@@ -8,9 +8,15 @@
 	  <id property="employeeId" column="employee_id" />
 	  <result property="firstName" column="first_name"/>
 	  <result property="lastName" column="last_name"/>
+	  
+	  <association property="role" javaType="com.nusapro.arlhb.model.Role">
+	  	<id property="roleId" column="role_id" />
+	  	<result property="roleName" column="role_name"/>
+	  </association>
 	</resultMap>
 	
     <select id="findAll" resultMap="employeeResultMap">
-        SELECT * FROM employee
+        SELECT m.*, r.role_id, r.role_name FROM employee m 
+        LEFT JOIN role r on m.role_id = r.role_id
     </select>
 </mapper>

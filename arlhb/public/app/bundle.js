@@ -21513,6 +21513,14 @@
 	
 	var _MainMenu2 = _interopRequireDefault(_MainMenu);
 	
+	var _RolePage = __webpack_require__(181);
+	
+	var _RolePage2 = _interopRequireDefault(_RolePage);
+	
+	var _UserList = __webpack_require__(192);
+	
+	var _UserList2 = _interopRequireDefault(_UserList);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21521,16 +21529,19 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	//import JqxMenu from 'jqwidgets-framework/jqwidgets-react/react_jqxmenu.js';
-	//import JqxCheckBox from 'jqwidgets-framework/jqwidgets-react/react_jqxcheckbox.js';
-	
 	var App = function (_React$Component) {
 	    _inherits(App, _React$Component);
 	
-	    function App() {
+	    function App(props) {
 	        _classCallCheck(this, App);
 	
-	        return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
+	        var _this2 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+	
+	        _this2.state = {
+	            secondsElapsed: 0,
+	            menuId: 0
+	        };
+	        return _this2;
 	    }
 	
 	    _createClass(App, [{
@@ -21539,15 +21550,42 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var _this = this;
 	
 	            var onMenuClick = function onMenuClick(e) {
-	                console.log('Mantap..');
+	
+	                console.log(e.args.id);
+	                _this.setState(function (prevState) {
+	                    return {
+	                        secondsElapsed: prevState.secondsElapsed + 1,
+	                        menuId: e.args.id
+	                    };
+	                });
 	            };
+	
+	            var page = null;
+	
+	            if (this.state.menuId == 58) {
+	                page = _react2.default.createElement(_RolePage2.default, null);
+	            } else if (this.state.menuId == 59) {
+	                page = _react2.default.createElement(_UserList2.default, null);
+	            } else {
+	                page = _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    'No Page'
+	                );
+	            }
 	
 	            return _react2.default.createElement(
 	                'div',
-	                { style: { height: '300px' } },
-	                _react2.default.createElement(_MainMenu2.default, { onMenuClick: onMenuClick })
+	                { style: { height: '100%' } },
+	                _react2.default.createElement(_MainMenu2.default, { onMenuClick: onMenuClick }),
+	                _react2.default.createElement(
+	                    'div',
+	                    { id: 'pageContainer', style: { height: '100%' } },
+	                    page
+	                )
 	            );
 	        }
 	    }]);
@@ -21679,7 +21717,6 @@
 	            var _this2 = this;
 	
 	            this.refs.myMenu.on('itemclick', function (e) {
-	                console.log('test');
 	                _this2.props.onMenuClick(e);
 	            });
 	        }
@@ -21688,7 +21725,7 @@
 	        value: function render() {
 	            return _react2.default.createElement(
 	                'div',
-	                { style: { height: '300px', width: '100%' } },
+	                { style: { height: '30px', width: '100%' } },
 	                _react2.default.createElement(_react_jqxmenu2.default, { ref: 'myMenu', source: this.state.records, theme: 'metro', width: '100%', height: 30 })
 	            );
 	        }
@@ -21984,6 +22021,3199 @@
 	
 	
 	module.exports = jqxMenu;
+
+/***/ },
+/* 181 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _RoleList = __webpack_require__(182);
+	
+	var _RoleList2 = _interopRequireDefault(_RoleList);
+	
+	var _RoleForm = __webpack_require__(184);
+	
+	var _RoleForm2 = _interopRequireDefault(_RoleForm);
+	
+	var _EditWindow = __webpack_require__(187);
+	
+	var _EditWindow2 = _interopRequireDefault(_EditWindow);
+	
+	var _SuccessNotification = __webpack_require__(190);
+	
+	var _SuccessNotification2 = _interopRequireDefault(_SuccessNotification);
+	
+	var _react_jqxnotification = __webpack_require__(191);
+	
+	var _react_jqxnotification2 = _interopRequireDefault(_react_jqxnotification);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var RolePage = function (_React$Component) {
+	    _inherits(RolePage, _React$Component);
+	
+	    function RolePage(props) {
+	        _classCallCheck(this, RolePage);
+	
+	        var _this2 = _possibleConstructorReturn(this, (RolePage.__proto__ || Object.getPrototypeOf(RolePage)).call(this, props));
+	
+	        _this2.state = {
+	            editedRole: null
+	        };
+	        return _this2;
+	    }
+	
+	    _createClass(RolePage, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {}
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	
+	            var _this = this;
+	
+	            var onDoubleClick = function onDoubleClick(data, e) {
+	                _this.setState({
+	                    editedRole: data
+	                });
+	                _this.refs.editRoleWindow.open();
+	            };
+	
+	            var onSave = function onSave(e) {
+	                _this.refs.editRoleForm.validate();
+	            };
+	
+	            var onValidationSuccess = function onValidationSuccess(role, e) {
+	                $.ajax({
+	                    method: "PUT",
+	                    url: "/roles/" + role.roleId,
+	                    data: JSON.stringify(role),
+	                    beforeSend: function beforeSend(xhr) {
+	                        xhr.setRequestHeader('Accept', 'application/json');
+	                        xhr.setRequestHeader('Content-Type', 'application/json');
+	                    }
+	                }).done(function () {
+	                    _this.refs.successNotification.open();
+	                    _this.refs.editRoleWindow.close();
+	                    _this.refs.roleList.refresh();
+	                }).fail(function (jqXHR, textStatus, errorThrown) {});
+	            };
+	
+	            var onDelete = function onDelete(e) {
+	
+	                var r = confirm("Proses hapus data akan dilakukan!");
+	                if (r == true) {
+	                    var role = _this.refs.editRoleForm.getValue();
+	                    $.ajax({
+	                        method: "DELETE",
+	                        url: "/roles/" + role.roleId,
+	                        data: {}
+	                    }).done(function () {
+	                        _this.refs.successNotification.open();
+	                        _this.refs.editRoleWindow.close();
+	                        _this.refs.roleList.refresh();
+	                    }).fail(function () {});
+	                }
+	            };
+	
+	            return _react2.default.createElement(
+	                'div',
+	                { style: {
+	                        height: '100%'
+	                    } },
+	                _react2.default.createElement(_RoleList2.default, { ref: 'roleList', onDoubleClick: onDoubleClick }),
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        _EditWindow2.default,
+	                        { ref: 'editRoleWindow', title: 'Edit Role', onSave: onSave, onDelete: onDelete },
+	                        _react2.default.createElement(_RoleForm2.default, { ref: 'editRoleForm', role: this.state.editedRole, onValidationSuccess: onValidationSuccess })
+	                    )
+	                ),
+	                _react2.default.createElement(_SuccessNotification2.default, { ref: 'successNotification' })
+	            );
+	        }
+	    }]);
+	
+	    return RolePage;
+	}(_react2.default.Component);
+	
+	exports.default = RolePage;
+
+/***/ },
+/* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _react_jqxgrid = __webpack_require__(183);
+	
+	var _react_jqxgrid2 = _interopRequireDefault(_react_jqxgrid);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var RoleList = function (_React$Component) {
+	    _inherits(RoleList, _React$Component);
+	
+	    function RoleList(props) {
+	        _classCallCheck(this, RoleList);
+	
+	        var _this2 = _possibleConstructorReturn(this, (RoleList.__proto__ || Object.getPrototypeOf(RoleList)).call(this, props));
+	
+	        var url = "/roles";
+	
+	        var source = {
+	            datatype: "json",
+	            datafields: [{
+	                name: 'roleId',
+	                type: 'int'
+	            }, {
+	                name: 'roleName',
+	                type: 'string'
+	            }, {
+	                name: 'description',
+	                type: 'string'
+	            }],
+	            id: "roleId",
+	            url: url
+	        };
+	
+	        var dataAdapter = new $.jqx.dataAdapter(source);
+	        dataAdapter.dataBind();
+	
+	        _this2.state = {
+	            dataAdapter: dataAdapter
+	        };
+	        return _this2;
+	    }
+	
+	    _createClass(RoleList, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this3 = this;
+	
+	            var _this = this;
+	            this.refs.roleList.on('rowdoubleclick', function (e) {
+	
+	                var args = e.args;
+	                var rowIndex = args.rowindex;
+	                var data = _this.refs.roleList.getrowdata(rowIndex);
+	                _this3.props.onDoubleClick(data, e);
+	            });
+	        }
+	    }, {
+	        key: 'refresh',
+	        value: function refresh() {
+	            this.refs.roleList.updatebounddata();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	
+	            var columns = [{
+	                text: 'Role Id',
+	                datafield: 'roleId',
+	                width: '30%'
+	            }, {
+	                text: 'Role Name',
+	                datafield: 'roleName',
+	                width: '30%'
+	            }, {
+	                text: 'Description',
+	                datafield: 'description',
+	                width: '40%'
+	            }];
+	
+	            return _react2.default.createElement(_react_jqxgrid2.default, { ref: 'roleList', width: '100%', height: 'calc(100% - 30px)', source: this.state.dataAdapter, pageable: true, sortable: true, altrows: true, enabletooltips: true, columns: columns, theme: 'metro' });
+	        }
+	    }]);
+	
+	    return RoleList;
+	}(_react2.default.Component);
+	
+	exports.default = RoleList;
+
+/***/ },
+/* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var jqxGrid = _react2.default.createClass({
+	  displayName: 'jqxGrid',
+	
+	  getInitialState: function getInitialState() {
+	    return { value: '' };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    var options = this.manageAttributes();
+	    this.createComponent(options);
+	  },
+	  manageAttributes: function manageAttributes() {
+	    var properties = ['altrows', 'altstart', 'altstep', 'autoshowloadelement', 'autoshowfiltericon', 'autoshowcolumnsmenubutton', 'clipboard', 'closeablegroups', 'columnsmenuwidth', 'columnmenuopening', 'columnmenuclosing', 'cellhover', 'enablekeyboarddelete', 'enableellipsis', 'enablemousewheel', 'enableanimations', 'enabletooltips', 'enablehover', 'enablebrowserselection', 'everpresentrowposition', 'everpresentrowheight', 'everpresentrowactions', 'everpresentrowactionsmode', 'filterrowheight', 'filtermode', 'groupsrenderer', 'groupcolumnrenderer', 'groupsexpandedbydefault', 'handlekeyboardnavigation', 'pagerrenderer', 'rtl', 'showdefaultloadelement', 'showfiltercolumnbackground', 'showfiltermenuitems', 'showpinnedcolumnbackground', 'showsortcolumnbackground', 'showsortmenuitems', 'showgroupmenuitems', 'showrowdetailscolumn', 'showheader', 'showgroupsheader', 'showaggregates', 'showgroupaggregates', 'showeverpresentrow', 'showfilterrow', 'showemptyrow', 'showstatusbar', 'statusbarheight', 'showtoolbar', 'selectionmode', 'theme', 'toolbarheight', 'autoheight', 'autorowheight', 'columnsheight', 'deferreddatafields', 'groupsheaderheight', 'groupindentwidth', 'height', 'pagerheight', 'rowsheight', 'scrollbarsize', 'scrollmode', 'scrollfeedback', 'width', 'autosavestate', 'autoloadstate', 'columns', 'columngroups', 'columnsmenu', 'columnsresize', 'columnsautoresize', 'columnsreorder', 'disabled', 'editable', 'editmode', 'filter', 'filterable', 'groupable', 'groups', 'horizontalscrollbarstep', 'horizontalscrollbarlargestep', 'initrowdetails', 'keyboardnavigation', 'pagesize', 'pagesizeoptions', 'pagermode', 'pagerbuttonscount', 'pageable', 'rowdetails', 'rowdetailstemplate', 'ready', 'rendered', 'renderstatusbar', 'rendertoolbar', 'rendergridrows', 'sortable', 'selectedrowindex', 'selectedrowindexes', 'source', 'sorttogglestates', 'updatedelay', 'virtualmode', 'verticalscrollbarstep', 'verticalscrollbarlargestep'];
+	    var options = {};
+	    for (var item in this.props) {
+	      if (item === 'settings') {
+	        for (var itemTwo in this.props[item]) {
+	          options[itemTwo] = this.props[item][itemTwo];
+	        }
+	      } else {
+	        if (properties.indexOf(item) !== -1) {
+	          options[item] = this.props[item];
+	        }
+	      }
+	    }
+	    return options;
+	  },
+	  createComponent: function createComponent(options) {
+	    if (!this.style) {
+	      for (var style in this.props.style) {
+	        $('#' + this.componentSelector).css(style, this.props.style[style]);
+	      }
+	    }
+	    if (this.props.className !== undefined) {
+	      var classes = this.props.className.split(' ');
+	      for (var i = 0; i < classes.length; i++) {
+	        $('#' + this.componentSelector).addClass(classes[i]);
+	      }
+	    }
+	    if (!this.template) {
+	      $('#' + this.componentSelector).html(this.props.template);
+	    }
+	    $('#' + this.componentSelector).jqxGrid(options);
+	  },
+	  generateID: function generateID() {
+	    return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+	  },
+	  setOptions: function setOptions(options) {
+	    $('#' + this.componentSelector).jqxGrid('setOptions', options);
+	  },
+	  getOptions: function getOptions() {
+	    if (arguments.length === 0) {
+	      throw Error('At least one argument expected in getOptions()!');
+	    }
+	    var resultToReturn = {};
+	    for (var i = 0; i < arguments.length; i++) {
+	      resultToReturn[arguments[i]] = $('#' + this.componentSelector).jqxGrid(arguments[i]);
+	    }
+	    return resultToReturn;
+	  },
+	  on: function on(name, callbackFn) {
+	    $('#' + this.componentSelector).on(name, callbackFn);
+	  },
+	  off: function off(name) {
+	    $('#' + this.componentSelector).off(name);
+	  },
+	  altrows: function altrows(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("altrows", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("altrows");
+	    }
+	  },
+	  altstart: function altstart(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("altstart", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("altstart");
+	    }
+	  },
+	  altstep: function altstep(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("altstep", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("altstep");
+	    }
+	  },
+	  autoshowloadelement: function autoshowloadelement(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("autoshowloadelement", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("autoshowloadelement");
+	    }
+	  },
+	  autoshowfiltericon: function autoshowfiltericon(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("autoshowfiltericon", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("autoshowfiltericon");
+	    }
+	  },
+	  autoshowcolumnsmenubutton: function autoshowcolumnsmenubutton(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("autoshowcolumnsmenubutton", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("autoshowcolumnsmenubutton");
+	    }
+	  },
+	  clipboard: function clipboard(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("clipboard", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("clipboard");
+	    }
+	  },
+	  closeablegroups: function closeablegroups(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("closeablegroups", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("closeablegroups");
+	    }
+	  },
+	  columnsmenuwidth: function columnsmenuwidth(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("columnsmenuwidth", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("columnsmenuwidth");
+	    }
+	  },
+	  columnmenuopening: function columnmenuopening(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("columnmenuopening", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("columnmenuopening");
+	    }
+	  },
+	  columnmenuclosing: function columnmenuclosing(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("columnmenuclosing", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("columnmenuclosing");
+	    }
+	  },
+	  cellhover: function cellhover(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("cellhover", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("cellhover");
+	    }
+	  },
+	  enablekeyboarddelete: function enablekeyboarddelete(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("enablekeyboarddelete", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("enablekeyboarddelete");
+	    }
+	  },
+	  enableellipsis: function enableellipsis(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("enableellipsis", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("enableellipsis");
+	    }
+	  },
+	  enablemousewheel: function enablemousewheel(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("enablemousewheel", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("enablemousewheel");
+	    }
+	  },
+	  enableanimations: function enableanimations(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("enableanimations", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("enableanimations");
+	    }
+	  },
+	  enabletooltips: function enabletooltips(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("enabletooltips", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("enabletooltips");
+	    }
+	  },
+	  enablehover: function enablehover(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("enablehover", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("enablehover");
+	    }
+	  },
+	  enablebrowserselection: function enablebrowserselection(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("enablebrowserselection", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("enablebrowserselection");
+	    }
+	  },
+	  everpresentrowposition: function everpresentrowposition(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("everpresentrowposition", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("everpresentrowposition");
+	    }
+	  },
+	  everpresentrowheight: function everpresentrowheight(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("everpresentrowheight", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("everpresentrowheight");
+	    }
+	  },
+	  everpresentrowactions: function everpresentrowactions(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("everpresentrowactions", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("everpresentrowactions");
+	    }
+	  },
+	  everpresentrowactionsmode: function everpresentrowactionsmode(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("everpresentrowactionsmode", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("everpresentrowactionsmode");
+	    }
+	  },
+	  filterrowheight: function filterrowheight(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("filterrowheight", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("filterrowheight");
+	    }
+	  },
+	  filtermode: function filtermode(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("filtermode", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("filtermode");
+	    }
+	  },
+	  groupsrenderer: function groupsrenderer(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("groupsrenderer", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("groupsrenderer");
+	    }
+	  },
+	  groupcolumnrenderer: function groupcolumnrenderer(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("groupcolumnrenderer", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("groupcolumnrenderer");
+	    }
+	  },
+	  groupsexpandedbydefault: function groupsexpandedbydefault(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("groupsexpandedbydefault", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("groupsexpandedbydefault");
+	    }
+	  },
+	  handlekeyboardnavigation: function handlekeyboardnavigation(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("handlekeyboardnavigation", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("handlekeyboardnavigation");
+	    }
+	  },
+	  pagerrenderer: function pagerrenderer(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("pagerrenderer", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("pagerrenderer");
+	    }
+	  },
+	  rtl: function rtl(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("rtl", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("rtl");
+	    }
+	  },
+	  showdefaultloadelement: function showdefaultloadelement(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("showdefaultloadelement", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("showdefaultloadelement");
+	    }
+	  },
+	  showfiltercolumnbackground: function showfiltercolumnbackground(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("showfiltercolumnbackground", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("showfiltercolumnbackground");
+	    }
+	  },
+	  showfiltermenuitems: function showfiltermenuitems(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("showfiltermenuitems", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("showfiltermenuitems");
+	    }
+	  },
+	  showpinnedcolumnbackground: function showpinnedcolumnbackground(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("showpinnedcolumnbackground", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("showpinnedcolumnbackground");
+	    }
+	  },
+	  showsortcolumnbackground: function showsortcolumnbackground(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("showsortcolumnbackground", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("showsortcolumnbackground");
+	    }
+	  },
+	  showsortmenuitems: function showsortmenuitems(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("showsortmenuitems", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("showsortmenuitems");
+	    }
+	  },
+	  showgroupmenuitems: function showgroupmenuitems(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("showgroupmenuitems", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("showgroupmenuitems");
+	    }
+	  },
+	  showrowdetailscolumn: function showrowdetailscolumn(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("showrowdetailscolumn", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("showrowdetailscolumn");
+	    }
+	  },
+	  showheader: function showheader(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("showheader", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("showheader");
+	    }
+	  },
+	  showgroupsheader: function showgroupsheader(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("showgroupsheader", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("showgroupsheader");
+	    }
+	  },
+	  showaggregates: function showaggregates(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("showaggregates", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("showaggregates");
+	    }
+	  },
+	  showgroupaggregates: function showgroupaggregates(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("showgroupaggregates", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("showgroupaggregates");
+	    }
+	  },
+	  showeverpresentrow: function showeverpresentrow(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("showeverpresentrow", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("showeverpresentrow");
+	    }
+	  },
+	  showfilterrow: function showfilterrow(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("showfilterrow", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("showfilterrow");
+	    }
+	  },
+	  showemptyrow: function showemptyrow(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("showemptyrow", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("showemptyrow");
+	    }
+	  },
+	  showstatusbar: function showstatusbar(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("showstatusbar", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("showstatusbar");
+	    }
+	  },
+	  statusbarheight: function statusbarheight(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("statusbarheight", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("statusbarheight");
+	    }
+	  },
+	  showtoolbar: function showtoolbar(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("showtoolbar", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("showtoolbar");
+	    }
+	  },
+	  selectionmode: function selectionmode(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("selectionmode", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("selectionmode");
+	    }
+	  },
+	  theme: function theme(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("theme", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("theme");
+	    }
+	  },
+	  toolbarheight: function toolbarheight(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("toolbarheight", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("toolbarheight");
+	    }
+	  },
+	  autoheight: function autoheight(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("autoheight", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("autoheight");
+	    }
+	  },
+	  autorowheight: function autorowheight(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("autorowheight", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("autorowheight");
+	    }
+	  },
+	  columnsheight: function columnsheight(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("columnsheight", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("columnsheight");
+	    }
+	  },
+	  deferreddatafields: function deferreddatafields(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("deferreddatafields", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("deferreddatafields");
+	    }
+	  },
+	  groupsheaderheight: function groupsheaderheight(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("groupsheaderheight", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("groupsheaderheight");
+	    }
+	  },
+	  groupindentwidth: function groupindentwidth(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("groupindentwidth", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("groupindentwidth");
+	    }
+	  },
+	  height: function height(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("height", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("height");
+	    }
+	  },
+	  pagerheight: function pagerheight(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("pagerheight", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("pagerheight");
+	    }
+	  },
+	  rowsheight: function rowsheight(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("rowsheight", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("rowsheight");
+	    }
+	  },
+	  scrollbarsize: function scrollbarsize(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("scrollbarsize", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("scrollbarsize");
+	    }
+	  },
+	  scrollmode: function scrollmode(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("scrollmode", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("scrollmode");
+	    }
+	  },
+	  scrollfeedback: function scrollfeedback(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("scrollfeedback", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("scrollfeedback");
+	    }
+	  },
+	  width: function width(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("width", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("width");
+	    }
+	  },
+	  autosavestate: function autosavestate(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("autosavestate", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("autosavestate");
+	    }
+	  },
+	  autoloadstate: function autoloadstate(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("autoloadstate", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("autoloadstate");
+	    }
+	  },
+	  columns: function columns(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("columns", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("columns");
+	    }
+	  },
+	  columngroups: function columngroups(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("columngroups", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("columngroups");
+	    }
+	  },
+	  columnsmenu: function columnsmenu(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("columnsmenu", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("columnsmenu");
+	    }
+	  },
+	  columnsresize: function columnsresize(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("columnsresize", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("columnsresize");
+	    }
+	  },
+	  columnsautoresize: function columnsautoresize(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("columnsautoresize", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("columnsautoresize");
+	    }
+	  },
+	  columnsreorder: function columnsreorder(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("columnsreorder", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("columnsreorder");
+	    }
+	  },
+	  disabled: function disabled(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("disabled", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("disabled");
+	    }
+	  },
+	  editable: function editable(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("editable", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("editable");
+	    }
+	  },
+	  editmode: function editmode(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("editmode", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("editmode");
+	    }
+	  },
+	  filter: function filter(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("filter", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("filter");
+	    }
+	  },
+	  filterable: function filterable(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("filterable", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("filterable");
+	    }
+	  },
+	  groupable: function groupable(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("groupable", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("groupable");
+	    }
+	  },
+	  groups: function groups(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("groups", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("groups");
+	    }
+	  },
+	  horizontalscrollbarstep: function horizontalscrollbarstep(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("horizontalscrollbarstep", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("horizontalscrollbarstep");
+	    }
+	  },
+	  horizontalscrollbarlargestep: function horizontalscrollbarlargestep(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("horizontalscrollbarlargestep", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("horizontalscrollbarlargestep");
+	    }
+	  },
+	  initrowdetails: function initrowdetails(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("initrowdetails", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("initrowdetails");
+	    }
+	  },
+	  keyboardnavigation: function keyboardnavigation(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("keyboardnavigation", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("keyboardnavigation");
+	    }
+	  },
+	  pagesize: function pagesize(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("pagesize", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("pagesize");
+	    }
+	  },
+	  pagesizeoptions: function pagesizeoptions(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("pagesizeoptions", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("pagesizeoptions");
+	    }
+	  },
+	  pagermode: function pagermode(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("pagermode", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("pagermode");
+	    }
+	  },
+	  pagerbuttonscount: function pagerbuttonscount(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("pagerbuttonscount", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("pagerbuttonscount");
+	    }
+	  },
+	  pageable: function pageable(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("pageable", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("pageable");
+	    }
+	  },
+	  rowdetails: function rowdetails(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("rowdetails", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("rowdetails");
+	    }
+	  },
+	  rowdetailstemplate: function rowdetailstemplate(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("rowdetailstemplate", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("rowdetailstemplate");
+	    }
+	  },
+	  ready: function ready(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("ready", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("ready");
+	    }
+	  },
+	  rendered: function rendered(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("rendered", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("rendered");
+	    }
+	  },
+	  renderstatusbar: function renderstatusbar(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("renderstatusbar", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("renderstatusbar");
+	    }
+	  },
+	  rendertoolbar: function rendertoolbar(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("rendertoolbar", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("rendertoolbar");
+	    }
+	  },
+	  rendergridrows: function rendergridrows(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("rendergridrows", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("rendergridrows");
+	    }
+	  },
+	  sortable: function sortable(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("sortable", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("sortable");
+	    }
+	  },
+	  selectedrowindex: function selectedrowindex(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("selectedrowindex", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("selectedrowindex");
+	    }
+	  },
+	  selectedrowindexes: function selectedrowindexes(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("selectedrowindexes", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("selectedrowindexes");
+	    }
+	  },
+	  source: function source(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("source", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("source");
+	    }
+	  },
+	  sorttogglestates: function sorttogglestates(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("sorttogglestates", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("sorttogglestates");
+	    }
+	  },
+	  updatedelay: function updatedelay(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("updatedelay", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("updatedelay");
+	    }
+	  },
+	  virtualmode: function virtualmode(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("virtualmode", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("virtualmode");
+	    }
+	  },
+	  verticalscrollbarstep: function verticalscrollbarstep(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("verticalscrollbarstep", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("verticalscrollbarstep");
+	    }
+	  },
+	  verticalscrollbarlargestep: function verticalscrollbarlargestep(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxGrid("verticalscrollbarlargestep", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxGrid("verticalscrollbarlargestep");
+	    }
+	  },
+	  autoresizecolumns: function autoresizecolumns(type) {
+	    $("#" + this.componentSelector).jqxGrid("autoresizecolumns", type);
+	  },
+	  autoresizecolumn: function autoresizecolumn(dataField, type) {
+	    $("#" + this.componentSelector).jqxGrid("autoresizecolumn", dataField, type);
+	  },
+	  beginupdate: function beginupdate() {
+	    $("#" + this.componentSelector).jqxGrid("beginupdate");
+	  },
+	  clear: function clear() {
+	    $("#" + this.componentSelector).jqxGrid("clear");
+	  },
+	  destroy: function destroy() {
+	    $("#" + this.componentSelector).jqxGrid("destroy");
+	  },
+	  endupdate: function endupdate() {
+	    $("#" + this.componentSelector).jqxGrid("endupdate");
+	  },
+	  ensurerowvisible: function ensurerowvisible(rowBoundIndex) {
+	    $("#" + this.componentSelector).jqxGrid("ensurerowvisible", rowBoundIndex);
+	  },
+	  focus: function focus() {
+	    $("#" + this.componentSelector).jqxGrid("focus");
+	  },
+	  getcolumnindex: function getcolumnindex(dataField) {
+	    return $("#" + this.componentSelector).jqxGrid("getcolumnindex", dataField);
+	  },
+	  getcolumn: function getcolumn(dataField) {
+	    return $("#" + this.componentSelector).jqxGrid("getcolumn", dataField);
+	  },
+	  getcolumnproperty: function getcolumnproperty(dataField, propertyName) {
+	    return $("#" + this.componentSelector).jqxGrid("getcolumnproperty", dataField, propertyName);
+	  },
+	  getrowid: function getrowid(rowBoundIndex) {
+	    return $("#" + this.componentSelector).jqxGrid("getrowid", rowBoundIndex);
+	  },
+	  getrowdata: function getrowdata(rowBoundIndex) {
+	    return $("#" + this.componentSelector).jqxGrid("getrowdata", rowBoundIndex);
+	  },
+	  getrowdatabyid: function getrowdatabyid(rowID) {
+	    return $("#" + this.componentSelector).jqxGrid("getrowdatabyid", rowID);
+	  },
+	  getrowboundindexbyid: function getrowboundindexbyid(rowID) {
+	    return $("#" + this.componentSelector).jqxGrid("getrowboundindexbyid", rowID);
+	  },
+	  getrowboundindex: function getrowboundindex(rowDisplayIndex) {
+	    return $("#" + this.componentSelector).jqxGrid("getrowboundindex", rowDisplayIndex);
+	  },
+	  getrows: function getrows() {
+	    return $("#" + this.componentSelector).jqxGrid("getrows");
+	  },
+	  getboundrows: function getboundrows() {
+	    return $("#" + this.componentSelector).jqxGrid("getboundrows");
+	  },
+	  getdisplayrows: function getdisplayrows() {
+	    return $("#" + this.componentSelector).jqxGrid("getdisplayrows");
+	  },
+	  getdatainformation: function getdatainformation() {
+	    return $("#" + this.componentSelector).jqxGrid("getdatainformation");
+	  },
+	  getsortinformation: function getsortinformation() {
+	    return $("#" + this.componentSelector).jqxGrid("getsortinformation");
+	  },
+	  getpaginginformation: function getpaginginformation() {
+	    return $("#" + this.componentSelector).jqxGrid("getpaginginformation");
+	  },
+	  hidecolumn: function hidecolumn(dataField) {
+	    $("#" + this.componentSelector).jqxGrid("hidecolumn", dataField);
+	  },
+	  hideloadelement: function hideloadelement() {
+	    $("#" + this.componentSelector).jqxGrid("hideloadelement");
+	  },
+	  hiderowdetails: function hiderowdetails(rowBoundIndex) {
+	    $("#" + this.componentSelector).jqxGrid("hiderowdetails", rowBoundIndex);
+	  },
+	  iscolumnvisible: function iscolumnvisible(dataField) {
+	    return $("#" + this.componentSelector).jqxGrid("iscolumnvisible", dataField);
+	  },
+	  iscolumnpinned: function iscolumnpinned(dataField) {
+	    return $("#" + this.componentSelector).jqxGrid("iscolumnpinned", dataField);
+	  },
+	  localizestrings: function localizestrings(localizationObject) {
+	    $("#" + this.componentSelector).jqxGrid("localizestrings", localizationObject);
+	  },
+	  pincolumn: function pincolumn(dataField) {
+	    $("#" + this.componentSelector).jqxGrid("pincolumn", dataField);
+	  },
+	  refreshdata: function refreshdata() {
+	    $("#" + this.componentSelector).jqxGrid("refreshdata");
+	  },
+	  refresh: function refresh() {
+	    $("#" + this.componentSelector).jqxGrid("refresh");
+	  },
+	  performRender: function performRender() {
+	    $("#" + this.componentSelector).jqxGrid("render");
+	  },
+	  scrolloffset: function scrolloffset(top, left) {
+	    $("#" + this.componentSelector).jqxGrid("scrolloffset", top, left);
+	  },
+	  scrollposition: function scrollposition() {
+	    return $("#" + this.componentSelector).jqxGrid("scrollposition");
+	  },
+	  showloadelement: function showloadelement() {
+	    $("#" + this.componentSelector).jqxGrid("showloadelement");
+	  },
+	  showrowdetails: function showrowdetails(rowBoundIndex) {
+	    $("#" + this.componentSelector).jqxGrid("showrowdetails", rowBoundIndex);
+	  },
+	  setcolumnindex: function setcolumnindex(dataField, index) {
+	    $("#" + this.componentSelector).jqxGrid("setcolumnindex", dataField, index);
+	  },
+	  setcolumnproperty: function setcolumnproperty(dataField, propertyName, propertyValue) {
+	    $("#" + this.componentSelector).jqxGrid("setcolumnproperty", dataField, propertyName, propertyValue);
+	  },
+	  showcolumn: function showcolumn(dataField) {
+	    $("#" + this.componentSelector).jqxGrid("showcolumn", dataField);
+	  },
+	  unpincolumn: function unpincolumn(dataField) {
+	    $("#" + this.componentSelector).jqxGrid("unpincolumn", dataField);
+	  },
+	  updatebounddata: function updatebounddata(type) {
+	    $("#" + this.componentSelector).jqxGrid("updatebounddata", type);
+	  },
+	  updating: function updating() {
+	    return $("#" + this.componentSelector).jqxGrid("updating");
+	  },
+	  getsortcolumn: function getsortcolumn() {
+	    return $("#" + this.componentSelector).jqxGrid("getsortcolumn");
+	  },
+	  removesort: function removesort() {
+	    $("#" + this.componentSelector).jqxGrid("removesort");
+	  },
+	  sortby: function sortby(dataField, sortOrder) {
+	    $("#" + this.componentSelector).jqxGrid("sortby", dataField, sortOrder);
+	  },
+	  addgroup: function addgroup(dataField) {
+	    $("#" + this.componentSelector).jqxGrid("addgroup", dataField);
+	  },
+	  cleargroups: function cleargroups() {
+	    $("#" + this.componentSelector).jqxGrid("cleargroups");
+	  },
+	  collapsegroup: function collapsegroup(group) {
+	    $("#" + this.componentSelector).jqxGrid("collapsegroup", group);
+	  },
+	  collapseallgroups: function collapseallgroups() {
+	    $("#" + this.componentSelector).jqxGrid("collapseallgroups");
+	  },
+	  expandallgroups: function expandallgroups() {
+	    $("#" + this.componentSelector).jqxGrid("expandallgroups");
+	  },
+	  expandgroup: function expandgroup(group) {
+	    $("#" + this.componentSelector).jqxGrid("expandgroup", group);
+	  },
+	  getrootgroupscount: function getrootgroupscount() {
+	    return $("#" + this.componentSelector).jqxGrid("getrootgroupscount");
+	  },
+	  getgroup: function getgroup(groupIndex) {
+	    return $("#" + this.componentSelector).jqxGrid("getgroup", groupIndex);
+	  },
+	  insertgroup: function insertgroup(groupIndex, dataField) {
+	    $("#" + this.componentSelector).jqxGrid("insertgroup", groupIndex, dataField);
+	  },
+	  iscolumngroupable: function iscolumngroupable() {
+	    return $("#" + this.componentSelector).jqxGrid("iscolumngroupable");
+	  },
+	  removegroupat: function removegroupat(groupIndex) {
+	    $("#" + this.componentSelector).jqxGrid("removegroupat", groupIndex);
+	  },
+	  removegroup: function removegroup(dataField) {
+	    $("#" + this.componentSelector).jqxGrid("removegroup", dataField);
+	  },
+	  addfilter: function addfilter(dataField, filterGroup, refreshGrid) {
+	    $("#" + this.componentSelector).jqxGrid("addfilter", dataField, filterGroup, refreshGrid);
+	  },
+	  applyfilters: function applyfilters() {
+	    $("#" + this.componentSelector).jqxGrid("applyfilters");
+	  },
+	  clearfilters: function clearfilters() {
+	    $("#" + this.componentSelector).jqxGrid("clearfilters");
+	  },
+	  getfilterinformation: function getfilterinformation() {
+	    return $("#" + this.componentSelector).jqxGrid("getfilterinformation");
+	  },
+	  removefilter: function removefilter(dataField, refreshGrid) {
+	    $("#" + this.componentSelector).jqxGrid("removefilter", dataField, refreshGrid);
+	  },
+	  refreshfilterrow: function refreshfilterrow() {
+	    $("#" + this.componentSelector).jqxGrid("refreshfilterrow");
+	  },
+	  gotopage: function gotopage(pageNumber) {
+	    $("#" + this.componentSelector).jqxGrid("gotopage", pageNumber);
+	  },
+	  gotoprevpage: function gotoprevpage() {
+	    $("#" + this.componentSelector).jqxGrid("gotoprevpage");
+	  },
+	  gotonextpage: function gotonextpage() {
+	    $("#" + this.componentSelector).jqxGrid("gotonextpage");
+	  },
+	  addrow: function addrow(rowIds, data, rowPosition) {
+	    $("#" + this.componentSelector).jqxGrid("addrow", rowIds, data, rowPosition);
+	  },
+	  begincelledit: function begincelledit(rowBoundIndex, dataField) {
+	    $("#" + this.componentSelector).jqxGrid("begincelledit", rowBoundIndex, dataField);
+	  },
+	  beginrowedit: function beginrowedit(rowBoundIndex) {
+	    $("#" + this.componentSelector).jqxGrid("beginrowedit", rowBoundIndex);
+	  },
+	  closemenu: function closemenu() {
+	    $("#" + this.componentSelector).jqxGrid("closemenu");
+	  },
+	  deleterow: function deleterow(rowIds) {
+	    $("#" + this.componentSelector).jqxGrid("deleterow", rowIds);
+	  },
+	  endcelledit: function endcelledit(rowBoundIndex, dataField, confirmChanges) {
+	    $("#" + this.componentSelector).jqxGrid("endcelledit", rowBoundIndex, dataField, confirmChanges);
+	  },
+	  endrowedit: function endrowedit(rowBoundIndex, confirmChanges) {
+	    $("#" + this.componentSelector).jqxGrid("endrowedit", rowBoundIndex, confirmChanges);
+	  },
+	  getcell: function getcell(rowBoundIndex, datafield) {
+	    return $("#" + this.componentSelector).jqxGrid("getcell", rowBoundIndex, datafield);
+	  },
+	  getcellatposition: function getcellatposition(left, top) {
+	    return $("#" + this.componentSelector).jqxGrid("getcellatposition", left, top);
+	  },
+	  getcelltext: function getcelltext(rowBoundIndex, dataField) {
+	    return $("#" + this.componentSelector).jqxGrid("getcelltext", rowBoundIndex, dataField);
+	  },
+	  getcelltextbyid: function getcelltextbyid(rowID, dataField) {
+	    return $("#" + this.componentSelector).jqxGrid("getcelltextbyid", rowID, dataField);
+	  },
+	  getcellvaluebyid: function getcellvaluebyid(rowID, dataField) {
+	    return $("#" + this.componentSelector).jqxGrid("getcellvaluebyid", rowID, dataField);
+	  },
+	  getcellvalue: function getcellvalue(rowBoundIndex, dataField) {
+	    return $("#" + this.componentSelector).jqxGrid("getcellvalue", rowBoundIndex, dataField);
+	  },
+	  isBindingCompleted: function isBindingCompleted() {
+	    return $("#" + this.componentSelector).jqxGrid("isBindingCompleted");
+	  },
+	  openmenu: function openmenu(dataField) {
+	    $("#" + this.componentSelector).jqxGrid("openmenu", dataField);
+	  },
+	  setcellvalue: function setcellvalue(rowBoundIndex, dataField, value) {
+	    $("#" + this.componentSelector).jqxGrid("setcellvalue", rowBoundIndex, dataField, value);
+	  },
+	  setcellvaluebyid: function setcellvaluebyid(rowID, dataField, value) {
+	    $("#" + this.componentSelector).jqxGrid("setcellvaluebyid", rowID, dataField, value);
+	  },
+	  showvalidationpopup: function showvalidationpopup(rowBoundIndex, dataField, validationMessage) {
+	    $("#" + this.componentSelector).jqxGrid("showvalidationpopup", rowBoundIndex, dataField, validationMessage);
+	  },
+	  updaterow: function updaterow(rowIds, data) {
+	    $("#" + this.componentSelector).jqxGrid("updaterow", rowIds, data);
+	  },
+	  clearselection: function clearselection() {
+	    $("#" + this.componentSelector).jqxGrid("clearselection");
+	  },
+	  getselectedrowindex: function getselectedrowindex() {
+	    return $("#" + this.componentSelector).jqxGrid("getselectedrowindex");
+	  },
+	  getselectedrowindexes: function getselectedrowindexes() {
+	    return $("#" + this.componentSelector).jqxGrid("getselectedrowindexes");
+	  },
+	  getselectedcell: function getselectedcell() {
+	    return $("#" + this.componentSelector).jqxGrid("getselectedcell");
+	  },
+	  getselectedcells: function getselectedcells() {
+	    return $("#" + this.componentSelector).jqxGrid("getselectedcells");
+	  },
+	  selectcell: function selectcell(rowBoundIndex, dataField) {
+	    $("#" + this.componentSelector).jqxGrid("selectcell", rowBoundIndex, dataField);
+	  },
+	  selectallrows: function selectallrows() {
+	    $("#" + this.componentSelector).jqxGrid("selectallrows");
+	  },
+	  selectrow: function selectrow(rowBoundIndex) {
+	    $("#" + this.componentSelector).jqxGrid("selectrow", rowBoundIndex);
+	  },
+	  unselectrow: function unselectrow(rowBoundIndex) {
+	    $("#" + this.componentSelector).jqxGrid("unselectrow", rowBoundIndex);
+	  },
+	  unselectcell: function unselectcell(rowBoundIndex, dataField) {
+	    $("#" + this.componentSelector).jqxGrid("unselectcell", rowBoundIndex, dataField);
+	  },
+	  getcolumnaggregateddata: function getcolumnaggregateddata(dataField, aggregates) {
+	    return $("#" + this.componentSelector).jqxGrid("getcolumnaggregateddata", dataField, aggregates);
+	  },
+	  refreshaggregates: function refreshaggregates() {
+	    $("#" + this.componentSelector).jqxGrid("refreshaggregates");
+	  },
+	  renderaggregates: function renderaggregates() {
+	    $("#" + this.componentSelector).jqxGrid("renderaggregates");
+	  },
+	  exportdata: function exportdata(dataType, fileName, exportHeader, rows, exportHiddenColumns, serverURL, charSet) {
+	    return $("#" + this.componentSelector).jqxGrid("exportdata", dataType, fileName, exportHeader, rows, exportHiddenColumns, serverURL, charSet);
+	  },
+	  getstate: function getstate() {
+	    return $("#" + this.componentSelector).jqxGrid("getstate");
+	  },
+	  loadstate: function loadstate(stateObject) {
+	    $("#" + this.componentSelector).jqxGrid("loadstate", stateObject);
+	  },
+	  savestate: function savestate() {
+	    return $("#" + this.componentSelector).jqxGrid("savestate");
+	  },
+	  render: function render() {
+	    var id = 'jqxGrid' + this.generateID() + this.generateID();
+	    this.componentSelector = id;return _react2.default.createElement(
+	      'div',
+	      { id: id },
+	      this.value ? null : this.props.value,
+	      this.props.children
+	    );
+	  }
+	}); /*
+	    jQWidgets v4.5.0 (2017-Jan)
+	    Copyright (c) 2011-2017 jQWidgets.
+	    License: http://jqwidgets.com/license/
+	    */
+	
+	
+	module.exports = jqxGrid;
+
+/***/ },
+/* 184 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _react_jqxinput = __webpack_require__(185);
+	
+	var _react_jqxinput2 = _interopRequireDefault(_react_jqxinput);
+	
+	var _react_jqxvalidator = __webpack_require__(186);
+	
+	var _react_jqxvalidator2 = _interopRequireDefault(_react_jqxvalidator);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var RoleForm = function (_React$Component) {
+	  _inherits(RoleForm, _React$Component);
+	
+	  function RoleForm(props) {
+	    _classCallCheck(this, RoleForm);
+	
+	    var _this2 = _possibleConstructorReturn(this, (RoleForm.__proto__ || Object.getPrototypeOf(RoleForm)).call(this, props));
+	
+	    _this2.state = {
+	      roleId: ''
+	    };
+	    return _this2;
+	  }
+	
+	  _createClass(RoleForm, [{
+	    key: 'validate',
+	    value: function validate() {
+	      this.refs.formValidator.validate(document.getElementById('roleForm'));
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      console.log('Did mount!!');
+	      var _this = this;
+	
+	      this.refs.formValidator.on('validationSuccess', function (event) {
+	        if (_this.props.onValidationSuccess) {
+	          var role = _this.getValue();
+	          _this.props.onValidationSuccess(role, event);
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'getValue',
+	    value: function getValue() {
+	      var role = {
+	        roleId: this.refs.roleIdInput.val(),
+	        roleName: this.refs.roleNameInput.val()
+	      };
+	
+	      return role;
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      console.log('Unmount!!');
+	      $('#roleForm').remove();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	
+	      var rules = [{ input: '.roleId', message: 'Role id is required!', action: 'keyup, blur', rule: 'required' }, { input: '.roleName', message: 'Role name is required!', action: 'keyup, blur', rule: 'required' }];
+	
+	      if (this.props.role) {
+	        this.refs.roleIdInput.val(this.props.role.roleId);
+	        this.refs.roleNameInput.val(this.props.role.roleName);
+	      }
+	
+	      return _react2.default.createElement(
+	        _react_jqxvalidator2.default,
+	        { ref: 'formValidator', rules: rules },
+	        _react2.default.createElement(
+	          'form',
+	          { id: 'roleForm', action: './' },
+	          _react2.default.createElement(
+	            'table',
+	            { className: 'register-table' },
+	            _react2.default.createElement(
+	              'tbody',
+	              null,
+	              _react2.default.createElement(
+	                'tr',
+	                null,
+	                _react2.default.createElement(
+	                  'td',
+	                  null,
+	                  'Role Id'
+	                ),
+	                _react2.default.createElement(
+	                  'td',
+	                  null,
+	                  _react2.default.createElement(_react_jqxinput2.default, { ref: 'roleIdInput', theme: 'metro', className: 'roleId text-input', width: 200 })
+	                ),
+	                _react2.default.createElement(
+	                  'td',
+	                  null,
+	                  _react2.default.createElement(
+	                    'span',
+	                    { style: { color: 'red' } },
+	                    '*'
+	                  )
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'tr',
+	                null,
+	                _react2.default.createElement(
+	                  'td',
+	                  null,
+	                  'Role Name'
+	                ),
+	                _react2.default.createElement(
+	                  'td',
+	                  null,
+	                  _react2.default.createElement(_react_jqxinput2.default, { ref: 'roleNameInput', theme: 'metro', className: 'roleName text-input', width: 200 })
+	                ),
+	                _react2.default.createElement(
+	                  'td',
+	                  null,
+	                  _react2.default.createElement(
+	                    'span',
+	                    { style: { color: 'red' } },
+	                    '*'
+	                  )
+	                )
+	              )
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return RoleForm;
+	}(_react2.default.Component);
+	
+	exports.default = RoleForm;
+
+/***/ },
+/* 185 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var jqxInput = _react2.default.createClass({
+	  displayName: 'jqxInput',
+	
+	  getInitialState: function getInitialState() {
+	    return { value: '' };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    var options = this.manageAttributes();
+	    this.createComponent(options);
+	  },
+	  manageAttributes: function manageAttributes() {
+	    var properties = ['disabled', 'dropDownWidth', 'displayMember', 'height', 'items', 'minLength', 'maxLength', 'opened', 'placeHolder', 'popupZIndex', 'query', 'renderer', 'rtl', 'searchMode', 'source', 'theme', 'valueMember', 'width'];
+	    var options = {};
+	    for (var item in this.props) {
+	      if (item === 'settings') {
+	        for (var itemTwo in this.props[item]) {
+	          options[itemTwo] = this.props[item][itemTwo];
+	        }
+	      } else {
+	        if (properties.indexOf(item) !== -1) {
+	          options[item] = this.props[item];
+	        }
+	      }
+	    }
+	    return options;
+	  },
+	  createComponent: function createComponent(options) {
+	    if (!this.style) {
+	      for (var style in this.props.style) {
+	        $('#' + this.componentSelector).css(style, this.props.style[style]);
+	      }
+	    }
+	    if (this.props.className !== undefined) {
+	      var classes = this.props.className.split(' ');
+	      for (var i = 0; i < classes.length; i++) {
+	        $('#' + this.componentSelector).addClass(classes[i]);
+	      }
+	    }
+	    if (!this.template) {
+	      $('#' + this.componentSelector).html(this.props.template);
+	    }
+	    $('#' + this.componentSelector).jqxInput(options);
+	  },
+	  generateID: function generateID() {
+	    return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+	  },
+	  setOptions: function setOptions(options) {
+	    $('#' + this.componentSelector).jqxInput('setOptions', options);
+	  },
+	  getOptions: function getOptions() {
+	    if (arguments.length === 0) {
+	      throw Error('At least one argument expected in getOptions()!');
+	    }
+	    var resultToReturn = {};
+	    for (var i = 0; i < arguments.length; i++) {
+	      resultToReturn[arguments[i]] = $('#' + this.componentSelector).jqxInput(arguments[i]);
+	    }
+	    return resultToReturn;
+	  },
+	  on: function on(name, callbackFn) {
+	    $('#' + this.componentSelector).on(name, callbackFn);
+	  },
+	  off: function off(name) {
+	    $('#' + this.componentSelector).off(name);
+	  },
+	  disabled: function disabled(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxInput("disabled", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxInput("disabled");
+	    }
+	  },
+	  dropDownWidth: function dropDownWidth(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxInput("dropDownWidth", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxInput("dropDownWidth");
+	    }
+	  },
+	  displayMember: function displayMember(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxInput("displayMember", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxInput("displayMember");
+	    }
+	  },
+	  height: function height(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxInput("height", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxInput("height");
+	    }
+	  },
+	  items: function items(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxInput("items", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxInput("items");
+	    }
+	  },
+	  minLength: function minLength(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxInput("minLength", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxInput("minLength");
+	    }
+	  },
+	  maxLength: function maxLength(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxInput("maxLength", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxInput("maxLength");
+	    }
+	  },
+	  opened: function opened(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxInput("opened", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxInput("opened");
+	    }
+	  },
+	  placeHolder: function placeHolder(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxInput("placeHolder", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxInput("placeHolder");
+	    }
+	  },
+	  popupZIndex: function popupZIndex(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxInput("popupZIndex", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxInput("popupZIndex");
+	    }
+	  },
+	  query: function query(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxInput("query", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxInput("query");
+	    }
+	  },
+	  renderer: function renderer(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxInput("renderer", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxInput("renderer");
+	    }
+	  },
+	  rtl: function rtl(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxInput("rtl", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxInput("rtl");
+	    }
+	  },
+	  searchMode: function searchMode(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxInput("searchMode", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxInput("searchMode");
+	    }
+	  },
+	  source: function source(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxInput("source", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxInput("source");
+	    }
+	  },
+	  theme: function theme(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxInput("theme", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxInput("theme");
+	    }
+	  },
+	  valueMember: function valueMember(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxInput("valueMember", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxInput("valueMember");
+	    }
+	  },
+	  width: function width(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxInput("width", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxInput("width");
+	    }
+	  },
+	  destroy: function destroy() {
+	    $("#" + this.componentSelector).jqxInput("destroy");
+	  },
+	  focus: function focus() {
+	    $("#" + this.componentSelector).jqxInput("focus");
+	  },
+	  selectAll: function selectAll() {
+	    $("#" + this.componentSelector).jqxInput("selectAll");
+	  },
+	  val: function val(value) {
+	    if (value !== undefined) {
+	      $("#" + this.componentSelector).jqxInput("val", value);
+	    } else {
+	      return $("#" + this.componentSelector).jqxInput("val");
+	    }
+	  },
+	
+	  render: function render() {
+	    var id = 'jqxInput' + this.generateID() + this.generateID();
+	    this.componentSelector = id;return _react2.default.createElement('input', { type: 'text', id: id });
+	  }
+	}); /*
+	    jQWidgets v4.5.0 (2017-Jan)
+	    Copyright (c) 2011-2017 jQWidgets.
+	    License: http://jqwidgets.com/license/
+	    */
+	
+	
+	module.exports = jqxInput;
+
+/***/ },
+/* 186 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var jqxValidator = _react2.default.createClass({
+	  displayName: 'jqxValidator',
+	
+	  getInitialState: function getInitialState() {
+	    return { value: '' };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    var options = this.manageAttributes();
+	    this.createComponent(options);
+	  },
+	  manageAttributes: function manageAttributes() {
+	    var properties = ['arrow', 'animation', 'animationDuration', 'closeOnClick', 'focus', 'hintType', 'onError', 'onSuccess', 'position', 'rules', 'rtl'];
+	    var options = {};
+	    for (var item in this.props) {
+	      if (item === 'settings') {
+	        for (var itemTwo in this.props[item]) {
+	          options[itemTwo] = this.props[item][itemTwo];
+	        }
+	      } else {
+	        if (properties.indexOf(item) !== -1) {
+	          options[item] = this.props[item];
+	        }
+	      }
+	    }
+	    return options;
+	  },
+	  createComponent: function createComponent(options) {
+	    if (!this.style) {
+	      for (var style in this.props.style) {
+	        $('#' + this.componentSelector).css(style, this.props.style[style]);
+	      }
+	    }
+	    if (this.props.className !== undefined) {
+	      var classes = this.props.className.split(' ');
+	      for (var i = 0; i < classes.length; i++) {
+	        $('#' + this.componentSelector).addClass(classes[i]);
+	      }
+	    }
+	    if (!this.template) {
+	      $('#' + this.componentSelector).html(this.props.template);
+	    }
+	    $('#' + this.componentSelector).jqxValidator(options);
+	  },
+	  generateID: function generateID() {
+	    return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+	  },
+	  setOptions: function setOptions(options) {
+	    $('#' + this.componentSelector).jqxValidator('setOptions', options);
+	  },
+	  getOptions: function getOptions() {
+	    if (arguments.length === 0) {
+	      throw Error('At least one argument expected in getOptions()!');
+	    }
+	    var resultToReturn = {};
+	    for (var i = 0; i < arguments.length; i++) {
+	      resultToReturn[arguments[i]] = $('#' + this.componentSelector).jqxValidator(arguments[i]);
+	    }
+	    return resultToReturn;
+	  },
+	  on: function on(name, callbackFn) {
+	    $('#' + this.componentSelector).on(name, callbackFn);
+	  },
+	  off: function off(name) {
+	    $('#' + this.componentSelector).off(name);
+	  },
+	  arrow: function arrow(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxValidator("arrow", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxValidator("arrow");
+	    }
+	  },
+	  animation: function animation(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxValidator("animation", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxValidator("animation");
+	    }
+	  },
+	  animationDuration: function animationDuration(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxValidator("animationDuration", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxValidator("animationDuration");
+	    }
+	  },
+	  closeOnClick: function closeOnClick(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxValidator("closeOnClick", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxValidator("closeOnClick");
+	    }
+	  },
+	  focus: function focus(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxValidator("focus", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxValidator("focus");
+	    }
+	  },
+	  hintType: function hintType(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxValidator("hintType", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxValidator("hintType");
+	    }
+	  },
+	  onError: function onError(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxValidator("onError", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxValidator("onError");
+	    }
+	  },
+	  onSuccess: function onSuccess(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxValidator("onSuccess", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxValidator("onSuccess");
+	    }
+	  },
+	  position: function position(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxValidator("position", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxValidator("position");
+	    }
+	  },
+	  rules: function rules(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxValidator("rules", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxValidator("rules");
+	    }
+	  },
+	  rtl: function rtl(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxValidator("rtl", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxValidator("rtl");
+	    }
+	  },
+	  hideHint: function hideHint(id) {
+	    $("#" + this.componentSelector).jqxValidator("hideHint", id);
+	  },
+	  hide: function hide() {
+	    $("#" + this.componentSelector).jqxValidator("hide");
+	  },
+	  updatePosition: function updatePosition() {
+	    $("#" + this.componentSelector).jqxValidator("updatePosition");
+	  },
+	  validate: function validate(htmlElement) {
+	    $("#" + this.componentSelector).jqxValidator("validate", htmlElement);
+	  },
+	  validateInput: function validateInput(id) {
+	    $("#" + this.componentSelector).jqxValidator("validateInput", id);
+	  },
+	  render: function render() {
+	    var id = 'jqxValidator' + this.generateID() + this.generateID();
+	    this.componentSelector = id;return _react2.default.createElement(
+	      'div',
+	      { id: id },
+	      this.value ? null : this.props.value,
+	      this.props.children
+	    );
+	  }
+	}); /*
+	    jQWidgets v4.5.0 (2017-Jan)
+	    Copyright (c) 2011-2017 jQWidgets.
+	    License: http://jqwidgets.com/license/
+	    */
+	
+	
+	module.exports = jqxValidator;
+
+/***/ },
+/* 187 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _react_jqxwindow = __webpack_require__(188);
+	
+	var _react_jqxwindow2 = _interopRequireDefault(_react_jqxwindow);
+	
+	var _react_jqxbuttons = __webpack_require__(189);
+	
+	var _react_jqxbuttons2 = _interopRequireDefault(_react_jqxbuttons);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var EditWindow = function (_React$Component) {
+	  _inherits(EditWindow, _React$Component);
+	
+	  function EditWindow(props) {
+	    _classCallCheck(this, EditWindow);
+	
+	    return _possibleConstructorReturn(this, (EditWindow.__proto__ || Object.getPrototypeOf(EditWindow)).call(this, props));
+	  }
+	
+	  _createClass(EditWindow, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	
+	      var _this = this;
+	
+	      this.refs.saveButton.on('click', function (event) {
+	        if (_this.props.onSave) {
+	          _this.props.onSave();
+	        }
+	      });
+	
+	      this.refs.cancelButton.on('click', function (event) {
+	        _this.refs.editWindow.close();
+	      });
+	
+	      this.refs.deleteButton.on('click', function (event) {
+	        if (_this.props.onDelete) {
+	          _this.props.onDelete();
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'open',
+	    value: function open() {
+	      this.refs.editWindow.open();
+	    }
+	  }, {
+	    key: 'close',
+	    value: function close() {
+	      this.refs.editWindow.close();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        _react_jqxwindow2.default,
+	        { ref: 'editWindow',
+	          width: 340, height: 150, theme: 'metro', isModal: true,
+	          resizable: false, autoOpen: false },
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'span',
+	            null,
+	            this.props.title
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { style: { overflow: 'hidden' } },
+	          _react2.default.createElement(
+	            'table',
+	            { className: 'register-table' },
+	            _react2.default.createElement(
+	              'tbody',
+	              null,
+	              _react2.default.createElement(
+	                'tr',
+	                null,
+	                _react2.default.createElement(
+	                  'td',
+	                  { colSpan: 3 },
+	                  this.props.children
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'tr',
+	                null,
+	                _react2.default.createElement(
+	                  'td',
+	                  null,
+	                  _react2.default.createElement(
+	                    'table',
+	                    { style: { height: '100%', width: '100%' } },
+	                    _react2.default.createElement(
+	                      'tbody',
+	                      null,
+	                      _react2.default.createElement(
+	                        'tr',
+	                        null,
+	                        _react2.default.createElement('td', { style: { width: '90%' } }),
+	                        _react2.default.createElement(
+	                          'td',
+	                          { style: { paddingRight: '20px' } },
+	                          _react2.default.createElement(_react_jqxbuttons2.default, { width: 60, height: 25, ref: 'deleteButton', value: 'Delete', theme: 'light', template: 'danger' })
+	                        ),
+	                        _react2.default.createElement(
+	                          'td',
+	                          null,
+	                          _react2.default.createElement(_react_jqxbuttons2.default, { width: 60, height: 25, ref: 'cancelButton', value: 'Cancel', theme: 'light', template: 'default' })
+	                        ),
+	                        _react2.default.createElement(
+	                          'td',
+	                          null,
+	                          _react2.default.createElement(_react_jqxbuttons2.default, { width: 60, height: 25, ref: 'saveButton', value: 'Save', theme: 'light', template: 'success' })
+	                        )
+	                      )
+	                    )
+	                  )
+	                )
+	              )
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return EditWindow;
+	}(_react2.default.Component);
+	
+	exports.default = EditWindow;
+
+/***/ },
+/* 188 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var jqxWindow = _react2.default.createClass({
+	  displayName: 'jqxWindow',
+	
+	  getInitialState: function getInitialState() {
+	    return { value: '' };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    var options = this.manageAttributes();
+	    this.createComponent(options);
+	  },
+	  manageAttributes: function manageAttributes() {
+	    var properties = ['autoOpen', 'animationType', 'collapsed', 'collapseAnimationDuration', 'content', 'closeAnimationDuration', 'closeButtonSize', 'closeButtonAction', 'cancelButton', 'dragArea', 'draggable', 'disabled', 'height', 'initContent', 'isModal', 'keyboardCloseKey', 'keyboardNavigation', 'minHeight', 'maxHeight', 'minWidth', 'maxWidth', 'modalOpacity', 'modalZIndex', 'modalBackgroundZIndex', 'okButton', 'position', 'rtl', 'resizable', 'showAnimationDuration', 'showCloseButton', 'showCollapseButton', 'theme', 'title', 'width', 'zIndex'];
+	    var options = {};
+	    for (var item in this.props) {
+	      if (item === 'settings') {
+	        for (var itemTwo in this.props[item]) {
+	          options[itemTwo] = this.props[item][itemTwo];
+	        }
+	      } else {
+	        if (properties.indexOf(item) !== -1) {
+	          options[item] = this.props[item];
+	        }
+	      }
+	    }
+	    return options;
+	  },
+	  createComponent: function createComponent(options) {
+	    if (!this.style) {
+	      for (var style in this.props.style) {
+	        $('#' + this.componentSelector).css(style, this.props.style[style]);
+	      }
+	    }
+	    if (this.props.className !== undefined) {
+	      var classes = this.props.className.split(' ');
+	      for (var i = 0; i < classes.length; i++) {
+	        $('#' + this.componentSelector).addClass(classes[i]);
+	      }
+	    }
+	    if (!this.template) {
+	      $('#' + this.componentSelector).html(this.props.template);
+	    }
+	    $('#' + this.componentSelector).jqxWindow(options);
+	  },
+	  generateID: function generateID() {
+	    return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+	  },
+	  setOptions: function setOptions(options) {
+	    $('#' + this.componentSelector).jqxWindow('setOptions', options);
+	  },
+	  getOptions: function getOptions() {
+	    if (arguments.length === 0) {
+	      throw Error('At least one argument expected in getOptions()!');
+	    }
+	    var resultToReturn = {};
+	    for (var i = 0; i < arguments.length; i++) {
+	      resultToReturn[arguments[i]] = $('#' + this.componentSelector).jqxWindow(arguments[i]);
+	    }
+	    return resultToReturn;
+	  },
+	  on: function on(name, callbackFn) {
+	    $('#' + this.componentSelector).on(name, callbackFn);
+	  },
+	  off: function off(name) {
+	    $('#' + this.componentSelector).off(name);
+	  },
+	  autoOpen: function autoOpen(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("autoOpen", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("autoOpen");
+	    }
+	  },
+	  animationType: function animationType(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("animationType", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("animationType");
+	    }
+	  },
+	  collapsed: function collapsed(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("collapsed", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("collapsed");
+	    }
+	  },
+	  collapseAnimationDuration: function collapseAnimationDuration(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("collapseAnimationDuration", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("collapseAnimationDuration");
+	    }
+	  },
+	  content: function content(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("content", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("content");
+	    }
+	  },
+	  closeAnimationDuration: function closeAnimationDuration(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("closeAnimationDuration", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("closeAnimationDuration");
+	    }
+	  },
+	  closeButtonSize: function closeButtonSize(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("closeButtonSize", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("closeButtonSize");
+	    }
+	  },
+	  closeButtonAction: function closeButtonAction(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("closeButtonAction", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("closeButtonAction");
+	    }
+	  },
+	  cancelButton: function cancelButton(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("cancelButton", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("cancelButton");
+	    }
+	  },
+	  dragArea: function dragArea(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("dragArea", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("dragArea");
+	    }
+	  },
+	  draggable: function draggable(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("draggable", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("draggable");
+	    }
+	  },
+	  disabled: function disabled(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("disabled", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("disabled");
+	    }
+	  },
+	  height: function height(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("height", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("height");
+	    }
+	  },
+	  initContent: function initContent(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("initContent", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("initContent");
+	    }
+	  },
+	  isModal: function isModal(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("isModal", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("isModal");
+	    }
+	  },
+	  keyboardCloseKey: function keyboardCloseKey(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("keyboardCloseKey", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("keyboardCloseKey");
+	    }
+	  },
+	  keyboardNavigation: function keyboardNavigation(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("keyboardNavigation", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("keyboardNavigation");
+	    }
+	  },
+	  minHeight: function minHeight(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("minHeight", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("minHeight");
+	    }
+	  },
+	  maxHeight: function maxHeight(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("maxHeight", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("maxHeight");
+	    }
+	  },
+	  minWidth: function minWidth(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("minWidth", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("minWidth");
+	    }
+	  },
+	  maxWidth: function maxWidth(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("maxWidth", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("maxWidth");
+	    }
+	  },
+	  modalOpacity: function modalOpacity(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("modalOpacity", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("modalOpacity");
+	    }
+	  },
+	  modalZIndex: function modalZIndex(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("modalZIndex", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("modalZIndex");
+	    }
+	  },
+	  modalBackgroundZIndex: function modalBackgroundZIndex(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("modalBackgroundZIndex", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("modalBackgroundZIndex");
+	    }
+	  },
+	  okButton: function okButton(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("okButton", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("okButton");
+	    }
+	  },
+	  position: function position(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("position", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("position");
+	    }
+	  },
+	  rtl: function rtl(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("rtl", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("rtl");
+	    }
+	  },
+	  resizable: function resizable(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("resizable", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("resizable");
+	    }
+	  },
+	  showAnimationDuration: function showAnimationDuration(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("showAnimationDuration", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("showAnimationDuration");
+	    }
+	  },
+	  showCloseButton: function showCloseButton(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("showCloseButton", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("showCloseButton");
+	    }
+	  },
+	  showCollapseButton: function showCollapseButton(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("showCollapseButton", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("showCollapseButton");
+	    }
+	  },
+	  theme: function theme(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("theme", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("theme");
+	    }
+	  },
+	  title: function title(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("title", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("title");
+	    }
+	  },
+	  width: function width(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("width", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("width");
+	    }
+	  },
+	  zIndex: function zIndex(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxWindow("zIndex", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxWindow("zIndex");
+	    }
+	  },
+	  bringToFront: function bringToFront() {
+	    $("#" + this.componentSelector).jqxWindow("bringToFront");
+	  },
+	  close: function close() {
+	    $("#" + this.componentSelector).jqxWindow("close");
+	  },
+	  collapse: function collapse() {
+	    $("#" + this.componentSelector).jqxWindow("collapse");
+	  },
+	  closeAll: function closeAll() {
+	    $("#" + this.componentSelector).jqxWindow("closeAll");
+	  },
+	  disable: function disable() {
+	    $("#" + this.componentSelector).jqxWindow("disable");
+	  },
+	  destroy: function destroy() {
+	    $("#" + this.componentSelector).jqxWindow("destroy");
+	  },
+	  enable: function enable() {
+	    $("#" + this.componentSelector).jqxWindow("enable");
+	  },
+	  expand: function expand() {
+	    $("#" + this.componentSelector).jqxWindow("expand");
+	  },
+	  focus: function focus() {
+	    $("#" + this.componentSelector).jqxWindow("focus");
+	  },
+	  isOpen: function isOpen() {
+	    return $("#" + this.componentSelector).jqxWindow("isOpen");
+	  },
+	  move: function move(top, left) {
+	    $("#" + this.componentSelector).jqxWindow("move", top, left);
+	  },
+	  open: function open() {
+	    $("#" + this.componentSelector).jqxWindow("open");
+	  },
+	  resize: function resize(top, left) {
+	    $("#" + this.componentSelector).jqxWindow("resize", top, left);
+	  },
+	  setTitle: function setTitle(title) {
+	    $("#" + this.componentSelector).jqxWindow("setTitle", title);
+	  },
+	  setContent: function setContent(content) {
+	    $("#" + this.componentSelector).jqxWindow("setContent", content);
+	  },
+	  render: function render() {
+	    var id = 'jqxWindow' + this.generateID() + this.generateID();
+	    this.componentSelector = id;return _react2.default.createElement(
+	      'div',
+	      { id: id },
+	      this.value ? null : this.props.value,
+	      this.props.children
+	    );
+	  }
+	}); /*
+	    jQWidgets v4.5.0 (2017-Jan)
+	    Copyright (c) 2011-2017 jQWidgets.
+	    License: http://jqwidgets.com/license/
+	    */
+	
+	
+	module.exports = jqxWindow;
+
+/***/ },
+/* 189 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var jqxButton = _react2.default.createClass({
+	  displayName: 'jqxButton',
+	
+	  getInitialState: function getInitialState() {
+	    return { value: '' };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    var options = this.manageAttributes();
+	    this.createComponent(options);
+	  },
+	  manageAttributes: function manageAttributes() {
+	    var properties = ['delay', 'disabled', 'height', 'imgSrc', 'imgWidth', 'imgHeight', 'imgPosition', 'roundedCorners', 'rtl', 'textPosition', 'textImageRelation', 'theme', 'template', 'toggled', 'width', 'value'];
+	    var options = {};
+	    for (var item in this.props) {
+	      if (item === 'settings') {
+	        for (var itemTwo in this.props[item]) {
+	          options[itemTwo] = this.props[item][itemTwo];
+	        }
+	      } else {
+	        if (properties.indexOf(item) !== -1) {
+	          options[item] = this.props[item];
+	        }
+	      }
+	    }
+	    return options;
+	  },
+	  createComponent: function createComponent(options) {
+	    if (!this.style) {
+	      for (var style in this.props.style) {
+	        $('#' + this.componentSelector).css(style, this.props.style[style]);
+	      }
+	    }
+	    if (this.props.className !== undefined) {
+	      var classes = this.props.className.split(' ');
+	      for (var i = 0; i < classes.length; i++) {
+	        $('#' + this.componentSelector).addClass(classes[i]);
+	      }
+	    }
+	    if (!this.template) {
+	      $('#' + this.componentSelector).html(this.props.template);
+	    }
+	    $('#' + this.componentSelector).jqxButton(options);
+	  },
+	  generateID: function generateID() {
+	    return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+	  },
+	  setOptions: function setOptions(options) {
+	    $('#' + this.componentSelector).jqxButton('setOptions', options);
+	  },
+	  getOptions: function getOptions() {
+	    if (arguments.length === 0) {
+	      throw Error('At least one argument expected in getOptions()!');
+	    }
+	    var resultToReturn = {};
+	    for (var i = 0; i < arguments.length; i++) {
+	      resultToReturn[arguments[i]] = $('#' + this.componentSelector).jqxButton(arguments[i]);
+	    }
+	    return resultToReturn;
+	  },
+	  on: function on(name, callbackFn) {
+	    $('#' + this.componentSelector).on(name, callbackFn);
+	  },
+	  off: function off(name) {
+	    $('#' + this.componentSelector).off(name);
+	  },
+	  delay: function delay(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxButton("delay", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxButton("delay");
+	    }
+	  },
+	  disabled: function disabled(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxButton("disabled", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxButton("disabled");
+	    }
+	  },
+	  height: function height(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxButton("height", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxButton("height");
+	    }
+	  },
+	  imgSrc: function imgSrc(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxButton("imgSrc", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxButton("imgSrc");
+	    }
+	  },
+	  imgWidth: function imgWidth(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxButton("imgWidth", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxButton("imgWidth");
+	    }
+	  },
+	  imgHeight: function imgHeight(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxButton("imgHeight", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxButton("imgHeight");
+	    }
+	  },
+	  imgPosition: function imgPosition(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxButton("imgPosition", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxButton("imgPosition");
+	    }
+	  },
+	  roundedCorners: function roundedCorners(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxButton("roundedCorners", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxButton("roundedCorners");
+	    }
+	  },
+	  rtl: function rtl(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxButton("rtl", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxButton("rtl");
+	    }
+	  },
+	  textPosition: function textPosition(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxButton("textPosition", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxButton("textPosition");
+	    }
+	  },
+	  textImageRelation: function textImageRelation(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxButton("textImageRelation", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxButton("textImageRelation");
+	    }
+	  },
+	  theme: function theme(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxButton("theme", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxButton("theme");
+	    }
+	  },
+	  template: function template(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxButton("template", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxButton("template");
+	    }
+	  },
+	  toggled: function toggled(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxButton("toggled", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxButton("toggled");
+	    }
+	  },
+	  width: function width(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxButton("width", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxButton("width");
+	    }
+	  },
+	  value: function value(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxButton("value", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxButton("value");
+	    }
+	  },
+	  check: function check() {
+	    $("#" + this.componentSelector).jqxButton("check");
+	  },
+	  destroy: function destroy() {
+	    $("#" + this.componentSelector).jqxButton("destroy");
+	  },
+	  focus: function focus() {
+	    $("#" + this.componentSelector).jqxButton("focus");
+	  },
+	  performRender: function performRender() {
+	    $("#" + this.componentSelector).jqxButton("render");
+	  },
+	  toggle: function toggle() {
+	    $("#" + this.componentSelector).jqxButton("toggle");
+	  },
+	  unCheck: function unCheck() {
+	    $("#" + this.componentSelector).jqxButton("unCheck");
+	  },
+	  val: function val(value) {
+	    if (value !== undefined) {
+	      $("#" + this.componentSelector).jqxButton("val", value);
+	    } else {
+	      return $("#" + this.componentSelector).jqxButton("val");
+	    }
+	  },
+	
+	  render: function render() {
+	    var id = 'jqxButton' + this.generateID() + this.generateID();
+	    this.componentSelector = id;return _react2.default.createElement(
+	      'div',
+	      { id: id },
+	      this.value ? null : this.props.value,
+	      this.props.children
+	    );
+	  }
+	}); /*
+	    jQWidgets v4.5.0 (2017-Jan)
+	    Copyright (c) 2011-2017 jQWidgets.
+	    License: http://jqwidgets.com/license/
+	    */
+	
+	
+	module.exports = jqxButton;
+
+/***/ },
+/* 190 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _react_jqxnotification = __webpack_require__(191);
+	
+	var _react_jqxnotification2 = _interopRequireDefault(_react_jqxnotification);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var SuccessNotification = function (_React$Component) {
+	  _inherits(SuccessNotification, _React$Component);
+	
+	  function SuccessNotification(props) {
+	    _classCallCheck(this, SuccessNotification);
+	
+	    return _possibleConstructorReturn(this, (SuccessNotification.__proto__ || Object.getPrototypeOf(SuccessNotification)).call(this, props));
+	  }
+	
+	  _createClass(SuccessNotification, [{
+	    key: 'open',
+	    value: function open() {
+	      this.refs.messageNotification.open();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        _react_jqxnotification2.default,
+	        { ref: 'messageNotification',
+	          width: 250, opacity: 0.9, autoCloseDelay: 3000, animationOpenDelay: 800,
+	          autoClose: true, autoOpen: false, position: 'top-right', template: 'info' },
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          'Operation Completed Successfully'
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return SuccessNotification;
+	}(_react2.default.Component);
+	
+	exports.default = SuccessNotification;
+
+/***/ },
+/* 191 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var jqxNotification = _react2.default.createClass({
+	  displayName: 'jqxNotification',
+	
+	  getInitialState: function getInitialState() {
+	    return { value: '' };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    var options = this.manageAttributes();
+	    this.createComponent(options);
+	  },
+	  manageAttributes: function manageAttributes() {
+	    var properties = ['appendContainer', 'autoOpen', 'animationOpenDelay', 'animationCloseDelay', 'autoClose', 'autoCloseDelay', 'blink', 'browserBoundsOffset', 'closeOnClick', 'disabled', 'height', 'hoverOpacity', 'icon', 'notificationOffset', 'opacity', 'position', 'rtl', 'showCloseButton', 'template', 'theme', 'width'];
+	    var options = {};
+	    for (var item in this.props) {
+	      if (item === 'settings') {
+	        for (var itemTwo in this.props[item]) {
+	          options[itemTwo] = this.props[item][itemTwo];
+	        }
+	      } else {
+	        if (properties.indexOf(item) !== -1) {
+	          options[item] = this.props[item];
+	        }
+	      }
+	    }
+	    return options;
+	  },
+	  createComponent: function createComponent(options) {
+	    if (!this.style) {
+	      for (var style in this.props.style) {
+	        $('#' + this.componentSelector).css(style, this.props.style[style]);
+	      }
+	    }
+	    if (this.props.className !== undefined) {
+	      var classes = this.props.className.split(' ');
+	      for (var i = 0; i < classes.length; i++) {
+	        $('#' + this.componentSelector).addClass(classes[i]);
+	      }
+	    }
+	    if (!this.template) {
+	      $('#' + this.componentSelector).html(this.props.template);
+	    }
+	    $('#' + this.componentSelector).jqxNotification(options);
+	  },
+	  generateID: function generateID() {
+	    return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+	  },
+	  setOptions: function setOptions(options) {
+	    $('#' + this.componentSelector).jqxNotification('setOptions', options);
+	  },
+	  getOptions: function getOptions() {
+	    if (arguments.length === 0) {
+	      throw Error('At least one argument expected in getOptions()!');
+	    }
+	    var resultToReturn = {};
+	    for (var i = 0; i < arguments.length; i++) {
+	      resultToReturn[arguments[i]] = $('#' + this.componentSelector).jqxNotification(arguments[i]);
+	    }
+	    return resultToReturn;
+	  },
+	  on: function on(name, callbackFn) {
+	    $('#' + this.componentSelector).on(name, callbackFn);
+	  },
+	  off: function off(name) {
+	    $('#' + this.componentSelector).off(name);
+	  },
+	  appendContainer: function appendContainer(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("appendContainer", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("appendContainer");
+	    }
+	  },
+	  autoOpen: function autoOpen(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("autoOpen", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("autoOpen");
+	    }
+	  },
+	  animationOpenDelay: function animationOpenDelay(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("animationOpenDelay", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("animationOpenDelay");
+	    }
+	  },
+	  animationCloseDelay: function animationCloseDelay(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("animationCloseDelay", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("animationCloseDelay");
+	    }
+	  },
+	  autoClose: function autoClose(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("autoClose", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("autoClose");
+	    }
+	  },
+	  autoCloseDelay: function autoCloseDelay(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("autoCloseDelay", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("autoCloseDelay");
+	    }
+	  },
+	  blink: function blink(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("blink", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("blink");
+	    }
+	  },
+	  browserBoundsOffset: function browserBoundsOffset(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("browserBoundsOffset", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("browserBoundsOffset");
+	    }
+	  },
+	  closeOnClick: function closeOnClick(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("closeOnClick", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("closeOnClick");
+	    }
+	  },
+	  disabled: function disabled(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("disabled", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("disabled");
+	    }
+	  },
+	  height: function height(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("height", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("height");
+	    }
+	  },
+	  hoverOpacity: function hoverOpacity(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("hoverOpacity", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("hoverOpacity");
+	    }
+	  },
+	  icon: function icon(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("icon", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("icon");
+	    }
+	  },
+	  notificationOffset: function notificationOffset(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("notificationOffset", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("notificationOffset");
+	    }
+	  },
+	  opacity: function opacity(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("opacity", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("opacity");
+	    }
+	  },
+	  position: function position(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("position", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("position");
+	    }
+	  },
+	  rtl: function rtl(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("rtl", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("rtl");
+	    }
+	  },
+	  showCloseButton: function showCloseButton(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("showCloseButton", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("showCloseButton");
+	    }
+	  },
+	  template: function template(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("template", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("template");
+	    }
+	  },
+	  theme: function theme(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("theme", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("theme");
+	    }
+	  },
+	  width: function width(arg) {
+	    if (arg !== undefined) {
+	      $("#" + this.componentSelector).jqxNotification("width", arg);
+	    } else {
+	      return $("#" + this.componentSelector).jqxNotification("width");
+	    }
+	  },
+	  closeAll: function closeAll() {
+	    $("#" + this.componentSelector).jqxNotification("closeAll");
+	  },
+	  closeLast: function closeLast() {
+	    $("#" + this.componentSelector).jqxNotification("closeLast");
+	  },
+	  destroy: function destroy() {
+	    $("#" + this.componentSelector).jqxNotification("destroy");
+	  },
+	  open: function open() {
+	    $("#" + this.componentSelector).jqxNotification("open");
+	  },
+	  refresh: function refresh() {
+	    $("#" + this.componentSelector).jqxNotification("refresh");
+	  },
+	  performRender: function performRender() {
+	    $("#" + this.componentSelector).jqxNotification("render");
+	  },
+	  render: function render() {
+	    var id = 'jqxNotification' + this.generateID() + this.generateID();
+	    this.componentSelector = id;return _react2.default.createElement(
+	      'div',
+	      { id: id },
+	      this.value ? null : this.props.value,
+	      this.props.children
+	    );
+	  }
+	}); /*
+	    jQWidgets v4.5.0 (2017-Jan)
+	    Copyright (c) 2011-2017 jQWidgets.
+	    License: http://jqwidgets.com/license/
+	    */
+	
+	
+	module.exports = jqxNotification;
+
+/***/ },
+/* 192 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _react_jqxgrid = __webpack_require__(183);
+	
+	var _react_jqxgrid2 = _interopRequireDefault(_react_jqxgrid);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var UserList = function (_React$Component) {
+	    _inherits(UserList, _React$Component);
+	
+	    function UserList(props) {
+	        _classCallCheck(this, UserList);
+	
+	        var _this2 = _possibleConstructorReturn(this, (UserList.__proto__ || Object.getPrototypeOf(UserList)).call(this, props));
+	
+	        var url = "/users";
+	
+	        var source = {
+	            datatype: "json",
+	            datafields: [{
+	                name: 'id',
+	                type: 'int'
+	            }, {
+	                name: 'firstName',
+	                type: 'string'
+	            }, {
+	                name: 'lastName',
+	                type: 'string'
+	            }, {
+	                name: 'status',
+	                type: 'string'
+	            }, {
+	                name: 'depo',
+	                type: 'string'
+	            }, {
+	                name: 'time',
+	                type: 'string'
+	            }, {
+	                name: 'role'
+	            }, {
+	                name: 'roleName',
+	                type: 'string',
+	                map: 'role>roleName'
+	            }],
+	            id: "id",
+	            url: url
+	        };
+	
+	        var dataAdapter = new $.jqx.dataAdapter(source);
+	        dataAdapter.dataBind();
+	
+	        _this2.state = {
+	            dataAdapter: dataAdapter
+	        };
+	        return _this2;
+	    }
+	
+	    _createClass(UserList, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this3 = this;
+	
+	            var _this = this;
+	            this.refs.roleList.on('rowdoubleclick', function (e) {
+	
+	                var args = e.args;
+	                var rowIndex = args.rowindex;
+	                var data = _this.refs.roleList.getrowdata(rowIndex);
+	                _this3.props.onDoubleClick(data, e);
+	            });
+	        }
+	    }, {
+	        key: 'refresh',
+	        value: function refresh() {
+	            this.refs.roleList.updatebounddata();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	
+	            var columns = [{
+	                text: 'Id',
+	                datafield: 'id'
+	            }, {
+	                text: 'First Name',
+	                datafield: 'firstName'
+	            }, {
+	                text: 'Last Name',
+	                datafield: 'lastName'
+	            }, {
+	                text: 'Status',
+	                datafield: 'status'
+	            }, {
+	                text: 'Depo',
+	                datafield: 'depo'
+	            }, {
+	                text: 'Time',
+	                datafield: 'time'
+	            }, {
+	                text: 'Role',
+	                datafield: 'roleName'
+	            }];
+	
+	            return _react2.default.createElement(_react_jqxgrid2.default, { ref: 'roleList', width: '100%', height: 'calc(100% - 30px)', source: this.state.dataAdapter, pageable: true, sortable: true, altrows: true, enabletooltips: true, columns: columns, theme: 'metro' });
+	        }
+	    }]);
+	
+	    return UserList;
+	}(_react2.default.Component);
+	
+	exports.default = UserList;
 
 /***/ }
 /******/ ]);
