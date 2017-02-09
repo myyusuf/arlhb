@@ -47,6 +47,17 @@ body, #header, #top-menu, #menu, #footer, #content {
 
 }
 
+.page-title{
+  font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+  font-size: large; 
+  font-weight: bold;
+  color: #404040;
+}
+
+.window-title{
+  font-weight: bold;
+}
+
 .jqx-notification-container {
     z-index: 20000;
 }

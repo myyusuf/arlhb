@@ -4,6 +4,7 @@ public class Role {
 
 	private int roleId;
 	private String roleName;
+	private String description;
 
 	public int getRoleId() {
 		return roleId;
@@ -21,4 +22,12 @@ public class Role {
 		this.roleName = roleName;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
 }
