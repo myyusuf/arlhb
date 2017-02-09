@@ -48,99 +48,24 @@
 
 	var _ApplicationData = __webpack_require__(1);
 
-	var _NavigationBar = __webpack_require__(2);
+	var _MainMenu = __webpack_require__(2);
 
-	var _NavigationBar2 = _interopRequireDefault(_NavigationBar);
+	var _MainMenu2 = _interopRequireDefault(_MainMenu);
 
-	var _Menu = __webpack_require__(4);
-
-	var _Menu2 = _interopRequireDefault(_Menu);
-
-	var _Tabs = __webpack_require__(5);
-
-	var _Tabs2 = _interopRequireDefault(_Tabs);
-
-	var _Button = __webpack_require__(6);
-
-	var _Button2 = _interopRequireDefault(_Button);
-
-	var _RoleList = __webpack_require__(7);
+	var _RoleList = __webpack_require__(6);
 
 	var _RoleList2 = _interopRequireDefault(_RoleList);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var menuData = [{
-	    "id": "1",
-	    "text": "Home",
-	    "parentid": "-1",
-	    "subMenuWidth": '250px'
-	}, {
-	    "id": "2",
-	    "text": "Customer Payment",
-	    "parentid": "-1",
-	    "subMenuWidth": '250px'
-	}, {
-	    "id": "3",
-	    "text": "Customer Transaction",
-	    "parentid": "-1"
-	}, {
-	    "id": "4",
-	    "text": "Bank Transaction",
-	    "parentid": "-1"
-	}, {
-	    "id": "5",
-	    "text": "Administration",
-	    "parentid": "-1"
-	}, {
-	    "id": "51",
-	    "text": "Active Sessions",
-	    "parentid": "5"
-	}, {
-	    "id": "52",
-	    "text": "Corporate Entity",
-	    "parentid": "5"
-	}, {
-	    "id": "53",
-	    "text": "Country Zone",
-	    "parentid": "5"
-	}, {
-	    "id": "54",
-	    "text": "Customer",
-	    "parentid": "5"
-	}, {
-	    "id": "55",
-	    "text": "Holidays",
-	    "parentid": "5"
-	}, {
-	    "id": "56",
-	    "text": "Location",
-	    "parentid": "5"
-	}, {
-	    "id": "57",
-	    "text": "Operational Time",
-	    "parentid": "5"
-	}, {
-	    "id": "58",
-	    "text": "Role",
-	    "parentid": "5"
-	}, {
-	    "id": "59",
-	    "text": "User",
-	    "parentid": "5"
-	}, {
-	    "id": "6",
-	    "text": "Report",
-	    "parentid": "-1"
-	}];
-
 	var roleList = new _RoleList2.default();
-	var menu = new _Menu2.default({
-	    data: menuData,
-	    onClick: function onClick(e) {}
+	var mainMenu = new _MainMenu2.default({
+	  onClick: function onClick(e) {
+	    roleList.render($('#content'));
+	  }
 	});
 
-	menu.render($('#top-menu'));
+	mainMenu.render($('#top-menu'));
 
 /***/ },
 /* 1 */
@@ -224,57 +149,131 @@
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _Utils = __webpack_require__(3);
 
+	var _Menu = __webpack_require__(4);
+
+	var _Menu2 = _interopRequireDefault(_Menu);
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var NavigationBar = function () {
-	  function NavigationBar(items) {
-	    _classCallCheck(this, NavigationBar);
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	    this.id = (0, _Utils.guid)();
-	    this.items = items;
-	  }
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	  _createClass(NavigationBar, [{
-	    key: 'render',
-	    value: function render(container) {
-	      var navigationBarContainer = $('<div></div>');
-	      navigationBarContainer.attr('id', this.id);
-	      for (var i = 0; i < this.items.length; i++) {
+	var MainMenu = function (_Component) {
+	    _inherits(MainMenu, _Component);
 
-	        var title = $('<div>' + this.items[i].title + '</div>');
-	        title.appendTo(navigationBarContainer);
+	    function MainMenu(options) {
+	        _classCallCheck(this, MainMenu);
 
-	        var contentContainer = $('<div></div>');
-	        contentContainer.appendTo(navigationBarContainer);
+	        var _this = _possibleConstructorReturn(this, (MainMenu.__proto__ || Object.getPrototypeOf(MainMenu)).call(this, options));
 
-	        if (this.items[i].content) {
-	          this.items[i].content.render(contentContainer);
-	        }
-	      }
-	      navigationBarContainer.appendTo(container);
+	        var menuData = [{
+	            "id": "1",
+	            "text": "Home",
+	            "parentid": "-1",
+	            "subMenuWidth": '250px'
+	        }, {
+	            "id": "2",
+	            "text": "Customer Payment",
+	            "parentid": "-1",
+	            "subMenuWidth": '250px'
+	        }, {
+	            "id": "3",
+	            "text": "Customer Transaction",
+	            "parentid": "-1"
+	        }, {
+	            "id": "4",
+	            "text": "Bank Transaction",
+	            "parentid": "-1"
+	        }, {
+	            "id": "5",
+	            "text": "Administration",
+	            "parentid": "-1"
+	        }, {
+	            "id": "51",
+	            "text": "Active Sessions",
+	            "parentid": "5"
+	        }, {
+	            "id": "52",
+	            "text": "Corporate Entity",
+	            "parentid": "5"
+	        }, {
+	            "id": "53",
+	            "text": "Country Zone",
+	            "parentid": "5"
+	        }, {
+	            "id": "54",
+	            "text": "Customer",
+	            "parentid": "5"
+	        }, {
+	            "id": "55",
+	            "text": "Holidays",
+	            "parentid": "5"
+	        }, {
+	            "id": "56",
+	            "text": "Location",
+	            "parentid": "5"
+	        }, {
+	            "id": "57",
+	            "text": "Operational Time",
+	            "parentid": "5"
+	        }, {
+	            "id": "58",
+	            "text": "Role",
+	            "parentid": "5"
+	        }, {
+	            "id": "59",
+	            "text": "User",
+	            "parentid": "5"
+	        }, {
+	            "id": "6",
+	            "text": "Report",
+	            "parentid": "-1"
+	        }];
 
-	      navigationBarContainer.jqxNavigationBar({
-	        theme: 'metro',
-	        width: '101%',
-	        height: '100%'
-	      });
+	        _this.menu = new _Menu2.default({
+	            data: menuData,
+	            onClick: function onClick(e) {
+	                if (options.onClick) {
+	                    options.onClick(e);
+	                }
+	            },
+	            jqxOptions: {
+	                width: '100%',
+	                height: '100%'
+	            }
+	        });
+	        return _this;
 	    }
-	  }]);
 
-	  return NavigationBar;
-	}();
+	    _createClass(MainMenu, [{
+	        key: "render",
+	        value: function render(container) {
 
-	exports.default = NavigationBar;
+	            this.menu.render(container);
+	        }
+	    }]);
+
+	    return MainMenu;
+	}(_Component3.default);
+
+	exports.default = MainMenu;
 
 /***/ },
 /* 3 */
@@ -297,7 +296,7 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -307,43 +306,55 @@
 
 	var _Utils = __webpack_require__(3);
 
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var Menu = function () {
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Menu = function (_Component) {
+	  _inherits(Menu, _Component);
+
 	  function Menu(options) {
 	    _classCallCheck(this, Menu);
 
-	    this.id = (0, _Utils.guid)();
-	    this.data = options.data;
-	    this.onClick = options.onClick;
+	    var _this2 = _possibleConstructorReturn(this, (Menu.__proto__ || Object.getPrototypeOf(Menu)).call(this, options));
+
+	    _this2.data = options.data;
+	    _this2.onClick = options.onClick;
+
+	    var source = {
+	      datatype: "json",
+	      datafields: [{ name: 'id' }, { name: 'parentid' }, { name: 'text' }, { name: 'subMenuWidth' }],
+	      id: 'id',
+	      localdata: _this2.data
+	    };
+
+	    var dataAdapter = new $.jqx.dataAdapter(source);
+	    dataAdapter.dataBind();
+
+	    _this2.records = dataAdapter.getRecordsHierarchy('id', 'parentid', 'items', [{ name: 'text', map: 'label' }]);
+	    _this2.jqxOptions['source'] = _this2.records;
+
+	    return _this2;
 	  }
 
 	  _createClass(Menu, [{
-	    key: 'render',
+	    key: "render",
 	    value: function render(container) {
 
 	      var _this = this;
 
-	      var source = {
-	        datatype: "json",
-	        datafields: [{ name: 'id' }, { name: 'parentid' }, { name: 'text' }, { name: 'subMenuWidth' }],
-	        id: 'id',
-	        localdata: _this.data
-	      };
-
-	      var dataAdapter = new $.jqx.dataAdapter(source);
-	      dataAdapter.dataBind();
-
-	      var records = dataAdapter.getRecordsHierarchy('id', 'parentid', 'items', [{ name: 'text', map: 'label' }]);
-
 	      var menuContainer = $('<div></div>');
 	      menuContainer.appendTo(container);
-	      menuContainer.jqxMenu({
-	        theme: 'metro',
-	        source: records,
-	        width: '100%',
-	        height: '100%'
-	      });
+
+	      menuContainer.jqxMenu(this.jqxOptions);
 
 	      menuContainer.on('itemclick', function (event) {
 	        var args = event.args;
@@ -355,7 +366,7 @@
 	  }]);
 
 	  return Menu;
-	}();
+	}(_Component3.default);
 
 	exports.default = Menu;
 
@@ -375,87 +386,34 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var Tabs = function () {
-	  function Tabs(items) {
-	    _classCallCheck(this, Tabs);
+	var Component = function () {
+	  function Component(options) {
+	    _classCallCheck(this, Component);
 
 	    this.id = (0, _Utils.guid)();
-	    this.items = items;
+
+	    var defaultTheme = 'metro';
+
+	    if (options.jqxOptions) {
+	      this.jqxOptions = options.jqxOptions;
+	    } else {
+	      this.jqxOptions = {};
+	    }
+
+	    if (this.jqxOptions.theme == undefined) {
+	      this.jqxOptions['theme'] = defaultTheme;
+	    }
 	  }
 
-	  _createClass(Tabs, [{
+	  _createClass(Component, [{
 	    key: 'render',
-	    value: function render(container) {
-	      var tabContainer = $('<div style="margin-top: -1px;"></div>');
-	      tabContainer.appendTo(container);
-	      tabContainer.attr('id', this.id);
-	      var ul = $('<ul></ul>');
-	      ul.appendTo(tabContainer);
-
-	      for (var i = 0; i < this.items.length; i++) {
-
-	        var title = $('<li>' + this.items[i].title + '</li>');
-	        title.appendTo(ul);
-	      }
-
-	      var tempContainer = [];
-	      for (var i = 0; i < this.items.length; i++) {
-
-	        var contentContainer = $('<div></div>');
-	        contentContainer.appendTo(tabContainer);
-	        tempContainer.push(contentContainer);
-	      }
-
-	      tabContainer.jqxTabs({
-	        theme: 'metro',
-	        position: 'top',
-	        showCloseButtons: true,
-	        width: '100%',
-	        height: '100.5%'
-	      });
-
-	      for (var i = 0; i < this.items.length; i++) {
-
-	        if (this.items[i].content) {
-	          this.items[i].content.render(tempContainer[i]);
-	        }
-	      }
-
-	      this.component = tabContainer;
-	    }
-	  }, {
-	    key: 'add',
-	    value: function add(childTabId, title, content) {
-
-	      var id = this.id + '_' + childTabId;
-	      var _contentContainer = '<div id="' + id + '" style="height: 100%;"></div>';
-	      this.component.jqxTabs('addLast', title, _contentContainer);
-
-	      content.render($('#' + id));
-	    }
-	  }, {
-	    key: 'selectTabByTitle',
-	    value: function selectTabByTitle(title) {
-	      var tabFound = false;
-	      var tabsLength = this.component.jqxTabs('length');
-
-	      for (var i = 0; i < tabsLength; i++) {
-	        var tabTitle = this.component.jqxTabs('getTitleAt', i);
-	        if (title == tabTitle) {
-	          tabFound = true;
-	          this.component.jqxTabs('select', i);
-	          break;
-	        }
-	      }
-
-	      return tabFound;
-	    }
+	    value: function render(container) {}
 	  }]);
 
-	  return Tabs;
+	  return Component;
 	}();
 
-	exports.default = Tabs;
+	exports.default = Component;
 
 /***/ },
 /* 6 */
@@ -471,63 +429,7 @@
 
 	var _Utils = __webpack_require__(3);
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var Button = function () {
-	  function Button(options) {
-	    _classCallCheck(this, Button);
-
-	    this.id = (0, _Utils.guid)();
-	    this.onClick = options.onClick;
-	    this.jqxOptions = options.jqxOptions;
-
-	    if (options.title) {
-	      this.title = options.title;
-	    } else {
-	      this.title = '';
-	    }
-	  }
-
-	  _createClass(Button, [{
-	    key: 'render',
-	    value: function render(container) {
-	      var _this = this;
-
-	      var buttonContainer = $('<input type="button" />');
-	      buttonContainer.attr('id', this.id);
-	      buttonContainer.attr('value', this.title);
-	      buttonContainer.appendTo(container);
-
-	      buttonContainer.jqxButton(buttonOptions);
-
-	      if (this.onClick) {
-	        $('#' + this.id).on('click', function () {
-	          _this.onClick();
-	        });
-	      }
-	    }
-	  }]);
-
-	  return Button;
-	}();
-
-	exports.default = Button;
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _Utils = __webpack_require__(3);
-
-	var _Button = __webpack_require__(6);
+	var _Button = __webpack_require__(7);
 
 	var _Button2 = _interopRequireDefault(_Button);
 
@@ -592,7 +494,7 @@
 	        return '<span style="margin: 4px; float: ' + columnproperties.cellsalign + ';">' + roleTypeDescription + '</span>';
 	      };
 
-	      var dataGridOptions = {
+	      var jqxOptions = {
 	        width: '100%',
 	        height: '100%',
 	        pageable: true,
@@ -619,15 +521,18 @@
 	          editRoleWindow.render($('#dialogWindowContainer'));
 	          editRoleWindow.open();
 	        },
-	        dataGridOptions: dataGridOptions
+	        jqxOptions: jqxOptions
 	      });
 
 	      var searchTextBox = new _TextBox2.default({ placeHolder: 'Role Name', width: 250, height: 24 });
-	      var searchButton = new _Button2.default({
+
+	      var jqxOptions = {
 	        imgSrc: '/arlhb_assets/images/search.png',
-	        theme: 'metro',
 	        width: 30,
-	        height: 26,
+	        height: 26
+	      };
+	      var searchButton = new _Button2.default({
+	        jqxOptions: jqxOptions,
 	        onClick: function onClick() {
 	          _this.dataGrid.refresh();
 	        }
@@ -648,7 +553,7 @@
 	        }
 	      });
 
-	      var table = $('<table style="height: 100%; width: 100%; margin: -3px; "></table>');
+	      var table = $('<table style="height: 100%; width: 100%; "></table>');
 	      var tr = $('<tr></tr>');
 	      var td = $('<td style="padding: 0; height: 40px;"></td>');
 	      table.appendTo(container);
@@ -686,6 +591,76 @@
 	}();
 
 	exports.default = RoleList;
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Utils = __webpack_require__(3);
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Button = function (_Component) {
+	  _inherits(Button, _Component);
+
+	  function Button(options) {
+	    _classCallCheck(this, Button);
+
+	    var _this2 = _possibleConstructorReturn(this, (Button.__proto__ || Object.getPrototypeOf(Button)).call(this, options));
+
+	    _this2.onClick = options.onClick;
+
+	    if (options.title) {
+	      _this2.title = options.title;
+	    } else {
+	      _this2.title = '';
+	    }
+
+	    return _this2;
+	  }
+
+	  _createClass(Button, [{
+	    key: 'render',
+	    value: function render(container) {
+	      var _this = this;
+
+	      var buttonContainer = $('<input type="button" />');
+	      buttonContainer.attr('id', this.id);
+	      buttonContainer.attr('value', this.title);
+	      buttonContainer.appendTo(container);
+
+	      buttonContainer.jqxButton(this.jqxOptions);
+
+	      if (this.onClick) {
+	        $('#' + this.id).on('click', function () {
+	          _this.onClick();
+	        });
+	      }
+	    }
+	  }]);
+
+	  return Button;
+	}(_Component3.default);
+
+	exports.default = Button;
 
 /***/ },
 /* 8 */
@@ -872,17 +847,53 @@
 
 	var _Utils = __webpack_require__(3);
 
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var DataGrid = function () {
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var DataGrid = function (_Component) {
+	  _inherits(DataGrid, _Component);
+
 	  function DataGrid(options) {
 	    _classCallCheck(this, DataGrid);
 
-	    this.id = (0, _Utils.guid)();
-	    this.source = options.source;
-	    this.onSearch = options.onSearch;
-	    this.dataGridOptions = options.dataGridOptions;
-	    this.onRowDoubleClick = options.onRowDoubleClick;
+	    var _this2 = _possibleConstructorReturn(this, (DataGrid.__proto__ || Object.getPrototypeOf(DataGrid)).call(this, options));
+
+	    var _this = _this2;
+
+	    _this2.source = options.source;
+	    _this2.onSearch = options.onSearch;
+	    _this2.onRowDoubleClick = options.onRowDoubleClick;
+
+	    var dataAdapter = new $.jqx.dataAdapter(_this2.source, {
+	      formatData: function formatData(data) {
+	        if (_this.onSearch) {
+	          return _this.onSearch(data);
+	        } else {
+	          return data;
+	        }
+	      },
+	      downloadComplete: function downloadComplete(data, status, xhr) {
+	        if (!_this.source.totalRecords) {
+	          _this.source.totalRecords = data.totalRecords;
+	        }
+	      }
+
+	    });
+	    _this2.jqxOptions['source'] = dataAdapter;
+	    _this2.jqxOptions['altrows'] = true;
+	    _this2.jqxOptions['columnsresize'] = true;
+	    _this2.jqxOptions['pagesizeoptions'] = ['20', '50', '100'];
+	    _this2.jqxOptions['pagesize'] = '20';
+	    return _this2;
 	  }
 
 	  _createClass(DataGrid, [{
@@ -890,30 +901,9 @@
 	    value: function render(container) {
 	      var _this = this;
 
-	      var dataAdapter = new $.jqx.dataAdapter(this.source, {
-	        formatData: function formatData(data) {
-	          if (_this.onSearch) {
-	            return _this.onSearch(data);
-	          } else {
-	            return data;
-	          }
-	        },
-	        downloadComplete: function downloadComplete(data, status, xhr) {
-	          if (!_this.source.totalRecords) {
-	            _this.source.totalRecords = data.totalRecords;
-	          }
-	        }
-
-	      });
-	      this.dataGridOptions['source'] = dataAdapter;
-	      this.dataGridOptions['altrows'] = true;
-	      this.dataGridOptions['columnsresize'] = true;
-	      this.dataGridOptions['pagesizeoptions'] = ['50', '100', '500'];
-	      this.dataGridOptions['pagesize'] = '50';
-
-	      var dataGridContainer = $('<div style="height: 100%"></div>');
+	      var dataGridContainer = $('<div style="width: 100%; height: 100%"></div>');
 	      dataGridContainer.appendTo(container);
-	      dataGridContainer.jqxGrid(this.dataGridOptions);
+	      dataGridContainer.jqxGrid(this.jqxOptions);
 
 	      if (this.onRowDoubleClick) {
 	        dataGridContainer.on('rowdoubleclick', function (event) {
@@ -940,7 +930,7 @@
 	  }]);
 
 	  return DataGrid;
-	}();
+	}(_Component3.default);
 
 	exports.default = DataGrid;
 
@@ -958,7 +948,7 @@
 
 	var _Utils = __webpack_require__(3);
 
-	var _Button = __webpack_require__(6);
+	var _Button = __webpack_require__(7);
 
 	var _Button2 = _interopRequireDefault(_Button);
 
@@ -1224,7 +1214,7 @@
 
 	var _Utils = __webpack_require__(3);
 
-	var _Button = __webpack_require__(6);
+	var _Button = __webpack_require__(7);
 
 	var _Button2 = _interopRequireDefault(_Button);
 
@@ -1526,7 +1516,7 @@
 
 	var _Utils = __webpack_require__(3);
 
-	var _Button = __webpack_require__(6);
+	var _Button = __webpack_require__(7);
 
 	var _Button2 = _interopRequireDefault(_Button);
 
@@ -1679,7 +1669,7 @@
 
 	var _Utils = __webpack_require__(3);
 
-	var _Button = __webpack_require__(6);
+	var _Button = __webpack_require__(7);
 
 	var _Button2 = _interopRequireDefault(_Button);
 

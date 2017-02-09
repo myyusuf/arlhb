@@ -31,10 +31,10 @@ body, #header, #top-menu, #menu, #footer, #content {
   height:25px;
 }
 #content {
-  background-color: gray;
+  background-color: white;
   right:0;
   top:70px;
-  bottom:25px;
+  bottom:23px;
   left: 0px;
   min-width:200px;
   min-height:200px;
