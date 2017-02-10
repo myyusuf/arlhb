@@ -24,11 +24,26 @@ public class RoleController {
 	@Autowired
 	RoleMapper roleMapper;
 	
+//	@RequestMapping(value="/roles", method=RequestMethod.POST)
+//    @ResponseBody 
+//    Map<String, String> create(@RequestBody Role roleParam) {
+//		
+//		roleMapper.create(roleParam);
+//		
+//        return ResponseHelper.responseSuccess();
+//    }
+	
 	@RequestMapping(value="/roles", method=RequestMethod.POST)
     @ResponseBody 
-    Map<String, String> create(@RequestBody Role roleParam) {
+    Map<String, String> create(@RequestBody Map<String, Object> roleParam) {
 		
-		roleMapper.create(roleParam);
+//		roleMapper.create(roleParam);
+		System.out.println(roleParam.get("roleName"));
+		
+		List<Map<String,Object>> list = (List<Map<String, Object>>) roleParam.get("authorities");
+		for (Map<String, Object> map : list) {
+			System.out.println(map.get("label"));
+		}
 		
         return ResponseHelper.responseSuccess();
     }

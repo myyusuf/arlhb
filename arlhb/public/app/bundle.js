@@ -56,14 +56,36 @@
 
 	var _RolePage2 = _interopRequireDefault(_RolePage);
 
+	var _UserPage = __webpack_require__(26);
+
+	var _UserPage2 = _interopRequireDefault(_UserPage);
+
+	var _CustomerPage = __webpack_require__(40);
+
+	var _CustomerPage2 = _interopRequireDefault(_CustomerPage);
+
+	var _ActiveSessionPage = __webpack_require__(42);
+
+	var _ActiveSessionPage2 = _interopRequireDefault(_ActiveSessionPage);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var rolePage = new _RolePage2.default({});
+	var userPage = new _UserPage2.default({});
+	var activeSessionPaga = new _ActiveSessionPage2.default({});
+	var customerPage = new _CustomerPage2.default({});
+
 	var mainMenu = new _MainMenu2.default({
 	  onClick: function onClick(e) {
 	    $('#content').empty();
-	    if (e == 2) {
+	    if (e == 1) {
 	      rolePage.render($('#content'));
+	    } else if (e == 2) {
+	      userPage.render($('#content'));
+	    } else if (e == 3) {
+	      activeSessionPaga.render($('#content'));
+	    } else if (e == 4) {
+	      customerPage.render($('#content'));
 	    }
 	  }
 	});
@@ -453,7 +475,7 @@
 
 	var _AddRoleWindow2 = _interopRequireDefault(_AddRoleWindow);
 
-	var _EditRoleWindow = __webpack_require__(24);
+	var _EditRoleWindow = __webpack_require__(25);
 
 	var _EditRoleWindow2 = _interopRequireDefault(_EditRoleWindow);
 
@@ -485,7 +507,7 @@
 	      var editRoleWindow = new _EditRoleWindow2.default({
 	        data: value,
 	        onSaveSuccess: function onSaveSuccess() {
-	          _this.dataGrid.refresh();
+	          _this.roleList.refresh();
 	        }
 	      });
 	      editRoleWindow.render($('#dialogWindowContainer'));
@@ -502,7 +524,7 @@
 	      onClick: function onClick(e) {
 	        var addRoleWindow = new _AddRoleWindow2.default({
 	          onSaveSuccess: function onSaveSuccess() {
-	            _this.dataGrid.refresh();
+	            _this.roleList.refresh();
 	          }
 	        });
 	        addRoleWindow.render($('#dialogWindowContainer'));
@@ -515,6 +537,7 @@
 	    });
 
 	    _this2.searchText = new _SearchText2.default({
+	      placeHolder: 'Role Name',
 	      onSearch: function onSearch(value) {
 	        _this.roleList.filter(value);
 	      }
@@ -671,7 +694,7 @@
 	    var _this = _this2;
 
 	    _this2.searchTextBox = new _TextBox2.default({
-	      jqxOptions: { placeHolder: 'Role Name', width: 250, height: 24 }
+	      jqxOptions: { placeHolder: options.placeHolder, width: 250, height: 24 }
 	    });
 
 	    var jqxOptions = {
@@ -907,6 +930,11 @@
 	      this.dataGrid.render(container);
 	    }
 	  }, {
+	    key: 'refresh',
+	    value: function refresh() {
+	      this.dataGrid.refresh();
+	    }
+	  }, {
 	    key: 'filter',
 	    value: function filter(value) {
 	      this.searchTxt = value;
@@ -975,8 +1003,8 @@
 	    _this2.jqxOptions['source'] = dataAdapter;
 	    _this2.jqxOptions['altrows'] = true;
 	    _this2.jqxOptions['columnsresize'] = true;
-	    _this2.jqxOptions['pagesizeoptions'] = ['20', '50', '100'];
-	    _this2.jqxOptions['pagesize'] = '20';
+	    _this2.jqxOptions['pagesizeoptions'] = ['10', '20', '50'];
+	    _this2.jqxOptions['pagesize'] = '10';
 	    return _this2;
 	  }
 
@@ -1151,7 +1179,11 @@
 
 	var _Component3 = _interopRequireDefault(_Component2);
 
-	var _RoleForm = __webpack_require__(19);
+	var _RestService = __webpack_require__(19);
+
+	var _RestService2 = _interopRequireDefault(_RestService);
+
+	var _RoleForm = __webpack_require__(20);
 
 	var _RoleForm2 = _interopRequireDefault(_RoleForm);
 
@@ -1173,7 +1205,16 @@
 
 	    var _this = _this2;
 
-	    var roleForm = new _RoleForm2.default({ onSaveSuccess: options.onSaveSuccess });
+	    _this2.onSaveSuccess = options.onSaveSuccess;
+
+	    var roleForm = new _RoleForm2.default({
+	      onValidationSuccess: function onValidationSuccess(formValue) {
+	        _RestService2.default.post({
+	          url: '/roles',
+	          data: formValue
+	        });
+	      }
+	    });
 
 	    var jqxOptions = {
 	      width: 430,
@@ -1253,14 +1294,8 @@
 	  }
 
 	  _createClass(Form, [{
-	    key: 'render',
-	    value: function render(container) {
-
-	      var _this = this;
-
-	      this.formItems = [];
-
-	      var validationRules = [];
+	    key: 'renderItems',
+	    value: function renderItems(container) {
 	      var form = $('<form></form>');
 	      form.appendTo(container);
 	      var table = $('<table style="width: 100%;"></table>');
@@ -1289,6 +1324,22 @@
 	        }
 
 	        this.items[i].content.render(td);
+	      }
+
+	      this.form = form;
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render(container) {
+
+	      var _this = this;
+
+	      this.renderItems(container);
+
+	      this.formItems = [];
+	      var validationRules = [];
+
+	      for (var i = 0; i < this.items.length; i++) {
 	        this.formItems.push({
 	          name: this.items[i].name,
 	          content: this.items[i].content
@@ -1308,7 +1359,7 @@
 	                var closureContent = content;
 	                validationRules.push({
 	                  input: '#' + contentId,
-	                  message: 'Wajib diisi',
+	                  message: 'Required',
 	                  action: 'select', rule: function rule(input) {
 	                    var value = closureContent.getValue();
 	                    if (value == null || value == '') {
@@ -1329,11 +1380,11 @@
 	        }
 	      }
 
-	      form.jqxValidator({
+	      this.form.jqxValidator({
 	        rules: validationRules
 	      });
 
-	      form.on('validationSuccess', function () {
+	      this.form.on('validationSuccess', function () {
 	        if (_this.onValidationSuccess) {
 	          var formValues = {};
 	          for (var i = 0; i < _this.formItems.length; i++) {
@@ -1342,8 +1393,6 @@
 	          _this.onValidationSuccess(formValues);
 	        }
 	      });
-
-	      this.form = form;
 	    }
 	  }, {
 	    key: 'validate',
@@ -1684,6 +1733,58 @@
 
 /***/ },
 /* 19 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var RestService = function () {
+	  function RestService() {
+	    _classCallCheck(this, RestService);
+	  }
+
+	  _createClass(RestService, null, [{
+	    key: 'post',
+	    value: function post(options) {
+	      $.ajax({
+	        method: "POST",
+	        url: options.url,
+	        data: JSON.stringify(options.data),
+	        beforeSend: function beforeSend(xhr) {
+	          xhr.setRequestHeader('Accept', 'application/json');
+	          xhr.setRequestHeader('Content-Type', 'application/json');
+	        }
+	      }).done(function () {
+	        $("#successNotification").jqxNotification("open");
+	        if (options.onSuccess) {
+	          options.onSuccess();
+	        }
+	      }).fail(function (jqXHR, textStatus, errorThrown) {
+	        var errorMessage = 'Proses gagal. Status : ' + jqXHR.status + ' [' + jqXHR.statusText + '] : ' + jqXHR.responseText;
+	        $("#errorNotification").html('<div>' + errorMessage + '</div>');
+	        $("#errorNotification").jqxNotification("open");
+
+	        if (options.onError) {
+	          options.onError();
+	        }
+	      });
+	    }
+	  }]);
+
+	  return RestService;
+	}();
+
+	exports.default = RestService;
+
+/***/ },
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1714,7 +1815,7 @@
 
 	var _TextBox2 = _interopRequireDefault(_TextBox);
 
-	var _TextArea = __webpack_require__(20);
+	var _TextArea = __webpack_require__(21);
 
 	var _TextArea2 = _interopRequireDefault(_TextArea);
 
@@ -1722,7 +1823,7 @@
 
 	var _Label2 = _interopRequireDefault(_Label);
 
-	var _AuthoritiesTree = __webpack_require__(21);
+	var _AuthoritiesTree = __webpack_require__(22);
 
 	var _AuthoritiesTree2 = _interopRequireDefault(_AuthoritiesTree);
 
@@ -1749,7 +1850,7 @@
 	    if (options.data) {
 	      role = options.data;
 	    }
-	    _this2.onSaveSuccess = options.onSaveSuccess;
+	    _this2.onValidationSuccess = options.onValidationSuccess;
 
 	    var roleNameTextBox = new _TextBox2.default({
 	      value: role.roleName,
@@ -1795,27 +1896,10 @@
 	      items: formItems,
 	      labelColumnWidth: '120px',
 	      onValidationSuccess: function onValidationSuccess(formValue) {
-
 	        console.log(formValue);
-	        // $.ajax({
-	        //       method: "POST",
-	        //       url: "/roles",
-	        //       data: JSON.stringify(formValue),
-	        //       beforeSend: function(xhr){
-	        //         xhr.setRequestHeader('Accept', 'application/json');
-	        //         xhr.setRequestHeader('Content-Type', 'application/json');
-	        //       }
-	        //     }).done(function() {
-	        //         $("#successNotification").jqxNotification("open");
-	        //         _this.window.close();
-	        //         if(_this.onSaveSuccess){
-	        //           _this.onSaveSuccess();
-	        //         }
-	        //     }).fail(function( jqXHR, textStatus, errorThrown) {
-	        //         var errorMessage = 'Proses gagal. Status : ' + jqXHR.status + ' [' + jqXHR.statusText + '] : ' + jqXHR.responseText;
-	        //         $("#errorNotification").html('<div>' + errorMessage + '</div>');
-	        //         $("#errorNotification").jqxNotification("open");
-	        //     });
+	        if (_this.onValidationSuccess) {
+	          _this.onValidationSuccess(formValue);
+	        }
 	      }
 	    };
 
@@ -1842,7 +1926,7 @@
 	exports.default = RoleForm;
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1905,7 +1989,7 @@
 	exports.default = TextArea;
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1920,7 +2004,7 @@
 
 	var _Component3 = _interopRequireDefault(_Component2);
 
-	var _CheckBoxTree = __webpack_require__(22);
+	var _CheckBoxTree = __webpack_require__(23);
 
 	var _CheckBoxTree2 = _interopRequireDefault(_CheckBoxTree);
 
@@ -2014,7 +2098,7 @@
 	exports.default = AuthoritiesTree;
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2025,7 +2109,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _Tree2 = __webpack_require__(23);
+	var _Tree2 = __webpack_require__(24);
 
 	var _Tree3 = _interopRequireDefault(_Tree2);
 
@@ -2053,7 +2137,16 @@
 	  _createClass(CheckBoxTree, [{
 	    key: 'getValue',
 	    value: function getValue() {
-	      return this.treeContainer.jqxTree('getCheckedItems');
+	      var result = [];
+	      var items = this.treeContainer.jqxTree('getCheckedItems');
+	      for (var i = 0; i < items.length; i++) {
+	        result.push({
+	          id: items[i].id,
+	          label: items[i].label,
+	          checked: items[i].checked
+	        });
+	      }
+	      return result;
 	    }
 	  }]);
 
@@ -2063,7 +2156,7 @@
 	exports.default = CheckBoxTree;
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2139,7 +2232,7 @@
 	exports.default = Tree;
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2166,7 +2259,7 @@
 
 	var _Component3 = _interopRequireDefault(_Component2);
 
-	var _RoleForm = __webpack_require__(19);
+	var _RoleForm = __webpack_require__(20);
 
 	var _RoleForm2 = _interopRequireDefault(_RoleForm);
 
@@ -2230,6 +2323,2276 @@
 	}(_Component3.default);
 
 	exports.default = EditRoleWindow;
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _Button = __webpack_require__(7);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _SearchText = __webpack_require__(8);
+
+	var _SearchText2 = _interopRequireDefault(_SearchText);
+
+	var _UserList = __webpack_require__(27);
+
+	var _UserList2 = _interopRequireDefault(_UserList);
+
+	var _ViewUserWindow = __webpack_require__(28);
+
+	var _ViewUserWindow2 = _interopRequireDefault(_ViewUserWindow);
+
+	var _EditUserWindow = __webpack_require__(31);
+
+	var _EditUserWindow2 = _interopRequireDefault(_EditUserWindow);
+
+	var _UserBlockWindow = __webpack_require__(37);
+
+	var _UserBlockWindow2 = _interopRequireDefault(_UserBlockWindow);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var UserPage = function (_Component) {
+	  _inherits(UserPage, _Component);
+
+	  function UserPage(options) {
+	    _classCallCheck(this, UserPage);
+
+	    var _this2 = _possibleConstructorReturn(this, (UserPage.__proto__ || Object.getPrototypeOf(UserPage)).call(this, options));
+
+	    var _this = _this2;
+
+	    if (options.title) {
+	      _this2.title = option.title;
+	    } else {
+	      _this2.title = "User Management";
+	    }
+
+	    var onViewButtonClick = function onViewButtonClick(value) {
+	      var viewUserWindow = new _ViewUserWindow2.default({
+	        data: value,
+	        onSaveSuccess: function onSaveSuccess() {
+	          _this.dataGrid.refresh();
+	        }
+	      });
+	      viewUserWindow.render($('#dialogWindowContainer'));
+	      viewUserWindow.open();
+	    };
+
+	    var onEditButtonClick = function onEditButtonClick(value) {
+	      var editUserWindow = new _EditUserWindow2.default({
+	        data: value,
+	        onSaveSuccess: function onSaveSuccess() {
+	          _this.dataGrid.refresh();
+	        }
+	      });
+	      editUserWindow.render($('#dialogWindowContainer'));
+	      editUserWindow.open();
+	    };
+
+	    var onBlockButtonClick = function onBlockButtonClick(value) {
+	      var userBlockWindow = new _UserBlockWindow2.default({
+	        data: value,
+	        onSaveSuccess: function onSaveSuccess() {
+	          _this.dataGrid.refresh();
+	        }
+	      });
+	      userBlockWindow.render($('#dialogWindowContainer'));
+	      userBlockWindow.open();
+	    };
+
+	    _this2.userList = new _UserList2.default({
+	      onViewButtonClick: onViewButtonClick,
+	      onEditButtonClick: onEditButtonClick,
+	      onBlockButtonClick: onBlockButtonClick
+	    });
+
+	    _this2.searchText = new _SearchText2.default({
+	      placeHolder: 'User Name',
+	      onSearch: function onSearch(value) {
+	        _this.roleList.filter(value);
+	      }
+	    });
+	    return _this2;
+	  }
+
+	  _createClass(UserPage, [{
+	    key: 'render',
+	    value: function render(container) {
+
+	      var _this = this;
+
+	      var table = $('<table style="height: 100%; width: 100%; "></table>');
+	      var tr = $('<tr></tr>');
+	      var td = $('<td colspan="1" style="padding: 10px; padding-bottom: 5px; height: 20px; "></td>');
+	      table.appendTo(container);
+	      tr.appendTo(table);
+	      td.appendTo(tr);
+	      td.html('<span class="page-title">' + this.title + '</span>');
+
+	      tr = $('<tr></tr>');
+	      td = $('<td style="padding-left: 7px; height: 20px; width: 30px;"></td>');
+	      tr.appendTo(table);
+	      td.appendTo(tr);
+	      this.searchText.render(td);
+
+	      tr = $('<tr></tr>');
+	      td = $('<td colspan="1" style=""></td>');
+	      tr.appendTo(table);
+	      td.appendTo(tr);
+
+	      this.userList.render(td);
+	    }
+	  }]);
+
+	  return UserPage;
+	}(_Component3.default);
+
+	exports.default = UserPage;
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _DataGrid = __webpack_require__(11);
+
+	var _DataGrid2 = _interopRequireDefault(_DataGrid);
+
+	var _SearchHeader = __webpack_require__(12);
+
+	var _SearchHeader2 = _interopRequireDefault(_SearchHeader);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var UserList = function (_Component) {
+	  _inherits(UserList, _Component);
+
+	  function UserList(options) {
+	    _classCallCheck(this, UserList);
+
+	    var _this2 = _possibleConstructorReturn(this, (UserList.__proto__ || Object.getPrototypeOf(UserList)).call(this, options));
+
+	    var _this = _this2;
+
+	    var source = {
+	      datatype: "json",
+	      datafields: [{ name: 'employeeId', type: 'string' }, { name: 'firstName', type: 'string' }, { name: 'description', type: 'string' }, { name: 'role' }, { name: 'roleName', type: 'string', map: 'role>roleName' }],
+	      id: "employeeId",
+	      url: "/users"
+	    };
+
+	    var onSearch = function onSearch(data) {
+	      data['searchTxt'] = _this.searchTxt;
+	      return data;
+	    };
+
+	    var onViewButtonClick = function onViewButtonClick(value) {
+	      if (options.onViewButtonClick) {
+	        options.onViewButtonClick(value.bounddata);
+	      }
+	    };
+
+	    var onEditButtonClick = function onEditButtonClick(value) {
+	      if (options.onEditButtonClick) {
+	        options.onEditButtonClick(value.bounddata);
+	      }
+	    };
+
+	    var onBlockButtonClick = function onBlockButtonClick(value) {
+	      if (options.onBlockButtonClick) {
+	        options.onBlockButtonClick(value.bounddata);
+	      }
+	    };
+
+	    var jqxOptions = {
+	      width: '100%',
+	      height: '100%',
+	      rowsheight: 35,
+	      pageable: true,
+	      altrows: true,
+	      theme: 'metro',
+	      virtualmode: true,
+	      rendergridrows: function rendergridrows(params) {
+	        return params.data;
+	      },
+	      columns: [{ text: 'ID', datafield: 'employeeId' }, { text: 'Name', datafield: 'firstName' }, { text: 'Status', datafield: 'status' }, { text: 'Location', datafield: 'location' }, { text: 'Role', datafield: 'roleName' }, {
+	        text: 'Actions',
+	        datafield: 'actions',
+	        // width: 325,
+	        createwidget: function createwidget(row, column, value, htmlElement) {
+	          var table = $('<table style="height: 100%; width: 100%; text-align: center;"></table>');
+	          var tr = $('<tr></tr>');
+	          var td = $('<td></td>');
+	          table.appendTo(htmlElement);
+	          tr.appendTo(table);
+	          td.appendTo(tr);
+	          var button1 = $("<div style='margin: 2.4px;'>" + "View" + "</div>");
+	          button1.appendTo(td);
+	          button1.jqxButton({ theme: 'light', template: "default" });
+	          button1.click(function (event) {
+	            onViewButtonClick(row);
+	          });
+
+	          td = $('<td></td>');
+	          td.appendTo(tr);
+	          var button2 = $("<div style='margin: 2.4px;'>" + "Edit" + "</div>");
+	          button2.appendTo(td);
+	          button2.jqxButton({ theme: 'light', template: "success" });
+	          button2.click(function (event) {
+	            onEditButtonClick(row);
+	          });
+
+	          td = $('<td style="width: 50%;"></td>');
+	          td.appendTo(tr);
+	          var button3 = $("<div style='margin: 2.4px;'>" + "Block / Unblock" + "</div>");
+	          button3.appendTo(td);
+	          button3.jqxButton({ theme: 'light', template: "danger" });
+	          button3.click(function (event) {
+	            onBlockButtonClick(row);
+	          });
+	        },
+	        initwidget: function initwidget(row, column, value, htmlElement) {
+	          // var imgurl = '../../images/' + value.toLowerCase() + '.png';
+	          // $(htmlElement).find('.buttonValue')[0].innerHTML = value;
+	          // $(htmlElement).find('img')[0].src = imgurl;
+	        }
+	      }],
+	      groups: []
+	    };
+
+	    _this2.dataGrid = new _DataGrid2.default({
+	      source: source,
+	      onSearch: onSearch,
+	      jqxOptions: jqxOptions
+	    });
+	    return _this2;
+	  }
+
+	  _createClass(UserList, [{
+	    key: 'render',
+	    value: function render(container) {
+	      this.dataGrid.render(container);
+	    }
+	  }, {
+	    key: 'filter',
+	    value: function filter(value) {
+	      this.searchTxt = value;
+	      this.dataGrid.refresh();
+	    }
+	  }]);
+
+	  return UserList;
+	}(_Component3.default);
+
+	exports.default = UserList;
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Button = __webpack_require__(7);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _Form = __webpack_require__(14);
+
+	var _Form2 = _interopRequireDefault(_Form);
+
+	var _ViewWindow = __webpack_require__(29);
+
+	var _ViewWindow2 = _interopRequireDefault(_ViewWindow);
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _UserViewForm = __webpack_require__(30);
+
+	var _UserViewForm2 = _interopRequireDefault(_UserViewForm);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ViewUserWindow = function (_Component) {
+	  _inherits(ViewUserWindow, _Component);
+
+	  function ViewUserWindow(options) {
+	    _classCallCheck(this, ViewUserWindow);
+
+	    var _this2 = _possibleConstructorReturn(this, (ViewUserWindow.__proto__ || Object.getPrototypeOf(ViewUserWindow)).call(this, options));
+
+	    var _this = _this2;
+
+	    var userViewForm = new _UserViewForm2.default({
+	      data: options.data
+	    });
+
+	    var jqxOptions = {
+	      width: 380,
+	      height: 330
+	    };
+
+	    _this2.window = new _ViewWindow2.default({
+	      title: 'View User',
+	      content: userViewForm,
+	      onSave: function onSave() {
+	        _this.window.close();
+	      },
+	      jqxOptions: jqxOptions
+	    });
+
+	    return _this2;
+	  }
+
+	  _createClass(ViewUserWindow, [{
+	    key: 'render',
+	    value: function render(container) {
+	      var _this = this;
+	      this.window.render(container);
+	    }
+	  }, {
+	    key: 'open',
+	    value: function open() {
+	      this.window.open();
+	    }
+	  }]);
+
+	  return ViewUserWindow;
+	}(_Component3.default);
+
+	exports.default = ViewUserWindow;
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Button = __webpack_require__(7);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _ModalWindow2 = __webpack_require__(16);
+
+	var _ModalWindow3 = _interopRequireDefault(_ModalWindow2);
+
+	var _Label = __webpack_require__(18);
+
+	var _Label2 = _interopRequireDefault(_Label);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ViewWindow = function (_ModalWindow) {
+	  _inherits(ViewWindow, _ModalWindow);
+
+	  function ViewWindow(options) {
+	    _classCallCheck(this, ViewWindow);
+
+	    var _this = _possibleConstructorReturn(this, (ViewWindow.__proto__ || Object.getPrototypeOf(ViewWindow)).call(this, options));
+
+	    if (options.content) {
+	      _this.content = options.content;
+	    } else {
+	      _this.content = new _Label2.default({ text: 'No Content' });
+	    }
+
+	    var title = options.saveButtonTitle ? options.saveButtonTitle : 'OK';
+
+	    _this.saveButton = new _Button2.default({
+	      title: title,
+	      onClick: function onClick() {
+	        if (options.onSave) {
+	          options.onSave();
+	        }
+	      },
+	      jqxOptions: {
+	        width: 90,
+	        theme: 'light',
+	        template: 'primary'
+	      }
+	    });
+
+	    return _this;
+	  }
+
+	  _createClass(ViewWindow, [{
+	    key: 'appendWindowContentChild',
+	    value: function appendWindowContentChild(windowContent) {
+	      var table = $('<table style="height: 100%; width: 100%;"></table>');
+	      var tr = $('<tr></tr>');
+	      var td = $('<td></td>');
+	      table.appendTo(windowContent);
+	      tr.appendTo(table);
+	      td.appendTo(tr);
+	      this.content.render(td);
+
+	      tr = $('<tr></tr>');
+	      td = $('<td></td>');
+	      tr.appendTo(table);
+	      td.appendTo(tr);
+
+	      var innerTable = $('<table style="height: 100%; width: 100%;"></table>');
+	      var innerTr = $('<tr></tr>');
+	      var innerTd = $('<td style="width: 30%;"></td>');
+	      innerTable.appendTo(td);
+	      innerTr.appendTo(innerTable);
+	      innerTd.appendTo(innerTr);
+
+	      innerTd = $('<td style="width: 40%; text-align: center;"></td>');
+	      innerTd.appendTo(innerTr);
+	      this.saveButton.render(innerTd);
+
+	      innerTd = $('<td style="width: 30%;"></td>');
+	      innerTd.appendTo(innerTr);
+	    }
+	  }]);
+
+	  return ViewWindow;
+	}(_ModalWindow3.default);
+
+	exports.default = ViewWindow;
+
+/***/ },
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Button = __webpack_require__(7);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _Form = __webpack_require__(14);
+
+	var _Form2 = _interopRequireDefault(_Form);
+
+	var _AddWindow = __webpack_require__(15);
+
+	var _AddWindow2 = _interopRequireDefault(_AddWindow);
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _TextBox = __webpack_require__(9);
+
+	var _TextBox2 = _interopRequireDefault(_TextBox);
+
+	var _TextArea = __webpack_require__(21);
+
+	var _TextArea2 = _interopRequireDefault(_TextArea);
+
+	var _Label = __webpack_require__(18);
+
+	var _Label2 = _interopRequireDefault(_Label);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var UserViewForm = function (_Component) {
+	  _inherits(UserViewForm, _Component);
+
+	  function UserViewForm(options) {
+	    _classCallCheck(this, UserViewForm);
+
+	    var _this2 = _possibleConstructorReturn(this, (UserViewForm.__proto__ || Object.getPrototypeOf(UserViewForm)).call(this, options));
+
+	    var _this = _this2;
+
+	    var user = {};
+
+	    if (options.data) {
+	      user = options.data;
+	    }
+	    _this2.onSaveSuccess = options.onSaveSuccess;
+
+	    var idLabel = new _Label2.default({
+	      text: user.employeeId,
+	      jqxOptions: {
+	        height: 25,
+	        width: 270
+	      }
+	    });
+
+	    var nameLabel = new _Label2.default({
+	      text: user.firstName,
+	      jqxOptions: {
+	        height: 25,
+	        width: 270
+	      }
+	    });
+
+	    var addressLabel = new _Label2.default({
+	      text: user.address ? user.address : '-',
+	      jqxOptions: {
+	        height: 25,
+	        width: 270
+	      }
+	    });
+
+	    var emailLabel = new _Label2.default({
+	      text: user.email ? user.email : '-',
+	      jqxOptions: {
+	        height: 25,
+	        width: 270
+	      }
+	    });
+
+	    var mobile1Label = new _Label2.default({
+	      text: user.mobile1 ? user.mobile1 : '-',
+	      jqxOptions: {
+	        height: 25,
+	        width: 270
+	      }
+	    });
+
+	    var roleLabel = new _Label2.default({
+	      text: user.role ? user.role.roleName : '-',
+	      jqxOptions: {
+	        height: 25,
+	        width: 270
+	      }
+	    });
+
+	    var branchLabel = new _Label2.default({
+	      text: user.branch ? user.branch.branchName : '-',
+	      jqxOptions: {
+	        height: 25,
+	        width: 270
+	      }
+	    });
+
+	    var locationLabel = new _Label2.default({
+	      text: user.location ? user.location.locationName : '-',
+	      jqxOptions: {
+	        height: 25,
+	        width: 270
+	      }
+	    });
+
+	    var formItems = [{
+	      name: 'id',
+	      label: 'ID',
+	      content: idLabel
+	    }, {
+	      name: 'name',
+	      label: 'Name',
+	      content: nameLabel
+	    }, {
+	      name: 'address',
+	      label: 'Address',
+	      content: addressLabel
+	    }, {
+	      name: 'email',
+	      label: 'Email',
+	      content: emailLabel
+	    }, {
+	      name: 'mobile1',
+	      label: 'HP No',
+	      content: mobile1Label
+	    }, {
+	      name: 'role',
+	      label: 'Role',
+	      content: roleLabel
+	    }, {
+	      name: 'branch',
+	      label: 'Branch',
+	      content: branchLabel
+	    }, {
+	      name: 'location',
+	      label: 'Location',
+	      content: locationLabel
+	    }];
+	    var formOptions = {
+	      items: formItems,
+	      labelColumnWidth: '120px',
+	      onValidationSuccess: function onValidationSuccess(formValue) {}
+	    };
+
+	    _this2.form = new _Form2.default(formOptions);
+
+	    return _this2;
+	  }
+
+	  _createClass(UserViewForm, [{
+	    key: 'render',
+	    value: function render(container) {
+	      this.form.render(container);
+	    }
+	  }, {
+	    key: 'validate',
+	    value: function validate() {
+	      this.form.validate();
+	    }
+	  }]);
+
+	  return UserViewForm;
+	}(_Component3.default);
+
+	exports.default = UserViewForm;
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Button = __webpack_require__(7);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _Form = __webpack_require__(14);
+
+	var _Form2 = _interopRequireDefault(_Form);
+
+	var _AddWindow = __webpack_require__(15);
+
+	var _AddWindow2 = _interopRequireDefault(_AddWindow);
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _UserForm = __webpack_require__(32);
+
+	var _UserForm2 = _interopRequireDefault(_UserForm);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var EditUserWindow = function (_Component) {
+	  _inherits(EditUserWindow, _Component);
+
+	  function EditUserWindow(options) {
+	    _classCallCheck(this, EditUserWindow);
+
+	    var _this2 = _possibleConstructorReturn(this, (EditUserWindow.__proto__ || Object.getPrototypeOf(EditUserWindow)).call(this, options));
+
+	    var _this = _this2;
+
+	    var userForm = new _UserForm2.default({
+	      data: options.data,
+	      onSaveSuccess: options.onSaveSuccess
+	    });
+
+	    var jqxOptions = {
+	      width: 380,
+	      height: 330
+	    };
+
+	    _this2.window = new _AddWindow2.default({
+	      title: 'Edit User',
+	      content: userForm,
+	      onSave: function onSave() {
+	        userForm.validate();
+	      },
+	      onCancel: function onCancel() {
+	        _this.window.close();
+	      },
+	      jqxOptions: jqxOptions
+	    });
+
+	    return _this2;
+	  }
+
+	  _createClass(EditUserWindow, [{
+	    key: 'render',
+	    value: function render(container) {
+	      var _this = this;
+	      this.window.render(container);
+	    }
+	  }, {
+	    key: 'open',
+	    value: function open() {
+	      this.window.open();
+	    }
+	  }]);
+
+	  return EditUserWindow;
+	}(_Component3.default);
+
+	exports.default = EditUserWindow;
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Button = __webpack_require__(7);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _Form = __webpack_require__(14);
+
+	var _Form2 = _interopRequireDefault(_Form);
+
+	var _AddWindow = __webpack_require__(15);
+
+	var _AddWindow2 = _interopRequireDefault(_AddWindow);
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _TextBox = __webpack_require__(9);
+
+	var _TextBox2 = _interopRequireDefault(_TextBox);
+
+	var _TextArea = __webpack_require__(21);
+
+	var _TextArea2 = _interopRequireDefault(_TextArea);
+
+	var _Label = __webpack_require__(18);
+
+	var _Label2 = _interopRequireDefault(_Label);
+
+	var _RoleComboBox = __webpack_require__(33);
+
+	var _RoleComboBox2 = _interopRequireDefault(_RoleComboBox);
+
+	var _BranchComboBox = __webpack_require__(35);
+
+	var _BranchComboBox2 = _interopRequireDefault(_BranchComboBox);
+
+	var _LocationComboBox = __webpack_require__(36);
+
+	var _LocationComboBox2 = _interopRequireDefault(_LocationComboBox);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var UserForm = function (_Component) {
+	  _inherits(UserForm, _Component);
+
+	  function UserForm(options) {
+	    _classCallCheck(this, UserForm);
+
+	    var _this2 = _possibleConstructorReturn(this, (UserForm.__proto__ || Object.getPrototypeOf(UserForm)).call(this, options));
+
+	    var _this = _this2;
+
+	    var user = {};
+
+	    if (options.data) {
+	      user = options.data;
+	    }
+	    _this2.onSaveSuccess = options.onSaveSuccess;
+
+	    var idLabel = new _Label2.default({
+	      text: user.employeeId,
+	      jqxOptions: {
+	        height: 25,
+	        width: 270
+	      }
+	    });
+
+	    var nameLabel = new _Label2.default({
+	      text: user.firstName,
+	      jqxOptions: {
+	        height: 25,
+	        width: 270
+	      }
+	    });
+
+	    var addressLabel = new _Label2.default({
+	      text: user.address ? user.address : '-',
+	      jqxOptions: {
+	        height: 25,
+	        width: 270
+	      }
+	    });
+
+	    var emailLabel = new _Label2.default({
+	      text: user.email ? user.email : '-',
+	      jqxOptions: {
+	        height: 25,
+	        width: 270
+	      }
+	    });
+
+	    var mobile1Label = new _Label2.default({
+	      text: user.mobile1 ? user.mobile1 : '-',
+	      jqxOptions: {
+	        height: 25,
+	        width: 270
+	      }
+	    });
+
+	    var roleComboBox = new _RoleComboBox2.default({
+	      value: user.role ? user.role.roleId : null,
+	      jqxOptions: {
+	        height: 25,
+	        width: 270
+	      }
+	    });
+
+	    var branchComboBox = new _BranchComboBox2.default({
+	      value: user.branch ? user.branch.branchId : null,
+	      jqxOptions: {
+	        height: 25,
+	        width: 270
+	      }
+	    });
+
+	    var locationComboBox = new _LocationComboBox2.default({
+	      value: user.location ? user.location.locationId : null,
+	      jqxOptions: {
+	        height: 25,
+	        width: 270
+	      }
+	    });
+
+	    var formItems = [{
+	      name: 'id',
+	      label: 'ID',
+	      content: idLabel
+	    }, {
+	      name: 'name',
+	      label: 'Name',
+	      content: nameLabel
+	    }, {
+	      name: 'address',
+	      label: 'Address',
+	      content: addressLabel
+	    }, {
+	      name: 'email',
+	      label: 'Email',
+	      content: emailLabel
+	    }, {
+	      name: 'mobile1',
+	      label: 'HP No',
+	      content: mobile1Label
+	    }, {
+	      name: 'role',
+	      label: 'Role',
+	      content: roleComboBox,
+	      validation: {
+	        type: 'COMBOBOX',
+	        rule: 'required'
+	      }
+	    }, {
+	      name: 'branch',
+	      label: 'Branch',
+	      content: branchComboBox,
+	      validation: {
+	        type: 'COMBOBOX',
+	        rule: 'required'
+	      }
+	    }, {
+	      name: 'location',
+	      label: 'Location',
+	      content: locationComboBox,
+	      validation: {
+	        type: 'COMBOBOX',
+	        rule: 'required'
+	      }
+	    }];
+	    var formOptions = {
+	      items: formItems,
+	      labelColumnWidth: '120px',
+	      onValidationSuccess: function onValidationSuccess(formValue) {
+
+	        console.log(formValue);
+	        // $.ajax({
+	        //       method: "POST",
+	        //       url: "/roles",
+	        //       data: JSON.stringify(formValue),
+	        //       beforeSend: function(xhr){
+	        //         xhr.setRequestHeader('Accept', 'application/json');
+	        //         xhr.setRequestHeader('Content-Type', 'application/json');
+	        //       }
+	        //     }).done(function() {
+	        //         $("#successNotification").jqxNotification("open");
+	        //         _this.window.close();
+	        //         if(_this.onSaveSuccess){
+	        //           _this.onSaveSuccess();
+	        //         }
+	        //     }).fail(function( jqXHR, textStatus, errorThrown) {
+	        //         var errorMessage = 'Proses gagal. Status : ' + jqXHR.status + ' [' + jqXHR.statusText + '] : ' + jqXHR.responseText;
+	        //         $("#errorNotification").html('<div>' + errorMessage + '</div>');
+	        //         $("#errorNotification").jqxNotification("open");
+	        //     });
+	      }
+	    };
+
+	    _this2.form = new _Form2.default(formOptions);
+
+	    return _this2;
+	  }
+
+	  _createClass(UserForm, [{
+	    key: 'render',
+	    value: function render(container) {
+	      this.form.render(container);
+	    }
+	  }, {
+	    key: 'validate',
+	    value: function validate() {
+	      this.form.validate();
+	    }
+	  }]);
+
+	  return UserForm;
+	}(_Component3.default);
+
+	exports.default = UserForm;
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _ComboBox = __webpack_require__(34);
+
+	var _ComboBox2 = _interopRequireDefault(_ComboBox);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var RoleComboBox = function (_Component) {
+	  _inherits(RoleComboBox, _Component);
+
+	  function RoleComboBox(options) {
+	    _classCallCheck(this, RoleComboBox);
+
+	    var _this = _possibleConstructorReturn(this, (RoleComboBox.__proto__ || Object.getPrototypeOf(RoleComboBox)).call(this, options));
+
+	    if (options == undefined) {
+	      options = {};
+	    }
+
+	    var jqxOptions = {
+	      displayMember: "roleName",
+	      valueMember: "roleId",
+	      placeHolder: 'Select Role',
+	      selectionMode: 'dropDownList',
+	      width: 220,
+	      height: 25
+	    };
+
+	    _this.comboBox = new _ComboBox2.default({
+	      url: '/roles',
+	      jqxOptions: jqxOptions,
+	      clearSelectionEnabled: true,
+	      value: options.value,
+	      onChange: function onChange(value) {
+	        if (options.onChange) {
+	          options.onChange(value);
+	        }
+	      }
+	    });
+
+	    return _this;
+	  }
+
+	  _createClass(RoleComboBox, [{
+	    key: "getId",
+	    value: function getId() {
+	      return this.comboBox.getId();
+	    }
+	  }, {
+	    key: "render",
+	    value: function render(container) {
+	      this.comboBox.render(container);
+	    }
+	  }, {
+	    key: "getValue",
+	    value: function getValue() {
+	      return this.comboBox.getValue();
+	    }
+	  }]);
+
+	  return RoleComboBox;
+	}(_Component3.default);
+
+	exports.default = RoleComboBox;
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ComboBox = function (_Component) {
+	  _inherits(ComboBox, _Component);
+
+	  function ComboBox(options) {
+	    _classCallCheck(this, ComboBox);
+
+	    var _this2 = _possibleConstructorReturn(this, (ComboBox.__proto__ || Object.getPrototypeOf(ComboBox)).call(this, options));
+
+	    _this2.localData = options.localData;
+	    _this2.url = options.url;
+	    _this2.dataFields = options.dataFields;
+	    _this2.onChange = options.onChange;
+	    _this2.clearSelectionEnabled = options.clearSelectionEnabled;
+	    _this2.initialValue = options.value;
+
+	    _this2.jqxOptions = options.jqxOptions;
+	    return _this2;
+	  }
+
+	  _createClass(ComboBox, [{
+	    key: 'render',
+	    value: function render(container) {
+
+	      var _this = this;
+
+	      var comboBoxContainer = $('<div></div>');
+	      comboBoxContainer.appendTo(container);
+	      comboBoxContainer.attr('id', this.id);
+
+	      if (this.localData) {
+	        this.jqxOptions['source'] = this.localData;
+	      } else {
+	        var source = {
+	          datatype: "json",
+	          datafields: this.dataFields,
+	          url: _this.url,
+	          data: {}
+	        };
+	        var dataAdapter = new $.jqx.dataAdapter(source);
+	        this.jqxOptions['source'] = dataAdapter;
+	      }
+
+	      comboBoxContainer.jqxComboBox(this.jqxOptions);
+
+	      if (this.onChange) {
+	        comboBoxContainer.on('change', function (event) {
+	          _this.onChange(comboBoxContainer.val());
+	        });
+	      }
+
+	      if (this.clearSelectionEnabled) {
+	        comboBoxContainer.on('keydown', function (event) {
+	          if (event.keyCode == 8 || event.keyCode == 46) {
+	            comboBoxContainer.jqxComboBox('clearSelection');
+	          }
+	        });
+	      }
+
+	      if (this.initialValue) {
+	        if (this.localData) {
+	          comboBoxContainer.val(_this.initialValue);
+	        } else {
+	          comboBoxContainer.on('bindingComplete', function (event) {
+	            comboBoxContainer.val(_this.initialValue);
+	          });
+	        }
+	      }
+
+	      this.component = comboBoxContainer;
+	    }
+	  }, {
+	    key: 'getId',
+	    value: function getId() {
+	      return this.id;
+	    }
+	  }, {
+	    key: 'getValue',
+	    value: function getValue() {
+	      return this.component.val();
+	    }
+	  }]);
+
+	  return ComboBox;
+	}(_Component3.default);
+
+	exports.default = ComboBox;
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _ComboBox = __webpack_require__(34);
+
+	var _ComboBox2 = _interopRequireDefault(_ComboBox);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var BranchComboBox = function (_Component) {
+	  _inherits(BranchComboBox, _Component);
+
+	  function BranchComboBox(options) {
+	    _classCallCheck(this, BranchComboBox);
+
+	    var _this = _possibleConstructorReturn(this, (BranchComboBox.__proto__ || Object.getPrototypeOf(BranchComboBox)).call(this, options));
+
+	    if (options == undefined) {
+	      options = {};
+	    }
+
+	    var jqxOptions = {
+	      displayMember: "branchId",
+	      valueMember: "name",
+	      placeHolder: 'Select Branch',
+	      selectionMode: 'dropDownList',
+	      width: 220,
+	      height: 25
+	    };
+
+	    _this.comboBox = new _ComboBox2.default({
+	      url: '/branches',
+	      jqxOptions: jqxOptions,
+	      clearSelectionEnabled: true,
+	      value: options.value,
+	      onChange: function onChange(value) {
+	        if (options.onChange) {
+	          options.onChange(value);
+	        }
+	      }
+	    });
+
+	    return _this;
+	  }
+
+	  _createClass(BranchComboBox, [{
+	    key: "getId",
+	    value: function getId() {
+	      return this.comboBox.getId();
+	    }
+	  }, {
+	    key: "render",
+	    value: function render(container) {
+	      this.comboBox.render(container);
+	    }
+	  }, {
+	    key: "getValue",
+	    value: function getValue() {
+	      return this.comboBox.getValue();
+	    }
+	  }]);
+
+	  return BranchComboBox;
+	}(_Component3.default);
+
+	exports.default = BranchComboBox;
+
+/***/ },
+/* 36 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _ComboBox = __webpack_require__(34);
+
+	var _ComboBox2 = _interopRequireDefault(_ComboBox);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LocationComboBox = function (_Component) {
+	  _inherits(LocationComboBox, _Component);
+
+	  function LocationComboBox(options) {
+	    _classCallCheck(this, LocationComboBox);
+
+	    var _this = _possibleConstructorReturn(this, (LocationComboBox.__proto__ || Object.getPrototypeOf(LocationComboBox)).call(this, options));
+
+	    if (options == undefined) {
+	      options = {};
+	    }
+
+	    var jqxOptions = {
+	      displayMember: "locationId",
+	      valueMember: "name",
+	      placeHolder: 'Select Location',
+	      selectionMode: 'dropDownList',
+	      width: 220,
+	      height: 25
+	    };
+
+	    _this.comboBox = new _ComboBox2.default({
+	      url: '/locations',
+	      jqxOptions: jqxOptions,
+	      clearSelectionEnabled: true,
+	      value: options.value,
+	      onChange: function onChange(value) {
+	        if (options.onChange) {
+	          options.onChange(value);
+	        }
+	      }
+	    });
+
+	    return _this;
+	  }
+
+	  _createClass(LocationComboBox, [{
+	    key: "getId",
+	    value: function getId() {
+	      return this.comboBox.getId();
+	    }
+	  }, {
+	    key: "render",
+	    value: function render(container) {
+	      this.comboBox.render(container);
+	    }
+	  }, {
+	    key: "getValue",
+	    value: function getValue() {
+	      return this.comboBox.getValue();
+	    }
+	  }]);
+
+	  return LocationComboBox;
+	}(_Component3.default);
+
+	exports.default = LocationComboBox;
+
+/***/ },
+/* 37 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _Button = __webpack_require__(7);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _TextArea = __webpack_require__(21);
+
+	var _TextArea2 = _interopRequireDefault(_TextArea);
+
+	var _SingleRowForm = __webpack_require__(38);
+
+	var _SingleRowForm2 = _interopRequireDefault(_SingleRowForm);
+
+	var _ConfirmationWindow = __webpack_require__(39);
+
+	var _ConfirmationWindow2 = _interopRequireDefault(_ConfirmationWindow);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var UserBlockWindow = function (_Component) {
+	  _inherits(UserBlockWindow, _Component);
+
+	  function UserBlockWindow(options) {
+	    _classCallCheck(this, UserBlockWindow);
+
+	    var _this2 = _possibleConstructorReturn(this, (UserBlockWindow.__proto__ || Object.getPrototypeOf(UserBlockWindow)).call(this, options));
+
+	    var _this = _this2;
+
+	    var descriptionTextArea = new _TextArea2.default({
+	      jqxOptions: {
+	        height: 70,
+	        width: 275
+	      }
+	    });
+
+	    var reasonCaption = 'Please specify a reason why you want <br/> to block customer <b>' + (options.data ? options.data.firstName : '') + '</b>?';
+
+	    var formItems = [{
+	      name: 'description',
+	      label: reasonCaption,
+	      content: descriptionTextArea,
+	      validation: {
+	        type: 'TEXTBOX',
+	        rule: 'required'
+	      }
+	    }];
+
+	    var formOptions = {
+	      items: formItems,
+	      labelColumnWidth: '120px',
+	      onValidationSuccess: function onValidationSuccess(formValue) {
+
+	        console.log(formValue);
+	        // $.ajax({
+	        //       method: "POST",
+	        //       url: "/roles",
+	        //       data: JSON.stringify(formValue),
+	        //       beforeSend: function(xhr){
+	        //         xhr.setRequestHeader('Accept', 'application/json');
+	        //         xhr.setRequestHeader('Content-Type', 'application/json');
+	        //       }
+	        //     }).done(function() {
+	        //         $("#successNotification").jqxNotification("open");
+	        //         _this.window.close();
+	        //         if(_this.onSaveSuccess){
+	        //           _this.onSaveSuccess();
+	        //         }
+	        //     }).fail(function( jqXHR, textStatus, errorThrown) {
+	        //         var errorMessage = 'Proses gagal. Status : ' + jqXHR.status + ' [' + jqXHR.statusText + '] : ' + jqXHR.responseText;
+	        //         $("#errorNotification").html('<div>' + errorMessage + '</div>');
+	        //         $("#errorNotification").jqxNotification("open");
+	        //     });
+	      }
+	    };
+
+	    var form = new _SingleRowForm2.default(formOptions);
+
+	    var jqxOptions = {
+	      width: 299,
+	      height: 214
+	    };
+
+	    _this2.window = new _ConfirmationWindow2.default({
+	      title: 'Confirm User Block/Unblock',
+	      saveButtonTitle: 'Confirm Blocking',
+	      content: form,
+	      onSave: function onSave() {
+	        form.validate();
+	      },
+	      onCancel: function onCancel() {
+	        _this.window.close();
+	      },
+	      jqxOptions: jqxOptions
+	    });
+
+	    return _this2;
+	  }
+
+	  _createClass(UserBlockWindow, [{
+	    key: 'render',
+	    value: function render(container) {
+	      var _this = this;
+	      this.window.render(container);
+	    }
+	  }, {
+	    key: 'open',
+	    value: function open() {
+	      this.window.open();
+	    }
+	  }]);
+
+	  return UserBlockWindow;
+	}(_Component3.default);
+
+	exports.default = UserBlockWindow;
+
+/***/ },
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Form2 = __webpack_require__(14);
+
+	var _Form3 = _interopRequireDefault(_Form2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var SingleRowForm = function (_Form) {
+	  _inherits(SingleRowForm, _Form);
+
+	  function SingleRowForm(options) {
+	    _classCallCheck(this, SingleRowForm);
+
+	    return _possibleConstructorReturn(this, (SingleRowForm.__proto__ || Object.getPrototypeOf(SingleRowForm)).call(this, options));
+	  }
+
+	  _createClass(SingleRowForm, [{
+	    key: 'renderItems',
+	    value: function renderItems(container) {
+	      var form = $('<form></form>');
+	      form.appendTo(container);
+	      var table = $('<table style="width: 100%;"></table>');
+	      table.appendTo(form);
+	      for (var i = 0; i < this.items.length; i++) {
+	        var tr = $('<tr></tr>');
+	        tr.appendTo(table);
+
+	        var td = $('<td></td>');
+	        td.appendTo(tr);
+	        td.css('padding-top', '5px');
+	        td.css('padding-bottom', '5px');
+	        if (this.labelColumnWidth) {
+	          td.css('width', this.labelColumnWidth);
+	        }
+
+	        var label = $('<span>' + this.items[i].label + '</span>');
+	        label.appendTo(td);
+
+	        tr = $('<tr></tr>');
+	        tr.appendTo(table);
+	        td = $('<td></td>');
+	        td.appendTo(tr);
+	        td.css('padding-top', '3px');
+	        td.css('padding-bottom', '3px');
+	        if (this.contentColumnWidth) {
+	          td.css('width', this.contentColumnWidth);
+	        }
+
+	        this.items[i].content.render(td);
+	      }
+
+	      this.form = form;
+	    }
+	  }]);
+
+	  return SingleRowForm;
+	}(_Form3.default);
+
+	exports.default = SingleRowForm;
+
+/***/ },
+/* 39 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Button = __webpack_require__(7);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _ModalWindow2 = __webpack_require__(16);
+
+	var _ModalWindow3 = _interopRequireDefault(_ModalWindow2);
+
+	var _Label = __webpack_require__(18);
+
+	var _Label2 = _interopRequireDefault(_Label);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ConfirmationWindow = function (_ModalWindow) {
+	  _inherits(ConfirmationWindow, _ModalWindow);
+
+	  function ConfirmationWindow(options) {
+	    _classCallCheck(this, ConfirmationWindow);
+
+	    var _this = _possibleConstructorReturn(this, (ConfirmationWindow.__proto__ || Object.getPrototypeOf(ConfirmationWindow)).call(this, options));
+
+	    if (options.content) {
+	      _this.content = options.content;
+	    } else {
+	      _this.content = new _Label2.default({ text: 'No Content' });
+	    }
+
+	    var title = options.saveButtonTitle ? options.saveButtonTitle : 'Confirm';
+
+	    _this.saveButton = new _Button2.default({
+	      title: title,
+	      onClick: function onClick() {
+	        if (options.onSave) {
+	          options.onSave();
+	        }
+	      },
+	      jqxOptions: {
+	        theme: 'light',
+	        template: 'danger'
+	      }
+	    });
+
+	    _this.cancelButton = new _Button2.default({
+	      title: 'Cancel',
+	      onClick: function onClick() {
+	        if (options.onCancel) {
+	          options.onCancel();
+	        }
+	      },
+	      jqxOptions: {
+	        theme: 'light',
+	        template: 'default'
+	      }
+	    });
+
+	    return _this;
+	  }
+
+	  _createClass(ConfirmationWindow, [{
+	    key: 'appendWindowContentChild',
+	    value: function appendWindowContentChild(windowContent) {
+	      var table = $('<table style="height: 100%; width: 100%;"></table>');
+	      var tr = $('<tr></tr>');
+	      var td = $('<td></td>');
+	      table.appendTo(windowContent);
+	      tr.appendTo(table);
+	      td.appendTo(tr);
+	      this.content.render(td);
+
+	      tr = $('<tr></tr>');
+	      td = $('<td></td>');
+	      tr.appendTo(table);
+	      td.appendTo(tr);
+
+	      var innerTable = $('<table style="height: 100%; width: 100%;"></table>');
+	      var innerTr = $('<tr></tr>');
+	      var innerTd = $('<td style="width: 90%;"></td>');
+	      innerTable.appendTo(td);
+	      innerTr.appendTo(innerTable);
+	      innerTd.appendTo(innerTr);
+
+	      innerTd = $('<td></td>');
+	      innerTd.appendTo(innerTr);
+	      this.cancelButton.render(innerTd);
+
+	      innerTd = $('<td></td>');
+	      innerTd.appendTo(innerTr);
+	      this.saveButton.render(innerTd);
+	    }
+	  }]);
+
+	  return ConfirmationWindow;
+	}(_ModalWindow3.default);
+
+	exports.default = ConfirmationWindow;
+
+/***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _Button = __webpack_require__(7);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _SearchText = __webpack_require__(8);
+
+	var _SearchText2 = _interopRequireDefault(_SearchText);
+
+	var _CustomerList = __webpack_require__(41);
+
+	var _CustomerList2 = _interopRequireDefault(_CustomerList);
+
+	var _AddRoleWindow = __webpack_require__(13);
+
+	var _AddRoleWindow2 = _interopRequireDefault(_AddRoleWindow);
+
+	var _EditRoleWindow = __webpack_require__(25);
+
+	var _EditRoleWindow2 = _interopRequireDefault(_EditRoleWindow);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var CustomerPage = function (_Component) {
+	  _inherits(CustomerPage, _Component);
+
+	  function CustomerPage(options) {
+	    _classCallCheck(this, CustomerPage);
+
+	    var _this2 = _possibleConstructorReturn(this, (CustomerPage.__proto__ || Object.getPrototypeOf(CustomerPage)).call(this, options));
+
+	    var _this = _this2;
+
+	    if (options.title) {
+	      _this2.title = option.title;
+	    } else {
+	      _this2.title = "Customer Management";
+	    }
+
+	    var onEditButtonClick = function onEditButtonClick(value) {
+	      var editRoleWindow = new _EditRoleWindow2.default({
+	        data: value,
+	        onSaveSuccess: function onSaveSuccess() {
+	          _this.dataGrid.refresh();
+	        }
+	      });
+	      editRoleWindow.render($('#dialogWindowContainer'));
+	      editRoleWindow.open();
+	    };
+
+	    _this2.customerList = new _CustomerList2.default({
+	      onEditButtonClick: onEditButtonClick
+	    });
+
+	    _this2.addRoleButton = new _Button2.default({
+	      title: 'Add Role',
+	      height: 26,
+	      onClick: function onClick(e) {
+	        var addRoleWindow = new _AddRoleWindow2.default({
+	          onSaveSuccess: function onSaveSuccess() {
+	            _this.dataGrid.refresh();
+	          }
+	        });
+	        addRoleWindow.render($('#dialogWindowContainer'));
+	        addRoleWindow.open();
+	      },
+	      jqxOptions: {
+	        theme: 'light',
+	        template: 'primary'
+	      }
+	    });
+
+	    _this2.searchText = new _SearchText2.default({
+	      placeHolder: 'Customer Name',
+	      onSearch: function onSearch(value) {
+	        _this.roleList.filter(value);
+	      }
+	    });
+	    return _this2;
+	  }
+
+	  _createClass(CustomerPage, [{
+	    key: 'render',
+	    value: function render(container) {
+
+	      var _this = this;
+
+	      var table = $('<table style="height: 100%; width: 100%; "></table>');
+	      var tr = $('<tr></tr>');
+	      var td = $('<td colspan="2" style="padding: 10px; padding-bottom: 5px; height: 20px; "></td>');
+	      table.appendTo(container);
+	      tr.appendTo(table);
+	      td.appendTo(tr);
+	      td.html('<span class="page-title">' + this.title + '</span>');
+
+	      tr = $('<tr></tr>');
+	      td = $('<td style="padding-left: 7px; height: 20px; width: 30px;"></td>');
+	      tr.appendTo(table);
+	      td.appendTo(tr);
+	      // this.addRoleButton.render(td);
+	      //
+	      // td = $('<td style=""></td>');
+	      // td.appendTo(tr);
+	      this.searchText.render(td);
+
+	      tr = $('<tr></tr>');
+	      td = $('<td colspan="2" style=""></td>');
+	      tr.appendTo(table);
+	      td.appendTo(tr);
+
+	      this.customerList.render(td);
+	    }
+	  }]);
+
+	  return CustomerPage;
+	}(_Component3.default);
+
+	exports.default = CustomerPage;
+
+/***/ },
+/* 41 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _DataGrid = __webpack_require__(11);
+
+	var _DataGrid2 = _interopRequireDefault(_DataGrid);
+
+	var _SearchHeader = __webpack_require__(12);
+
+	var _SearchHeader2 = _interopRequireDefault(_SearchHeader);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var CustomerList = function (_Component) {
+	  _inherits(CustomerList, _Component);
+
+	  function CustomerList(options) {
+	    _classCallCheck(this, CustomerList);
+
+	    var _this2 = _possibleConstructorReturn(this, (CustomerList.__proto__ || Object.getPrototypeOf(CustomerList)).call(this, options));
+
+	    var _this = _this2;
+
+	    var source = {
+	      datatype: "json",
+	      datafields: [{ name: 'employeeId', type: 'string' }, { name: 'firstName', type: 'string' }, { name: 'description', type: 'string' }],
+	      id: "employeeId",
+	      url: "/customers"
+	    };
+
+	    var onSearch = function onSearch(data) {
+	      data['searchTxt'] = _this.searchTxt;
+	      return data;
+	    };
+
+	    var onEditButtonClick = function onEditButtonClick(value) {
+	      if (options.onEditButtonClick) {
+	        options.onEditButtonClick(value.bounddata);
+	      }
+	    };
+
+	    var jqxOptions = {
+	      width: '100%',
+	      height: '100%',
+	      rowsheight: 35,
+	      pageable: true,
+	      altrows: true,
+	      theme: 'metro',
+	      virtualmode: true,
+	      rendergridrows: function rendergridrows(params) {
+	        return params.data;
+	      },
+	      columns: [{ text: 'ID', datafield: 'employeeId' }, { text: 'Customer Name', datafield: 'firstName' }, { text: 'Code', datafield: 'status' }, { text: 'Address', datafield: 'location' }, { text: 'Contact No', datafield: 'role' }, {
+	        text: 'Actions',
+	        datafield: 'actions',
+	        // width: 325,
+	        createwidget: function createwidget(row, column, value, htmlElement) {
+	          var table = $('<table style="height: 100%; width: 100%; text-align: center;"></table>');
+	          var tr = $('<tr></tr>');
+	          var td = $('<td></td>');
+	          table.appendTo(htmlElement);
+	          tr.appendTo(table);
+	          td.appendTo(tr);
+	          var button1 = $("<div style='margin: 2.4px;'>" + "View" + "</div>");
+	          button1.appendTo(td);
+	          button1.jqxButton({ theme: 'light', template: "default" });
+	          button1.click(function (event) {
+	            onEditButtonClick(row);
+	          });
+
+	          td = $('<td></td>');
+	          td.appendTo(tr);
+	          var button2 = $("<div style='margin: 2.4px;'>" + "Edit" + "</div>");
+	          button2.appendTo(td);
+	          button2.jqxButton({ theme: 'light', template: "success" });
+	          button2.click(function (event) {
+	            onEditButtonClick(row);
+	          });
+
+	          td = $('<td style="width: 50%;"></td>');
+	          td.appendTo(tr);
+	          var button3 = $("<div style='margin: 2.4px;'>" + "Block / Unblock" + "</div>");
+	          button3.appendTo(td);
+	          button3.jqxButton({ theme: 'light', template: "danger" });
+	          button3.click(function (event) {
+	            onEditButtonClick(row);
+	          });
+
+	          td = $('<td style="width: 50%;"></td>');
+	          td.appendTo(tr);
+	          var button4 = $("<div style='margin: 2.4px;'>" + "Update Limit" + "</div>");
+	          button4.appendTo(td);
+	          button4.jqxButton({ theme: 'light', template: "default" });
+	          button4.click(function (event) {
+	            onEditButtonClick(row);
+	          });
+	        },
+	        initwidget: function initwidget(row, column, value, htmlElement) {
+	          // var imgurl = '../../images/' + value.toLowerCase() + '.png';
+	          // $(htmlElement).find('.buttonValue')[0].innerHTML = value;
+	          // $(htmlElement).find('img')[0].src = imgurl;
+	        }
+	      }],
+	      groups: []
+	    };
+
+	    _this2.dataGrid = new _DataGrid2.default({
+	      source: source,
+	      onSearch: onSearch,
+	      jqxOptions: jqxOptions
+	    });
+	    return _this2;
+	  }
+
+	  _createClass(CustomerList, [{
+	    key: 'render',
+	    value: function render(container) {
+	      this.dataGrid.render(container);
+	    }
+	  }, {
+	    key: 'filter',
+	    value: function filter(value) {
+	      this.searchTxt = value;
+	      this.dataGrid.refresh();
+	    }
+	  }]);
+
+	  return CustomerList;
+	}(_Component3.default);
+
+	exports.default = CustomerList;
+
+/***/ },
+/* 42 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _Button = __webpack_require__(7);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _SearchText = __webpack_require__(8);
+
+	var _SearchText2 = _interopRequireDefault(_SearchText);
+
+	var _ActiveSessionList = __webpack_require__(43);
+
+	var _ActiveSessionList2 = _interopRequireDefault(_ActiveSessionList);
+
+	var _AddRoleWindow = __webpack_require__(13);
+
+	var _AddRoleWindow2 = _interopRequireDefault(_AddRoleWindow);
+
+	var _EditRoleWindow = __webpack_require__(25);
+
+	var _EditRoleWindow2 = _interopRequireDefault(_EditRoleWindow);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ActiveSessionPage = function (_Component) {
+	  _inherits(ActiveSessionPage, _Component);
+
+	  function ActiveSessionPage(options) {
+	    _classCallCheck(this, ActiveSessionPage);
+
+	    var _this2 = _possibleConstructorReturn(this, (ActiveSessionPage.__proto__ || Object.getPrototypeOf(ActiveSessionPage)).call(this, options));
+
+	    var _this = _this2;
+
+	    if (options.title) {
+	      _this2.title = option.title;
+	    } else {
+	      _this2.title = "Active Sessions";
+	    }
+
+	    var onEditButtonClick = function onEditButtonClick(value) {
+	      var editRoleWindow = new _EditRoleWindow2.default({
+	        data: value,
+	        onSaveSuccess: function onSaveSuccess() {
+	          _this.dataGrid.refresh();
+	        }
+	      });
+	      editRoleWindow.render($('#dialogWindowContainer'));
+	      editRoleWindow.open();
+	    };
+
+	    _this2.activeSessionList = new _ActiveSessionList2.default({
+	      onEditButtonClick: onEditButtonClick
+	    });
+
+	    _this2.addRoleButton = new _Button2.default({
+	      title: 'Add Role',
+	      height: 26,
+	      onClick: function onClick(e) {
+	        var addRoleWindow = new _AddRoleWindow2.default({
+	          onSaveSuccess: function onSaveSuccess() {
+	            _this.dataGrid.refresh();
+	          }
+	        });
+	        addRoleWindow.render($('#dialogWindowContainer'));
+	        addRoleWindow.open();
+	      },
+	      jqxOptions: {
+	        theme: 'light',
+	        template: 'primary'
+	      }
+	    });
+
+	    _this2.searchText = new _SearchText2.default({
+	      placeHolder: 'User Id',
+	      onSearch: function onSearch(value) {
+	        _this.roleList.filter(value);
+	      }
+	    });
+	    return _this2;
+	  }
+
+	  _createClass(ActiveSessionPage, [{
+	    key: 'render',
+	    value: function render(container) {
+
+	      var _this = this;
+
+	      var table = $('<table style="height: 100%; width: 100%; "></table>');
+	      var tr = $('<tr></tr>');
+	      var td = $('<td colspan="2" style="padding: 10px; padding-bottom: 5px; height: 20px; "></td>');
+	      table.appendTo(container);
+	      tr.appendTo(table);
+	      td.appendTo(tr);
+	      td.html('<span class="page-title">' + this.title + '</span>');
+
+	      tr = $('<tr></tr>');
+	      td = $('<td style="padding-left: 7px; height: 20px; width: 30px;"></td>');
+	      tr.appendTo(table);
+	      td.appendTo(tr);
+	      // this.addRoleButton.render(td);
+	      //
+	      // td = $('<td style=""></td>');
+	      // td.appendTo(tr);
+	      this.searchText.render(td);
+
+	      tr = $('<tr></tr>');
+	      td = $('<td colspan="2" style=""></td>');
+	      tr.appendTo(table);
+	      td.appendTo(tr);
+
+	      this.activeSessionList.render(td);
+	    }
+	  }]);
+
+	  return ActiveSessionPage;
+	}(_Component3.default);
+
+	exports.default = ActiveSessionPage;
+
+/***/ },
+/* 43 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _DataGrid = __webpack_require__(11);
+
+	var _DataGrid2 = _interopRequireDefault(_DataGrid);
+
+	var _SearchHeader = __webpack_require__(12);
+
+	var _SearchHeader2 = _interopRequireDefault(_SearchHeader);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ActiveSessionList = function (_Component) {
+	  _inherits(ActiveSessionList, _Component);
+
+	  function ActiveSessionList(options) {
+	    _classCallCheck(this, ActiveSessionList);
+
+	    var _this2 = _possibleConstructorReturn(this, (ActiveSessionList.__proto__ || Object.getPrototypeOf(ActiveSessionList)).call(this, options));
+
+	    var _this = _this2;
+
+	    var source = {
+	      datatype: "json",
+	      datafields: [{ name: 'roleId', type: 'int' }, { name: 'roleName', type: 'string' }, { name: 'description', type: 'string' }],
+	      id: "roleId",
+	      url: "/activesessions"
+	    };
+
+	    var onSearch = function onSearch(data) {
+	      data['searchTxt'] = _this.searchTxt;
+	      return data;
+	    };
+
+	    var onEditButtonClick = function onEditButtonClick(value) {
+	      if (options.onEditButtonClick) {
+	        options.onEditButtonClick(value.bounddata);
+	      }
+	    };
+
+	    var jqxOptions = {
+	      width: '100%',
+	      height: '100%',
+	      rowsheight: 40,
+	      pageable: true,
+	      altrows: true,
+	      theme: 'metro',
+	      virtualmode: true,
+	      rendergridrows: function rendergridrows(params) {
+	        return params.data;
+	      },
+	      columns: [{ text: 'User ID', datafield: 'userId' }, { text: 'Name', datafield: 'name' }, { text: 'Depo', datafield: 'depo' }, { text: 'Time Zone', datafield: 'timeZone' }, { text: 'Role', datafield: 'role' }, {
+	        text: 'Actions',
+	        datafield: 'actions',
+	        // width: '30%',
+	        createwidget: function createwidget(row, column, value, htmlElement) {
+	          var table = $('<table style="height: 100%; width: 100%; text-align: center;"></table>');
+	          var tr = $('<tr></tr>');
+	          var td = $('<td style="width: 50%;"></td>');
+	          table.appendTo(htmlElement);
+	          tr.appendTo(table);
+	          td.appendTo(tr);
+
+	          td = $('<td></td>');
+	          td.appendTo(tr);
+	          var button = $("<div style='margin: 5px;'>" + "Kill Session" + "</div>");
+	          button.appendTo(td);
+	          button.jqxButton({ theme: 'light', template: "danger", width: 70 });
+	          button.click(function (event) {
+	            onEditButtonClick(row);
+	          });
+
+	          td = $('<td style="width: 50%;"></td>');
+	          td.appendTo(tr);
+	        },
+	        initwidget: function initwidget(row, column, value, htmlElement) {
+	          // var imgurl = '../../images/' + value.toLowerCase() + '.png';
+	          // $(htmlElement).find('.buttonValue')[0].innerHTML = value;
+	          // $(htmlElement).find('img')[0].src = imgurl;
+	        }
+	      }],
+	      groups: []
+	    };
+
+	    _this2.dataGrid = new _DataGrid2.default({
+	      source: source,
+	      onSearch: onSearch,
+	      jqxOptions: jqxOptions
+	    });
+	    return _this2;
+	  }
+
+	  _createClass(ActiveSessionList, [{
+	    key: 'render',
+	    value: function render(container) {
+	      this.dataGrid.render(container);
+	    }
+	  }, {
+	    key: 'filter',
+	    value: function filter(value) {
+	      this.searchTxt = value;
+	      this.dataGrid.refresh();
+	    }
+	  }]);
+
+	  return ActiveSessionList;
+	}(_Component3.default);
+
+	exports.default = ActiveSessionList;
 
 /***/ }
 /******/ ]);
