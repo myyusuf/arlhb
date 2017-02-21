@@ -56,7 +56,7 @@ public class RoleController {
 			@RequestParam("pagenum") int pageNum,
 			@RequestParam("searchTxt") String searchTxt) {
 		
-		searchTxt = "%" + searchTxt + "%";
+		searchTxt = "%" + searchTxt + "%" ;
 		int start = pageNum * pageSize;
 		
  		Map<String, Object> params = new HashMap<String, Object>();
