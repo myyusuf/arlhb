@@ -78,13 +78,13 @@
 	var mainMenu = new _MainMenu2.default({
 	  onClick: function onClick(e) {
 	    $('#content').empty();
-	    if (e == 1) {
+	    if (e == 58) {
 	      rolePage.render($('#content'));
-	    } else if (e == 2) {
+	    } else if (e == 59) {
 	      userPage.render($('#content'));
-	    } else if (e == 3) {
+	    } else if (e == 51) {
 	      activeSessionPaga.render($('#content'));
-	    } else if (e == 4) {
+	    } else if (e == 54) {
 	      customerPage.render($('#content'));
 	    }
 	  }

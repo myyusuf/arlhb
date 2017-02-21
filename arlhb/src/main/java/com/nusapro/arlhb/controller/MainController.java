@@ -24,10 +24,30 @@ public class MainController {
 	RoleMapper roleMapper;
 	
 	@RequestMapping("/")
-    @ResponseBody
+    String main() {
+//		City city = cityMapper.findByCode("JKT");
+//		Role role = roleMapper.findById(1);
+//        return "Info : Arlhb. " + role.getRoleName();
+		return "homex";
+    }
+	
+	@RequestMapping("/main")
+    String workspace() {
+		return "workspace";
+    }
+	
+	@RequestMapping("/home")
     String home() {
-		City city = cityMapper.findByCode("JKT");
-		Role role = roleMapper.findById(1);
-        return "Info : Arlhb. " + role.getRoleName();
+		return "homex";
+    }
+	
+	@RequestMapping("/hello")
+    String hello() {
+		return "hellox";
+    }
+	
+	@RequestMapping("/login")
+    String login() {
+		return "loginx";
     }
 }
