@@ -11,7 +11,7 @@
 	</resultMap>
 	
     <select id="findAll" resultMap="roleResultMap">
-        SELECT * FROM role
+        SELECT * FROM role WHERE role_name LIKE #{searchTxt} LIMIT #{start}, #{pageSize}
     </select>
     
     <select id="findById" resultMap="roleResultMap">

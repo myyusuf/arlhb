@@ -1,5 +1,6 @@
 package com.nusapro.arlhb.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -50,8 +52,19 @@ public class RoleController {
 
 	@RequestMapping(value = "/roles")
 	@ResponseBody
-	List<Role> list() {
-		return roleMapper.findAll();
+	List<Role> list(@RequestParam("pagesize") int pageSize, 
+			@RequestParam("pagenum") int pageNum,
+			@RequestParam("searchTxt") String searchTxt) {
+		
+		searchTxt = "%" + searchTxt + "%";
+		int start = pageNum * pageSize;
+		
+ 		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("start", start);
+		params.put("pageSize", pageSize);
+		params.put("searchTxt", searchTxt);
+		
+		return roleMapper.findAll(params);
 	}
 	
 	@RequestMapping(value="/roles/{roleId}", method=RequestMethod.PUT)

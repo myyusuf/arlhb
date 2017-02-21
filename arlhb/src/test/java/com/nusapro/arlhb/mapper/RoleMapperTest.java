@@ -32,7 +32,7 @@ public class RoleMapperTest {
 	@Test
 	@DatabaseSetup("/META-INF/roleData.xml")
     public void findAllTest() {
-        List<Role> roles = roleMapper.findAll();
+        List<Role> roles = roleMapper.findAll(null);
         assertEquals(1, roles.size());
     }
 	
@@ -72,7 +72,7 @@ public class RoleMapperTest {
 	@DatabaseSetup("/META-INF/roleData.xml")
     public void delete() {
 		roleMapper.delete(1);
-        List<Role> roles = roleMapper.findAll();
+        List<Role> roles = roleMapper.findAll(null);
         assertEquals(0, roles.size());
     }
 
