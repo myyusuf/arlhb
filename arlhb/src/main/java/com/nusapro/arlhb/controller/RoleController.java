@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nusapro.arlhb.dto.ResponseDto;
 import com.nusapro.arlhb.mapper.RoleMapper;
 import com.nusapro.arlhb.model.Role;
 
@@ -52,19 +53,27 @@ public class RoleController {
 
 	@RequestMapping(value = "/roles")
 	@ResponseBody
-	List<Role> list(@RequestParam("pagesize") int pageSize, 
+	ResponseDto<Role> list(@RequestParam("pagesize") int pageSize, 
 			@RequestParam("pagenum") int pageNum,
 			@RequestParam("searchTxt") String searchTxt) {
-		
-		searchTxt = "%" + searchTxt + "%" ;
+
+
+		searchTxt = "%" + searchTxt + "%";
+
 		int start = pageNum * pageSize;
-		
+
+
  		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("start", start);
 		params.put("pageSize", pageSize);
 		params.put("searchTxt", searchTxt);
-		
-		return roleMapper.findAll(params);
+
+		ResponseDto<Role> responseDto = new ResponseDto<Role>();
+		responseDto.setData(roleMapper.findAll(params));
+		responseDto.setTotalRecords(roleMapper.countAll(params));
+
+		return responseDto;
+
 	}
 	
 	@RequestMapping(value="/roles/{roleId}", method=RequestMethod.PUT)
