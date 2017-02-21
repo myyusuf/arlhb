@@ -19,11 +19,24 @@
 
 
     <div id="header">
-         <img src="arlhb_assets/images/logo_small.png" class="logo-small"/>
+    	<table style="width: 100%;">
+    		<tr>
+    			<td style="width: 90%;">
+    				<img src="arlhb_assets/images/logo_small.png" class="logo-small"/>
+    			</td>
+    			<td>
+    				<!-- <a href="/logout" style="font-family: arial; font-size: 15px; font-weight: bold; color: #4A90E2; text-decoration: none; float: right; margin-top: 10px; margin-right: 20px;">Logout</a> -->
+				       <span style="font-family: arial; font-size: 16px; color: #4A90E2; text-decoration: none; float: right; margin-top: 0px; margin-right: 5px;">
+				         User | </span>
+    			</td>
+    			<td>
+    				<form th:action="@{/logout}" method="post" style="margin-top: 0px;">
+			            <input type="submit" value="Sign Out"/>
+			        </form>
+    			</td>
+    		</tr>
+    	</table> 
          
-         <a href="/logout" style="font-family: arial; font-size: 15px; font-weight: bold; color: #4A90E2; text-decoration: none; float: right; margin-top: 10px; margin-right: 20px;">Logout</a>
-       <span style="font-family: arial; font-size: 16px; color: #4A90E2; text-decoration: none; float: right; margin-top: 10px; margin-right: 5px;">
-         User | </span>
      </div>
      <div id="top-menu"></div>
      <div id="content">

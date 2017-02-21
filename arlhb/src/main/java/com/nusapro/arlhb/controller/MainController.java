@@ -28,7 +28,7 @@ public class MainController {
 //		City city = cityMapper.findByCode("JKT");
 //		Role role = roleMapper.findById(1);
 //        return "Info : Arlhb. " + role.getRoleName();
-		return "homex";
+		return "workspace";
     }
 	
 	@RequestMapping("/main")
