@@ -14,6 +14,10 @@
         SELECT * FROM role WHERE role_name LIKE #{searchTxt} LIMIT #{start}, #{pageSize}
     </select>
     
+    <select id="countAll" resultType="int">
+        SELECT COUNT(1) FROM role WHERE role_name LIKE #{searchTxt}
+    </select>
+    
     <select id="findById" resultMap="roleResultMap">
         SELECT * FROM role WHERE role_id = #{roleId}
     </select>

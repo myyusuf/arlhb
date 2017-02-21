@@ -13,6 +13,8 @@ public interface RoleMapper {
 	
 	List<Role> findAll(Map<String, Object> params);
 	
+	int countAll(Map<String, Object> params);
+	
 	void create(Role role);
 	
 	void update(Role role);
