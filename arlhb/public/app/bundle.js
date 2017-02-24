@@ -1753,8 +1753,13 @@
 	  _createClass(RestService, null, [{
 	    key: 'post',
 	    value: function post(options, csrfToken) {
+	      RestService.send("POST", options, csrfToken);
+	    }
+	  }, {
+	    key: 'send',
+	    value: function send(method, options, csrfToken) {
 	      $.ajax({
-	        method: "POST",
+	        method: method,
 	        url: options.url,
 	        data: JSON.stringify(options.data),
 	        beforeSend: function beforeSend(xhr) {
@@ -1870,7 +1875,29 @@
 
 	    var data = [{ label: "Item 1", expanded: true, items: [{ label: "Item 1.1" }, { label: "Item 1.2", selected: true }]
 	    }];
-	    var checkBoxTree = new _AuthoritiesTree2.default({});
+	    var checkBoxTree = new _AuthoritiesTree2.default({
+	      onDataLoaded: function onDataLoaded(data) {
+
+	        if (role.roleId) {
+	          var url = "/role_task_actions/" + role.roleId;
+	          $.ajax({
+	            method: "GET",
+	            url: url,
+	            data: {}
+	          }).done(function (data) {
+	            var taskActionIds = [];
+	            for (var i = 0; i < data.length; i++) {
+	              taskActionIds.push(data[i].taskActionId);
+	            }
+	            checkBoxTree.setValue(taskActionIds);
+	          }).fail(function () {
+	            var errorMessage = 'Proses gagal';
+	            $("#errorNotification").html('<div>' + errorMessage + '</div>');
+	            $("#errorNotification").jqxNotification("open");
+	          });
+	        }
+	      }
+	    });
 
 	    var formItems = [{
 	      name: 'roleName',
@@ -2037,6 +2064,8 @@
 	      }
 	    });
 
+	    _this2.onDataLoaded = options.onDataLoaded;
+
 	    return _this2;
 	  }
 
@@ -2057,8 +2086,12 @@
 	        url: url,
 	        data: {}
 	      }).done(function (data) {
+	        _this.data = data;
 	        var _convertedToHierarchical = _this._convertArray(data);
 	        _this.checkBoxTree.refreshData(_convertedToHierarchical);
+	        if (_this.onDataLoaded) {
+	          _this.onDataLoaded(_this.data);
+	        }
 	      }).fail(function () {
 	        var errorMessage = 'Proses gagal. Status : ' + jqXHR.status + ' [' + jqXHR.statusText + '] : ' + jqXHR.responseText;
 	        $("#errorNotification").html('<div>' + errorMessage + '</div>');
@@ -2090,6 +2123,29 @@
 	    key: 'getValue',
 	    value: function getValue() {
 	      return this.checkBoxTree.getValue();
+	    }
+	  }, {
+	    key: 'setValue',
+	    value: function setValue(value) {
+	      var _this = this;
+
+	      for (var i = 0; i < value.length; i++) {
+	        var tempTaskId = value[i] * 1000;
+
+	        // console.log('tempTaskId : ' + tempTaskId);
+
+	        for (var j = 0; j < this.data.length; j++) {
+
+	          // console.log('tempTaskId : ' + tempTaskId + ", this.data[j].id : " + this.data[j].id);
+
+	          if (tempTaskId == this.data[j].id) {
+	            this.data[j].checked = true;
+	          }
+	        }
+	      }
+
+	      var _convertedToHierarchical = _this._convertArray(_this.data);
+	      _this.checkBoxTree.refreshData(_convertedToHierarchical);
 	    }
 	  }]);
 

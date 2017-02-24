@@ -22,8 +22,12 @@
         SELECT * FROM role WHERE role_id = #{roleId}
     </select>
     
-    <insert id="create">
+    <insert id="create" useGeneratedKeys="true" keyProperty="roleId" keyColumn="role_id">
 	  INSERT into role(role_id, role_name) VALUES(#{roleId}, #{roleName})
+	</insert>
+	
+	<insert id="createTaskAction">
+	  INSERT into role_task_action(role_id, task_id, task_action_id) VALUES(#{roleId}, #{taskId}, #{taskActionId})
 	</insert>
 	
 	<update id="update">

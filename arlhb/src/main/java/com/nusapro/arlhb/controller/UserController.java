@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,7 @@ import com.nusapro.arlhb.mapper.TaskMapper;
 import com.nusapro.arlhb.model.Authority;
 import com.nusapro.arlhb.model.Employee;
 import com.nusapro.arlhb.model.Task;
+import com.nusapro.arlhb.model.TaskAction;
 import com.nusapro.arlhb.service.UserService;
 
 @RestController
@@ -61,26 +63,15 @@ public class UserController {
 //		authority.setExpanded(true);
 //		authority.setParentId(1);
 //		authorities.add(authority);
-//		
-//		authority = new Authority();
-//		authority.setId(3);
-//		authority.setLabel("View");
-//		authority.setValue("VIEW");
-//		authority.setChecked(true);
-//		authority.setExpanded(true);
-//		authority.setParentId(2);
-//		authorities.add(authority);
-//		
-//		authority = new Authority();
-//		authority.setId(4);
-//		authority.setLabel("Edit");
-//		authority.setValue("EDIT");
-//		authority.setChecked(false);
-//		authority.setExpanded(true);
-//		authority.setParentId(2);
-//		authorities.add(authority);
 		
 		return userService.getAuthorities();
+	}
+	
+	@RequestMapping(value = "/role_task_actions/{roleId}")
+	@ResponseBody
+	List<TaskAction> roleTaskActions(@PathVariable("roleId") int roleId) {
+		
+		return userService.getRoleTaskAction(roleId);
 	}
 
 }

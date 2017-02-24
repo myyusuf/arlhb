@@ -14,4 +14,10 @@
         SELECT * FROM task_action
     </select>
     
+    <select id="findByRoleId" resultMap="taskActionResultMap">
+        SELECT ta.* FROM role_task_action rta 
+        LEFT JOIN task_action ta ON rta.task_action_id = ta.task_action_id
+        WHERE rta.role_id = #{roleId}
+    </select>
+    
 </mapper>

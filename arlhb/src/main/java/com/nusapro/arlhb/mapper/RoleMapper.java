@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import com.nusapro.arlhb.model.Role;
+import com.nusapro.arlhb.model.RoleTaskAction;
 
 @Mapper
 public interface RoleMapper {
@@ -20,5 +21,7 @@ public interface RoleMapper {
 	void update(Role role);
 
 	void delete(int roleId);
+	
+	void createTaskAction(RoleTaskAction roleTaskAction);
 	
 }

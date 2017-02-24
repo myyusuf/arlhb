@@ -52,4 +52,13 @@ public class UserService {
 		
 		return authorities;
 	}
+	
+	public List<TaskAction> getRoleTaskAction(int roleId){
+		
+		
+		List<TaskAction> taskActions = taskActionMapper.findByRoleId(roleId);
+		
+		
+		return taskActions;
+	}
 }

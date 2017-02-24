@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nusapro.arlhb.dto.ResponseDto;
 import com.nusapro.arlhb.mapper.RoleMapper;
 import com.nusapro.arlhb.model.Role;
+import com.nusapro.arlhb.service.RoleService;
 
 @RestController
 @EnableAutoConfiguration
@@ -26,6 +27,9 @@ public class RoleController {
 	
 	@Autowired
 	RoleMapper roleMapper;
+	
+	@Autowired
+	RoleService roleService;
 	
 //	@RequestMapping(value="/roles", method=RequestMethod.POST)
 //    @ResponseBody 
@@ -48,6 +52,8 @@ public class RoleController {
 			System.out.println(map.get("label"));
 		}
 		
+		roleService.createRole(roleParam);
+		
         return ResponseHelper.responseSuccess();
     }
 
@@ -55,7 +61,7 @@ public class RoleController {
 	@ResponseBody
 	ResponseDto<Role> list(@RequestParam("pagesize") int pageSize, 
 			@RequestParam("pagenum") int pageNum,
-			@RequestParam("searchTxt") String searchTxt) {
+			@RequestParam(name="searchTxt", required=false, defaultValue="") String searchTxt) {
 
 
 		searchTxt = "%" + searchTxt + "%";
