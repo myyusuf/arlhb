@@ -1212,7 +1212,7 @@
 	        _RestService2.default.post({
 	          url: '/roles',
 	          data: formValue
-	        });
+	        }, $("input[name='_csrf']").val());
 	      }
 	    });
 
@@ -1752,7 +1752,7 @@
 
 	  _createClass(RestService, null, [{
 	    key: 'post',
-	    value: function post(options) {
+	    value: function post(options, csrfToken) {
 	      $.ajax({
 	        method: "POST",
 	        url: options.url,
@@ -1760,6 +1760,7 @@
 	        beforeSend: function beforeSend(xhr) {
 	          xhr.setRequestHeader('Accept', 'application/json');
 	          xhr.setRequestHeader('Content-Type', 'application/json');
+	          xhr.setRequestHeader('X-CSRF-Token', csrfToken);
 	        }
 	      }).done(function () {
 	        $("#successNotification").jqxNotification("open");
@@ -2031,7 +2032,7 @@
 	    _this2.checkBoxTree = new _CheckBoxTree2.default({
 	      data: _this2.data,
 	      jqxOptions: {
-	        height: 200,
+	        height: 230,
 	        width: 275
 	      }
 	    });
@@ -2288,7 +2289,7 @@
 
 	    var jqxOptions = {
 	      width: 430,
-	      height: 430
+	      height: 450
 	    };
 
 	    _this2.window = new _AddWindow2.default({

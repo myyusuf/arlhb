@@ -15,6 +15,7 @@ import com.nusapro.arlhb.mapper.TaskMapper;
 import com.nusapro.arlhb.model.Authority;
 import com.nusapro.arlhb.model.Employee;
 import com.nusapro.arlhb.model.Task;
+import com.nusapro.arlhb.service.UserService;
 
 @RestController
 @EnableAutoConfiguration
@@ -27,6 +28,9 @@ public class UserController {
 	@Autowired
 	TaskMapper taskMapper;
 	
+	@Autowired
+	UserService userService;
+	
 	@RequestMapping(value = "/users")
 	@ResponseBody
 	List<Employee> list() {
@@ -37,18 +41,18 @@ public class UserController {
 	@ResponseBody
 	List<Authority> authorities() {
 		
-		List<Authority> authorities = new ArrayList<Authority>();
-		
-		List<Task> tasks = taskMapper.findAll();
-		for (Task task : tasks) {
-			Authority authority = new Authority();
-			authority.setId(task.getTaskId());
-			authority.setParentId(task.getParentId());
-			authority.setLabel(task.getTaskName());
-			authority.setValue(String.valueOf(task.getTaskId()));
-			authority.setExpanded(true);
-			authorities.add(authority);
-		}
+//		List<Authority> authorities = new ArrayList<Authority>();
+//		
+//		List<Task> tasks = taskMapper.findAll();
+//		for (Task task : tasks) {
+//			Authority authority = new Authority();
+//			authority.setId(task.getTaskId());
+//			authority.setParentId(task.getParentId());
+//			authority.setLabel(task.getTaskName());
+//			authority.setValue(String.valueOf(task.getTaskId()));
+//			authority.setExpanded(true);
+//			authorities.add(authority);
+//		}
 		
 //		authority = new Authority();
 //		authority.setId(2);
@@ -76,7 +80,7 @@ public class UserController {
 //		authority.setParentId(2);
 //		authorities.add(authority);
 		
-		return authorities;
+		return userService.getAuthorities();
 	}
 
 }

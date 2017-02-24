@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nusapro.arlhb.mapper.TaskActionMapper">
+
+	<resultMap id="taskActionResultMap" type="com.nusapro.arlhb.model.TaskAction">
+	  <id property="taskActionId" column="task_action_id" />
+	  <result property="taskId" column="task_id" />
+	  <result property="actionName" column="action_name"/>
+	</resultMap>
+	
+    <select id="findAll" resultMap="taskActionResultMap">
+        SELECT * FROM task_action
+    </select>
+    
+</mapper>
