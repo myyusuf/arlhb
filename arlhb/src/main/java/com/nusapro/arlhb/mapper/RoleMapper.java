@@ -22,6 +22,8 @@ public interface RoleMapper {
 
 	void delete(int roleId);
 	
-	void createTaskAction(RoleTaskAction roleTaskAction);
+	void createRoleTaskAction(RoleTaskAction roleTaskAction);
+	
+	void deleteRoleTaskAction(int roleId);
 	
 }

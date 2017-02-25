@@ -23,18 +23,22 @@
     </select>
     
     <insert id="create" useGeneratedKeys="true" keyProperty="roleId" keyColumn="role_id">
-	  INSERT into role(role_id, role_name) VALUES(#{roleId}, #{roleName})
+	  INSERT into role(role_name, description) VALUES(#{roleName}, #{description})
 	</insert>
 	
-	<insert id="createTaskAction">
+	<insert id="createRoleTaskAction">
 	  INSERT into role_task_action(role_id, task_id, task_action_id) VALUES(#{roleId}, #{taskId}, #{taskActionId})
 	</insert>
 	
 	<update id="update">
-	  UPDATE role SET role_name=#{roleName} WHERE role_id = #{roleId}
+	  UPDATE role SET role_name=#{roleName}, description=#{description} WHERE role_id = #{roleId}
 	</update>
 	
 	<delete id="delete">
 	  DELETE FROM role WHERE role_id = #{roleId}
+	</delete>
+	
+	<delete id="deleteRoleTaskAction">
+	  DELETE FROM role_task_action WHERE role_id = #{roleId}
 	</delete>
 </mapper>

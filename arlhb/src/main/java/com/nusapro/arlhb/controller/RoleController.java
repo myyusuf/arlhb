@@ -44,14 +44,6 @@ public class RoleController {
     @ResponseBody 
     Map<String, String> create(@RequestBody Map<String, Object> roleParam) {
 		
-//		roleMapper.create(roleParam);
-		System.out.println(roleParam.get("roleName"));
-		
-		List<Map<String,Object>> list = (List<Map<String, Object>>) roleParam.get("authorities");
-		for (Map<String, Object> map : list) {
-			System.out.println(map.get("label"));
-		}
-		
 		roleService.createRole(roleParam);
 		
         return ResponseHelper.responseSuccess();
@@ -84,21 +76,19 @@ public class RoleController {
 	
 	@RequestMapping(value="/roles/{roleId}", method=RequestMethod.PUT)
     @ResponseBody 
-    Map<String, String> update(@PathVariable("roleId") int roleId, @RequestBody Role roleParam) {
+    Map<String, String> update(@PathVariable("roleId") int roleId, @RequestBody Map<String, Object> roleParam) {
 		
-		Role role = roleMapper.findById(roleId);
-		role.setRoleName(roleParam.getRoleName());
-		roleMapper.update(role);
+		roleService.updateRole(roleId, roleParam);
 		
         return ResponseHelper.responseSuccess();
     }
 	
-	@RequestMapping(value="/roles/{roleId}", method=RequestMethod.DELETE)
-    @ResponseBody 
-    Map<String, String> delete(@PathVariable("roleId") int roleId) {
-		
-		roleMapper.delete(roleId);
-		
-        return ResponseHelper.responseSuccess();
-    }
+//	@RequestMapping(value="/roles/{roleId}", method=RequestMethod.DELETE)
+//    @ResponseBody 
+//    Map<String, String> delete(@PathVariable("roleId") int roleId) {
+//		
+//		roleMapper.delete(roleId);
+//		
+//        return ResponseHelper.responseSuccess();
+//    }
 }

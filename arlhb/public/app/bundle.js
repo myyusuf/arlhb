@@ -868,7 +868,7 @@
 
 	    var onEditButtonClick = function onEditButtonClick(value) {
 	      if (options.onEditButtonClick) {
-	        options.onEditButtonClick(value.bounddata);
+	        options.onEditButtonClick(value);
 	      }
 	    };
 
@@ -888,6 +888,11 @@
 	        datafield: 'actions',
 	        width: '30%',
 	        createwidget: function createwidget(row, column, value, htmlElement) {
+
+	          var rowIndex = $('<input type="hidden" value="" class="myRowIndex"/>');
+	          rowIndex.val(row.boundindex);
+	          rowIndex.appendTo(htmlElement);
+
 	          var table = $('<table style="height: 100%; width: 100%; text-align: center;"></table>');
 	          var tr = $('<tr></tr>');
 	          var td = $('<td style="width: 50%;"></td>');
@@ -900,14 +905,27 @@
 	          var button = $("<div style='margin: 5px;'>" + "Edit" + "</div>");
 	          button.appendTo(td);
 	          button.jqxButton({ theme: 'light', template: "success", width: 70 });
+
+	          // console.log('row.bounddata : ' + row.bounddata.roleName);
+
 	          button.click(function (event) {
-	            onEditButtonClick(row);
+	            var rowIndexVal = $(htmlElement).find(':input.myRowIndex').val();
+	            // console.log('rowIndexVal : ' + rowIndexVal);
+
+	            var rowdata = _this.dataGrid.getDataRow(rowIndexVal);
+	            // console.log('rowdata : ' + rowdata.roleName);
+	            onEditButtonClick(rowdata);
 	          });
 
 	          td = $('<td style="width: 50%;"></td>');
 	          td.appendTo(tr);
 	        },
 	        initwidget: function initwidget(row, column, value, htmlElement) {
+
+	          var rowIndexVal = $(htmlElement).find(':input.myRowIndex');
+	          rowIndexVal.val(row);
+
+	          // console.log('initwidget value : ' + htmlElement);
 	          // var imgurl = '../../images/' + value.toLowerCase() + '.png';
 	          // $(htmlElement).find('.buttonValue')[0].innerHTML = value;
 	          // $(htmlElement).find('img')[0].src = imgurl;
@@ -1038,6 +1056,12 @@
 	    key: 'addGroup',
 	    value: function addGroup(groupName) {
 	      this.dataGridContainer.jqxGrid('addgroup', groupName);
+	    }
+	  }, {
+	    key: 'getDataRow',
+	    value: function getDataRow(rowIndex) {
+	      var datarow = this.dataGridContainer.jqxGrid('getrowdata', rowIndex);
+	      return datarow;
 	    }
 	  }]);
 
@@ -1211,7 +1235,13 @@
 	      onValidationSuccess: function onValidationSuccess(formValue) {
 	        _RestService2.default.post({
 	          url: '/roles',
-	          data: formValue
+	          data: formValue,
+	          onSuccess: function onSuccess() {
+	            if (options.onSaveSuccess) {
+	              options.onSaveSuccess();
+	            }
+	            _this.window.close();
+	          }
 	        }, $("input[name='_csrf']").val());
 	      }
 	    });
@@ -1735,7 +1765,7 @@
 /* 19 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -1751,12 +1781,17 @@
 	  }
 
 	  _createClass(RestService, null, [{
-	    key: 'post',
+	    key: "post",
 	    value: function post(options, csrfToken) {
 	      RestService.send("POST", options, csrfToken);
 	    }
 	  }, {
-	    key: 'send',
+	    key: "put",
+	    value: function put(options, csrfToken) {
+	      RestService.send("PUT", options, csrfToken);
+	    }
+	  }, {
+	    key: "send",
 	    value: function send(method, options, csrfToken) {
 	      $.ajax({
 	        method: method,
@@ -1908,7 +1943,7 @@
 	        rule: 'required'
 	      }
 	    }, {
-	      name: 'roleDescription',
+	      name: 'description',
 	      label: 'Role Description',
 	      content: roleDescriptionTextArea,
 	      validation: {
@@ -2320,6 +2355,10 @@
 
 	var _RoleForm2 = _interopRequireDefault(_RoleForm);
 
+	var _RestService = __webpack_require__(19);
+
+	var _RestService2 = _interopRequireDefault(_RestService);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2340,7 +2379,18 @@
 
 	    var roleForm = new _RoleForm2.default({
 	      data: options.data,
-	      onSaveSuccess: options.onSaveSuccess
+	      onValidationSuccess: function onValidationSuccess(formValue) {
+	        _RestService2.default.put({
+	          url: '/roles/' + options.data.roleId,
+	          data: formValue,
+	          onSuccess: function onSuccess() {
+	            if (options.onSaveSuccess) {
+	              options.onSaveSuccess();
+	            }
+	            _this.window.close();
+	          }
+	        }, $("input[name='_csrf']").val());
+	      }
 	    });
 
 	    var jqxOptions = {

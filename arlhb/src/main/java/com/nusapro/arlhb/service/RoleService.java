@@ -38,13 +38,52 @@ public class RoleService {
 			int taskActionId = Integer.valueOf((String) map.get("id"));
 			int taskId = 9999;
 			
-			taskActionId = taskActionId / 1000;
+			if(taskActionId >= 1000){
+				
+				taskActionId = taskActionId / 1000;
+				
+				RoleTaskAction roleTaskAction = new RoleTaskAction();
+				roleTaskAction.setRoleId(roleId);
+				roleTaskAction.setTaskId(taskId);
+				roleTaskAction.setTaskActionId(taskActionId);
+				roleMapper.createRoleTaskAction(roleTaskAction );
+			}
 			
-			RoleTaskAction roleTaskAction = new RoleTaskAction();
-			roleTaskAction.setRoleId(roleId);
-			roleTaskAction.setTaskId(taskId);
-			roleTaskAction.setTaskActionId(taskActionId);
-			roleMapper.createTaskAction(roleTaskAction );
+		}
+		
+	}
+	
+	@Transactional
+	public void updateRole(int roleIdParam, Map<String, Object> roleParam) {
+		
+		String roleName = (String) roleParam.get("roleName");
+		String description = (String) roleParam.get("description");
+		
+		Role role = roleMapper.findById(roleIdParam);
+		role.setRoleName(roleName);
+		role.setDescription(description);
+		
+		roleMapper.update(role);
+		
+		roleMapper.deleteRoleTaskAction(roleIdParam);
+		
+		List<Map<String,Object>> taskActions = (List<Map<String, Object>>) roleParam.get("authorities");
+		for (Map<String, Object> map : taskActions) {
+			int roleId = role.getRoleId();
+			int taskActionId = Integer.valueOf((String) map.get("id"));
+			int taskId = 9999;
+			
+			if(taskActionId >= 1000){
+				
+				taskActionId = taskActionId / 1000;
+				
+				RoleTaskAction roleTaskAction = new RoleTaskAction();
+				roleTaskAction.setRoleId(roleId);
+				roleTaskAction.setTaskId(taskId);
+				roleTaskAction.setTaskActionId(taskActionId);
+				roleMapper.createRoleTaskAction(roleTaskAction );
+			}
+			
 		}
 		
 	}
