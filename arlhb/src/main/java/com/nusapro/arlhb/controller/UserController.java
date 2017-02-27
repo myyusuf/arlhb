@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nusapro.arlhb.mapper.EmployeeMapper;
 import com.nusapro.arlhb.mapper.TaskMapper;
 import com.nusapro.arlhb.model.Authority;
+import com.nusapro.arlhb.model.Branch;
 import com.nusapro.arlhb.model.Employee;
+import com.nusapro.arlhb.model.Location;
 import com.nusapro.arlhb.model.Task;
 import com.nusapro.arlhb.model.TaskAction;
 import com.nusapro.arlhb.service.UserService;
@@ -72,6 +74,20 @@ public class UserController {
 	List<TaskAction> roleTaskActions(@PathVariable("roleId") int roleId) {
 		
 		return userService.getRoleTaskAction(roleId);
+	}
+	
+	@RequestMapping(value = "/user/branches")
+	@ResponseBody
+	List<Branch> branches() {
+		
+		return userService.getBranches();
+	}
+	
+	@RequestMapping(value = "/user/locations")
+	@ResponseBody
+	List<Location> locations() {
+		
+		return userService.getLocations();
 	}
 
 }

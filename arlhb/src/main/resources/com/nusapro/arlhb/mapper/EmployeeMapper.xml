@@ -15,8 +15,27 @@
 	  </association>
 	</resultMap>
 	
+	<resultMap id="branchResultMap" type="com.nusapro.arlhb.model.Branch">
+	  <id property="corpEntityId" column="corp_entity_id" />
+	  <result property="corpEntityName" column="corp_entity_name"/>
+	  <result property="corpEntityLevelId" column="corp_entity_level_id"/>
+	</resultMap>
+	
+	<resultMap id="locationResultMap" type="com.nusapro.arlhb.model.Location">
+	  <id property="locationId" column="location_id" />
+	  <result property="name" column="name"/>
+	</resultMap>
+	
     <select id="findAll" resultMap="employeeResultMap">
         SELECT m.*, r.role_id, r.role_name FROM employee m 
         LEFT JOIN role r on m.role_id = r.role_id
+    </select>
+    
+    <select id="findAllBranches" resultMap="branchResultMap">
+        SELECT * FROM corp_entity WHERE corp_entity_level_id = 2
+    </select>
+    
+    <select id="findAllLocations" resultMap="locationResultMap">
+        SELECT * FROM location
     </select>
 </mapper>

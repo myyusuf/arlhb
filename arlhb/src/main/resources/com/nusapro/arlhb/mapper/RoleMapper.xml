@@ -10,12 +10,16 @@
 	  <result property="description" column="description"/>
 	</resultMap>
 	
-    <select id="findAll" resultMap="roleResultMap">
+    <select id="findAllByPage" resultMap="roleResultMap">
         SELECT * FROM role WHERE role_name LIKE #{searchTxt} LIMIT #{start}, #{pageSize}
     </select>
     
     <select id="countAll" resultType="int">
         SELECT COUNT(1) FROM role WHERE role_name LIKE #{searchTxt}
+    </select>
+    
+    <select id="findAll" resultMap="roleResultMap">
+        SELECT * FROM role
     </select>
     
     <select id="findById" resultMap="roleResultMap">

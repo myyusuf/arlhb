@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+
+import com.nusapro.arlhb.dto.ResponseDto;
 import com.nusapro.arlhb.model.Role;
 import com.nusapro.arlhb.model.RoleTaskAction;
 
@@ -12,7 +14,7 @@ public interface RoleMapper {
 	
     Role findById(int roleId);
 	
-	List<Role> findAll(Map<String, Object> params);
+	List<Role> findAllByPage(Map<String, Object> params);
 	
 	int countAll(Map<String, Object> params);
 	
@@ -25,5 +27,7 @@ public interface RoleMapper {
 	void createRoleTaskAction(RoleTaskAction roleTaskAction);
 	
 	void deleteRoleTaskAction(int roleId);
+
+	List<Role> findAll();
 	
 }

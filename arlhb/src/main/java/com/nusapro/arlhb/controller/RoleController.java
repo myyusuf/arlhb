@@ -60,17 +60,24 @@ public class RoleController {
 
 		int start = pageNum * pageSize;
 
-
  		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("start", start);
 		params.put("pageSize", pageSize);
 		params.put("searchTxt", searchTxt);
 
 		ResponseDto<Role> responseDto = new ResponseDto<Role>();
-		responseDto.setData(roleMapper.findAll(params));
+		responseDto.setData(roleMapper.findAllByPage(params));
 		responseDto.setTotalRecords(roleMapper.countAll(params));
 
 		return responseDto;
+
+	}
+	
+	@RequestMapping(value = "/all_roles")
+	@ResponseBody
+	List<Role> list() {
+
+		return roleMapper.findAll();
 
 	}
 	

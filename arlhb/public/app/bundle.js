@@ -84,7 +84,7 @@
 	      userPage.render($('#content'));
 	    } else if (e == 51) {
 	      activeSessionPaga.render($('#content'));
-	    } else if (e == 54) {
+	    } else if (e == 542) {
 	      customerPage.render($('#content'));
 	    }
 	  }
@@ -246,6 +246,18 @@
 	            "id": "54",
 	            "text": "Customer",
 	            "parentid": "5"
+	        }, {
+	            "id": "541",
+	            "text": "Daily Blocking",
+	            "parentid": "54"
+	        }, {
+	            "id": "542",
+	            "text": "Management",
+	            "parentid": "54"
+	        }, {
+	            "id": "543",
+	            "text": "Reward Program",
+	            "parentid": "54"
 	        }, {
 	            "id": "55",
 	            "text": "Holidays",
@@ -3491,7 +3503,7 @@
 	    };
 
 	    _this.comboBox = new _ComboBox2.default({
-	      url: '/roles',
+	      url: '/all_roles',
 	      jqxOptions: jqxOptions,
 	      clearSelectionEnabled: true,
 	      value: options.value,
@@ -3679,8 +3691,8 @@
 	    }
 
 	    var jqxOptions = {
-	      displayMember: "branchId",
-	      valueMember: "name",
+	      displayMember: "corpEntityName",
+	      valueMember: "corpEntityId",
 	      placeHolder: 'Select Branch',
 	      selectionMode: 'dropDownList',
 	      width: 220,
@@ -3688,7 +3700,7 @@
 	    };
 
 	    _this.comboBox = new _ComboBox2.default({
-	      url: '/branches',
+	      url: '/user/branches',
 	      jqxOptions: jqxOptions,
 	      clearSelectionEnabled: true,
 	      value: options.value,
@@ -3765,8 +3777,8 @@
 	    }
 
 	    var jqxOptions = {
-	      displayMember: "locationId",
-	      valueMember: "name",
+	      displayMember: "name",
+	      valueMember: "locationId",
 	      placeHolder: 'Select Location',
 	      selectionMode: 'dropDownList',
 	      width: 220,
@@ -3774,7 +3786,7 @@
 	    };
 
 	    _this.comboBox = new _ComboBox2.default({
-	      url: '/locations',
+	      url: '/user/locations',
 	      jqxOptions: jqxOptions,
 	      clearSelectionEnabled: true,
 	      value: options.value,

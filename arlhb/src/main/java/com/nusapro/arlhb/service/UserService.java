@@ -6,9 +6,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nusapro.arlhb.mapper.EmployeeMapper;
 import com.nusapro.arlhb.mapper.TaskActionMapper;
 import com.nusapro.arlhb.mapper.TaskMapper;
 import com.nusapro.arlhb.model.Authority;
+import com.nusapro.arlhb.model.Branch;
+import com.nusapro.arlhb.model.Location;
 import com.nusapro.arlhb.model.Task;
 import com.nusapro.arlhb.model.TaskAction;
 
@@ -20,6 +23,9 @@ public class UserService {
 	
 	@Autowired
 	TaskActionMapper taskActionMapper;
+	
+	@Autowired
+	EmployeeMapper employeeMapper;
 	
 	public List<Authority> getAuthorities(){
 		
@@ -60,5 +66,13 @@ public class UserService {
 		
 		
 		return taskActions;
+	}
+
+	public List<Branch> getBranches() {
+		return employeeMapper.findAllBranches();
+	}
+
+	public List<Location> getLocations() {
+		return employeeMapper.findAllLocations();
 	}
 }
