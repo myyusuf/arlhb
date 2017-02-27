@@ -8,6 +8,9 @@
 	  <id property="employeeId" column="employee_id" />
 	  <result property="firstName" column="first_name"/>
 	  <result property="lastName" column="last_name"/>
+	  <result property="address" column="address"/>
+	  <result property="email" column="email"/>
+	  <result property="mobilePhoneNumber" column="mobile_phone_number"/>
 	  
 	  <association property="role" javaType="com.nusapro.arlhb.model.Role">
 	  	<id property="roleId" column="role_id" />
@@ -26,9 +29,14 @@
 	  <result property="name" column="name"/>
 	</resultMap>
 	
-    <select id="findAll" resultMap="employeeResultMap">
+    <select id="findAllByPage" resultMap="employeeResultMap">
         SELECT m.*, r.role_id, r.role_name FROM employee m 
         LEFT JOIN role r on m.role_id = r.role_id
+        WHERE m.first_name LIKE #{searchTxt} LIMIT #{start}, #{pageSize}
+    </select>
+    
+    <select id="countAll" resultType="int">
+        SELECT COUNT(1) FROM employee WHERE first_name LIKE #{searchTxt}
     </select>
     
     <select id="findAllBranches" resultMap="branchResultMap">

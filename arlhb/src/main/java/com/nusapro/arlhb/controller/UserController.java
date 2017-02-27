@@ -1,23 +1,25 @@
 package com.nusapro.arlhb.controller;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nusapro.arlhb.dto.ResponseDto;
 import com.nusapro.arlhb.mapper.EmployeeMapper;
 import com.nusapro.arlhb.mapper.TaskMapper;
 import com.nusapro.arlhb.model.Authority;
 import com.nusapro.arlhb.model.Branch;
 import com.nusapro.arlhb.model.Employee;
 import com.nusapro.arlhb.model.Location;
-import com.nusapro.arlhb.model.Task;
 import com.nusapro.arlhb.model.TaskAction;
 import com.nusapro.arlhb.service.UserService;
 
@@ -37,8 +39,24 @@ public class UserController {
 	
 	@RequestMapping(value = "/users")
 	@ResponseBody
-	List<Employee> list() {
-		return employeeMapper.findAll();
+	ResponseDto<Employee> list(@RequestParam("pagesize") int pageSize, 
+			@RequestParam("pagenum") int pageNum,
+			@RequestParam(name="searchTxt", required=false, defaultValue="") String searchTxt) {
+		
+		searchTxt = "%" + searchTxt + "%";
+
+		int start = pageNum * pageSize;
+
+ 		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("start", start);
+		params.put("pageSize", pageSize);
+		params.put("searchTxt", searchTxt);
+		
+		ResponseDto<Employee> responseDto = new ResponseDto<Employee>();
+		responseDto.setData(employeeMapper.findAllByPage(params));
+		responseDto.setTotalRecords(employeeMapper.countAll(params));
+		
+		return responseDto;
 	}
 	
 	@RequestMapping(value = "/user/authorities")

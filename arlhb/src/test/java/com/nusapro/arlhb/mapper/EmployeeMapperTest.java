@@ -47,7 +47,7 @@ public class EmployeeMapperTest {
 	@Test
 	@DatabaseSetup("/META-INF/employeeData.xml")
     public void findAllTest() {
-        List<Employee> employees = employeeMapper.findAll();
+        List<Employee> employees = employeeMapper.findAllByPage(null);
         assertEquals(1, employees.size());
     }
 

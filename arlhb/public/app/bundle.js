@@ -2549,7 +2549,7 @@
 	    _this2.searchText = new _SearchText2.default({
 	      placeHolder: 'User Name',
 	      onSearch: function onSearch(value) {
-	        _this.roleList.filter(value);
+	        _this.userList.filter(value);
 	      }
 	    });
 	    return _this2;
@@ -2633,7 +2633,7 @@
 
 	    var source = {
 	      datatype: "json",
-	      datafields: [{ name: 'employeeId', type: 'string' }, { name: 'firstName', type: 'string' }, { name: 'description', type: 'string' }, { name: 'role' }, { name: 'roleName', type: 'string', map: 'role>roleName' }],
+	      datafields: [{ name: 'employeeId', type: 'string' }, { name: 'firstName', type: 'string' }, { name: 'address', type: 'string' }, { name: 'email', type: 'string' }, { name: 'mobilePhoneNumber', type: 'string' }, { name: 'role' }, { name: 'roleName', type: 'string', map: 'role>roleName' }, { name: 'location', type: 'string' }],
 	      id: "employeeId",
 	      url: "/users"
 	    };
@@ -3032,7 +3032,7 @@
 	    });
 
 	    var mobile1Label = new _Label2.default({
-	      text: user.mobile1 ? user.mobile1 : '-',
+	      text: user.mobilePhoneNumber ? user.mobilePhoneNumber : '-',
 	      jqxOptions: {
 	        height: 25,
 	        width: 270
@@ -3327,7 +3327,7 @@
 	    });
 
 	    var mobile1Label = new _Label2.default({
-	      text: user.mobile1 ? user.mobile1 : '-',
+	      text: user.mobilePhoneNumber ? user.mobilePhoneNumber : '-',
 	      jqxOptions: {
 	        height: 25,
 	        width: 270
