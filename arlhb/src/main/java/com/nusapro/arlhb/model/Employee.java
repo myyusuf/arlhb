@@ -8,7 +8,10 @@ public class Employee {
 	private String address;
 	private String email;
 	private String mobilePhoneNumber;
+	private int status;
 	private Role role;
+	private Branch branch;
+	private Location location;
 
 	public String getEmployeeId() {
 		return employeeId;
@@ -64,6 +67,30 @@ public class Employee {
 
 	public void setMobilePhoneNumber(String mobilePhoneNumber) {
 		this.mobilePhoneNumber = mobilePhoneNumber;
+	}
+
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
+	public Branch getBranch() {
+		return branch;
+	}
+
+	public void setBranch(Branch branch) {
+		this.branch = branch;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
 }

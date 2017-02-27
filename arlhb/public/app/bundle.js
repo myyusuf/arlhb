@@ -2511,7 +2511,7 @@
 	      var viewUserWindow = new _ViewUserWindow2.default({
 	        data: value,
 	        onSaveSuccess: function onSaveSuccess() {
-	          _this.dataGrid.refresh();
+	          _this.userList.refresh();
 	        }
 	      });
 	      viewUserWindow.render($('#dialogWindowContainer'));
@@ -2522,7 +2522,7 @@
 	      var editUserWindow = new _EditUserWindow2.default({
 	        data: value,
 	        onSaveSuccess: function onSaveSuccess() {
-	          _this.dataGrid.refresh();
+	          _this.userList.refresh();
 	        }
 	      });
 	      editUserWindow.render($('#dialogWindowContainer'));
@@ -2533,7 +2533,7 @@
 	      var userBlockWindow = new _UserBlockWindow2.default({
 	        data: value,
 	        onSaveSuccess: function onSaveSuccess() {
-	          _this.dataGrid.refresh();
+	          _this.userList.refresh();
 	        }
 	      });
 	      userBlockWindow.render($('#dialogWindowContainer'));
@@ -2633,7 +2633,7 @@
 
 	    var source = {
 	      datatype: "json",
-	      datafields: [{ name: 'employeeId', type: 'string' }, { name: 'firstName', type: 'string' }, { name: 'address', type: 'string' }, { name: 'email', type: 'string' }, { name: 'mobilePhoneNumber', type: 'string' }, { name: 'role' }, { name: 'roleName', type: 'string', map: 'role>roleName' }, { name: 'location', type: 'string' }],
+	      datafields: [{ name: 'employeeId', type: 'string' }, { name: 'firstName', type: 'string' }, { name: 'address', type: 'string' }, { name: 'email', type: 'string' }, { name: 'status', type: 'number' }, { name: 'mobilePhoneNumber', type: 'string' }, { name: 'role' }, { name: 'roleName', type: 'string', map: 'role>roleName' }, { name: 'branch' }, { name: 'location' }, { name: 'locationName', type: 'string', map: 'location>name' }],
 	      id: "employeeId",
 	      url: "/users"
 	    };
@@ -2672,7 +2672,7 @@
 	      rendergridrows: function rendergridrows(params) {
 	        return params.data;
 	      },
-	      columns: [{ text: 'ID', datafield: 'employeeId' }, { text: 'Name', datafield: 'firstName' }, { text: 'Status', datafield: 'status' }, { text: 'Location', datafield: 'location' }, { text: 'Role', datafield: 'roleName' }, {
+	      columns: [{ text: 'ID', datafield: 'employeeId' }, { text: 'Name', datafield: 'firstName' }, { text: 'Status', datafield: 'status' }, { text: 'Location', datafield: 'locationName' }, { text: 'Role', datafield: 'roleName' }, {
 	        text: 'Actions',
 	        datafield: 'actions',
 	        // width: 325,
@@ -2729,6 +2729,11 @@
 	    key: 'render',
 	    value: function render(container) {
 	      this.dataGrid.render(container);
+	    }
+	  }, {
+	    key: 'refresh',
+	    value: function refresh() {
+	      this.dataGrid.refresh();
 	    }
 	  }, {
 	    key: 'filter',
@@ -3048,7 +3053,7 @@
 	    });
 
 	    var branchLabel = new _Label2.default({
-	      text: user.branch ? user.branch.branchName : '-',
+	      text: user.branch ? user.branch.corpEntityName : '-',
 	      jqxOptions: {
 	        height: 25,
 	        width: 270
@@ -3056,7 +3061,7 @@
 	    });
 
 	    var locationLabel = new _Label2.default({
-	      text: user.location ? user.location.locationName : '-',
+	      text: user.location ? user.location.name : '-',
 	      jqxOptions: {
 	        height: 25,
 	        width: 270
@@ -3156,6 +3161,10 @@
 
 	var _UserForm2 = _interopRequireDefault(_UserForm);
 
+	var _RestService = __webpack_require__(19);
+
+	var _RestService2 = _interopRequireDefault(_RestService);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -3176,7 +3185,18 @@
 
 	    var userForm = new _UserForm2.default({
 	      data: options.data,
-	      onSaveSuccess: options.onSaveSuccess
+	      onValidationSuccess: function onValidationSuccess(formValue) {
+	        _RestService2.default.put({
+	          url: '/users/' + options.data.employeeId,
+	          data: formValue,
+	          onSuccess: function onSuccess() {
+	            if (options.onSaveSuccess) {
+	              options.onSaveSuccess();
+	            }
+	            _this.window.close();
+	          }
+	        }, $("input[name='_csrf']").val());
+	      }
 	    });
 
 	    var jqxOptions = {
@@ -3292,7 +3312,7 @@
 	    if (options.data) {
 	      user = options.data;
 	    }
-	    _this2.onSaveSuccess = options.onSaveSuccess;
+	    _this2.onValidationSuccess = options.onValidationSuccess;
 
 	    var idLabel = new _Label2.default({
 	      text: user.employeeId,
@@ -3343,7 +3363,7 @@
 	    });
 
 	    var branchComboBox = new _BranchComboBox2.default({
-	      value: user.branch ? user.branch.branchId : null,
+	      value: user.branch ? user.branch.corpEntityId : null,
 	      jqxOptions: {
 	        height: 25,
 	        width: 270
@@ -3407,27 +3427,10 @@
 	      items: formItems,
 	      labelColumnWidth: '120px',
 	      onValidationSuccess: function onValidationSuccess(formValue) {
-
 	        console.log(formValue);
-	        // $.ajax({
-	        //       method: "POST",
-	        //       url: "/roles",
-	        //       data: JSON.stringify(formValue),
-	        //       beforeSend: function(xhr){
-	        //         xhr.setRequestHeader('Accept', 'application/json');
-	        //         xhr.setRequestHeader('Content-Type', 'application/json');
-	        //       }
-	        //     }).done(function() {
-	        //         $("#successNotification").jqxNotification("open");
-	        //         _this.window.close();
-	        //         if(_this.onSaveSuccess){
-	        //           _this.onSaveSuccess();
-	        //         }
-	        //     }).fail(function( jqXHR, textStatus, errorThrown) {
-	        //         var errorMessage = 'Proses gagal. Status : ' + jqXHR.status + ' [' + jqXHR.statusText + '] : ' + jqXHR.responseText;
-	        //         $("#errorNotification").html('<div>' + errorMessage + '</div>');
-	        //         $("#errorNotification").jqxNotification("open");
-	        //     });
+	        if (_this.onValidationSuccess) {
+	          _this.onValidationSuccess(formValue);
+	        }
 	      }
 	    };
 

@@ -17,5 +17,7 @@ public interface EmployeeMapper {
 	
 	List<Branch> findAllBranches();
 	List<Location> findAllLocations();
+	
+	void update(Map<String,Object> employeeParam);
 
 }

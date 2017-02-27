@@ -10,18 +10,29 @@
 	  <result property="lastName" column="last_name"/>
 	  <result property="address" column="address"/>
 	  <result property="email" column="email"/>
+	  <result property="status" column="status"/>
 	  <result property="mobilePhoneNumber" column="mobile_phone_number"/>
 	  
 	  <association property="role" javaType="com.nusapro.arlhb.model.Role">
 	  	<id property="roleId" column="role_id" />
 	  	<result property="roleName" column="role_name"/>
 	  </association>
+	  
+	  <association property="branch" javaType="com.nusapro.arlhb.model.Branch">
+	  	<id property="corpEntityId" column="corp_entity_id" />
+		<result property="corpEntityName" column="corp_entity_name"/>
+		<result property="corpEntityLevelId" column="corp_entity_level_id"/>
+	  </association>
+	  
+	  <association property="location" javaType="com.nusapro.arlhb.model.Location">
+	  	<id property="locationId" column="location_id" />
+	  	<result property="name" column="location_name"/>
+	  </association>
 	</resultMap>
 	
 	<resultMap id="branchResultMap" type="com.nusapro.arlhb.model.Branch">
 	  <id property="corpEntityId" column="corp_entity_id" />
 	  <result property="corpEntityName" column="corp_entity_name"/>
-	  <result property="corpEntityLevelId" column="corp_entity_level_id"/>
 	</resultMap>
 	
 	<resultMap id="locationResultMap" type="com.nusapro.arlhb.model.Location">
@@ -30,8 +41,10 @@
 	</resultMap>
 	
     <select id="findAllByPage" resultMap="employeeResultMap">
-        SELECT m.*, r.role_id, r.role_name FROM employee m 
+        SELECT m.*, r.role_id, r.role_name, ce.corp_entity_id, ce.corp_entity_name, l.location_id, l.name AS location_name FROM employee m 
         LEFT JOIN role r on m.role_id = r.role_id
+        LEFT JOIN corp_entity ce on m.corp_entity_id = ce.corp_entity_id
+        LEFT JOIN location l on m.location_id = l.location_id
         WHERE m.first_name LIKE #{searchTxt} LIMIT #{start}, #{pageSize}
     </select>
     
@@ -46,4 +59,9 @@
     <select id="findAllLocations" resultMap="locationResultMap">
         SELECT * FROM location
     </select>
+    
+    <update id="update">
+	  UPDATE employee SET role_id=#{roleId}, corp_entity_id=#{branchId}, location_id=#{locationId} WHERE employee_id = #{employeeId}
+	</update>
+	
 </mapper>

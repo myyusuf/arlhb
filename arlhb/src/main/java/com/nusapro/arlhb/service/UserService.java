@@ -1,10 +1,13 @@
 package com.nusapro.arlhb.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.nusapro.arlhb.mapper.EmployeeMapper;
 import com.nusapro.arlhb.mapper.TaskActionMapper;
@@ -57,6 +60,22 @@ public class UserService {
 		}
 		
 		return authorities;
+	}
+	
+	@Transactional
+	public void update(String userIdParam, Map<String, Object> userParam) {
+		
+		int roleId = (int) userParam.get("role");
+		int branchId = (int) userParam.get("branch");
+		int locationId = (int) userParam.get("location");
+		
+		Map<String,Object> params = new HashMap<String, Object>();
+		params.put("employeeId", userIdParam);
+		params.put("roleId", roleId);
+		params.put("branchId", branchId);
+		params.put("locationId", locationId);
+		
+		employeeMapper.update(params);
 	}
 	
 	public List<TaskAction> getRoleTaskAction(int roleId){

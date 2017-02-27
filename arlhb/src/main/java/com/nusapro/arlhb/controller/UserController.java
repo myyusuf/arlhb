@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -107,5 +109,14 @@ public class UserController {
 		
 		return userService.getLocations();
 	}
+	
+	@RequestMapping(value="/users/{userId}", method=RequestMethod.PUT)
+    @ResponseBody 
+    Map<String, String> update(@PathVariable("userId") String userId, @RequestBody Map<String, Object> userParam) {
+		
+		userService.update(userId, userParam);
+		
+        return ResponseHelper.responseSuccess();
+    }
 
 }
