@@ -64,4 +64,8 @@
 	  UPDATE employee SET role_id=#{roleId}, corp_entity_id=#{branchId}, location_id=#{locationId} WHERE employee_id = #{employeeId}
 	</update>
 	
+	<update id="blockUser">
+	  UPDATE employee SET status=2 WHERE employee_id = #{employeeId}
+	</update>
+	
 </mapper>

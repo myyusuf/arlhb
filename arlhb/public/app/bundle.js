@@ -68,12 +68,17 @@
 
 	var _ActiveSessionPage2 = _interopRequireDefault(_ActiveSessionPage);
 
+	var _CorporateEntityPage = __webpack_require__(46);
+
+	var _CorporateEntityPage2 = _interopRequireDefault(_CorporateEntityPage);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var rolePage = new _RolePage2.default({});
 	var userPage = new _UserPage2.default({});
 	var activeSessionPaga = new _ActiveSessionPage2.default({});
 	var customerPage = new _CustomerPage2.default({});
+	var corporateEntityPage = new _CorporateEntityPage2.default({});
 
 	var mainMenu = new _MainMenu2.default({
 	  onClick: function onClick(e) {
@@ -86,6 +91,8 @@
 	      activeSessionPaga.render($('#content'));
 	    } else if (e == 542) {
 	      customerPage.render($('#content'));
+	    } else if (e == 52) {
+	      corporateEntityPage.render($('#content'));
 	    }
 	  }
 	});
@@ -216,8 +223,23 @@
 	        }, {
 	            "id": "2",
 	            "text": "Customer Payment",
-	            "parentid": "-1",
-	            "subMenuWidth": '250px'
+	            "parentid": "-1"
+	        }, {
+	            "id": "21",
+	            "text": "Cash",
+	            "parentid": "2"
+	        }, {
+	            "id": "22",
+	            "text": "Deposit Cash to Bank",
+	            "parentid": "2"
+	        }, {
+	            "id": "23",
+	            "text": "Non Cash",
+	            "parentid": "2"
+	        }, {
+	            "id": "24",
+	            "text": "Reversal",
+	            "parentid": "2"
 	        }, {
 	            "id": "3",
 	            "text": "Customer Transaction",
@@ -2645,19 +2667,19 @@
 
 	    var onViewButtonClick = function onViewButtonClick(value) {
 	      if (options.onViewButtonClick) {
-	        options.onViewButtonClick(value.bounddata);
+	        options.onViewButtonClick(value);
 	      }
 	    };
 
 	    var onEditButtonClick = function onEditButtonClick(value) {
 	      if (options.onEditButtonClick) {
-	        options.onEditButtonClick(value.bounddata);
+	        options.onEditButtonClick(value);
 	      }
 	    };
 
 	    var onBlockButtonClick = function onBlockButtonClick(value) {
 	      if (options.onBlockButtonClick) {
-	        options.onBlockButtonClick(value.bounddata);
+	        options.onBlockButtonClick(value);
 	      }
 	    };
 
@@ -2677,6 +2699,11 @@
 	        datafield: 'actions',
 	        // width: 325,
 	        createwidget: function createwidget(row, column, value, htmlElement) {
+
+	          var rowIndex = $('<input type="hidden" value="" class="myRowIndex"/>');
+	          rowIndex.val(row.boundindex);
+	          rowIndex.appendTo(htmlElement);
+
 	          var table = $('<table style="height: 100%; width: 100%; text-align: center;"></table>');
 	          var tr = $('<tr></tr>');
 	          var td = $('<td></td>');
@@ -2687,7 +2714,9 @@
 	          button1.appendTo(td);
 	          button1.jqxButton({ theme: 'light', template: "default" });
 	          button1.click(function (event) {
-	            onViewButtonClick(row);
+	            var rowIndexVal = $(htmlElement).find(':input.myRowIndex').val();
+	            var rowdata = _this.dataGrid.getDataRow(rowIndexVal);
+	            onViewButtonClick(rowdata);
 	          });
 
 	          td = $('<td></td>');
@@ -2696,7 +2725,9 @@
 	          button2.appendTo(td);
 	          button2.jqxButton({ theme: 'light', template: "success" });
 	          button2.click(function (event) {
-	            onEditButtonClick(row);
+	            var rowIndexVal = $(htmlElement).find(':input.myRowIndex').val();
+	            var rowdata = _this.dataGrid.getDataRow(rowIndexVal);
+	            onEditButtonClick(rowdata);
 	          });
 
 	          td = $('<td style="width: 50%;"></td>');
@@ -2705,13 +2736,14 @@
 	          button3.appendTo(td);
 	          button3.jqxButton({ theme: 'light', template: "danger" });
 	          button3.click(function (event) {
-	            onBlockButtonClick(row);
+	            var rowIndexVal = $(htmlElement).find(':input.myRowIndex').val();
+	            var rowdata = _this.dataGrid.getDataRow(rowIndexVal);
+	            onBlockButtonClick(rowdata);
 	          });
 	        },
 	        initwidget: function initwidget(row, column, value, htmlElement) {
-	          // var imgurl = '../../images/' + value.toLowerCase() + '.png';
-	          // $(htmlElement).find('.buttonValue')[0].innerHTML = value;
-	          // $(htmlElement).find('img')[0].src = imgurl;
+	          var rowIndexVal = $(htmlElement).find(':input.myRowIndex');
+	          rowIndexVal.val(row);
 	        }
 	      }],
 	      groups: []
@@ -3898,27 +3930,16 @@
 	      items: formItems,
 	      labelColumnWidth: '120px',
 	      onValidationSuccess: function onValidationSuccess(formValue) {
-
-	        console.log(formValue);
-	        // $.ajax({
-	        //       method: "POST",
-	        //       url: "/roles",
-	        //       data: JSON.stringify(formValue),
-	        //       beforeSend: function(xhr){
-	        //         xhr.setRequestHeader('Accept', 'application/json');
-	        //         xhr.setRequestHeader('Content-Type', 'application/json');
-	        //       }
-	        //     }).done(function() {
-	        //         $("#successNotification").jqxNotification("open");
-	        //         _this.window.close();
-	        //         if(_this.onSaveSuccess){
-	        //           _this.onSaveSuccess();
-	        //         }
-	        //     }).fail(function( jqXHR, textStatus, errorThrown) {
-	        //         var errorMessage = 'Proses gagal. Status : ' + jqXHR.status + ' [' + jqXHR.statusText + '] : ' + jqXHR.responseText;
-	        //         $("#errorNotification").html('<div>' + errorMessage + '</div>');
-	        //         $("#errorNotification").jqxNotification("open");
-	        //     });
+	        RestService.put({
+	          url: '/user_block/' + options.data.employeeId,
+	          data: formValue,
+	          onSuccess: function onSuccess() {
+	            if (options.onSaveSuccess) {
+	              options.onSaveSuccess();
+	            }
+	            _this.window.close();
+	          }
+	        }, $("input[name='_csrf']").val());
 	      }
 	    };
 
@@ -4715,6 +4736,296 @@
 	}(_Component3.default);
 
 	exports.default = ActiveSessionList;
+
+/***/ },
+/* 44 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _TreeGrid = __webpack_require__(45);
+
+	var _TreeGrid2 = _interopRequireDefault(_TreeGrid);
+
+	var _SearchHeader = __webpack_require__(12);
+
+	var _SearchHeader2 = _interopRequireDefault(_SearchHeader);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var CorporateEntityList = function (_Component) {
+	  _inherits(CorporateEntityList, _Component);
+
+	  function CorporateEntityList(options) {
+	    _classCallCheck(this, CorporateEntityList);
+
+	    var _this2 = _possibleConstructorReturn(this, (CorporateEntityList.__proto__ || Object.getPrototypeOf(CorporateEntityList)).call(this, options));
+
+	    var _this = _this2;
+
+	    var source = {
+	      dataType: "json",
+	      dataFields: [{ name: 'corpEntityId', type: 'int' }, { name: 'corpEntityParentId', type: 'int' }, { name: 'corpEntityName', type: 'string' }],
+	      hierarchy: {
+	        keyDataField: { name: 'corpEntityId' },
+	        parentDataField: { name: 'corpEntityParentId' }
+	      },
+	      id: "corpEntityId",
+	      url: "/corporate_entities"
+	    };
+
+	    var onSearch = function onSearch(data) {
+	      data['searchTxt'] = _this.searchTxt;
+	      return data;
+	    };
+
+	    var jqxOptions = {
+	      width: '100%',
+	      height: '100%',
+	      // pageable: true,
+	      filterable: true,
+	      theme: 'metro',
+	      columns: [{ text: 'Corporate Entity Name', datafield: 'corpEntityName' }],
+	      groups: []
+	    };
+
+	    _this2.treeGrid = new _TreeGrid2.default({
+	      source: source,
+	      onSearch: onSearch,
+	      jqxOptions: jqxOptions
+	    });
+	    return _this2;
+	  }
+
+	  _createClass(CorporateEntityList, [{
+	    key: 'render',
+	    value: function render(container) {
+	      this.treeGrid.render(container);
+	    }
+	  }, {
+	    key: 'refresh',
+	    value: function refresh() {
+	      this.treeGrid.refresh();
+	    }
+	  }, {
+	    key: 'filter',
+	    value: function filter(value) {
+	      this.searchTxt = value;
+	      this.treeGrid.refresh();
+	    }
+	  }]);
+
+	  return CorporateEntityList;
+	}(_Component3.default);
+
+	exports.default = CorporateEntityList;
+
+/***/ },
+/* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var TreeGrid = function (_Component) {
+	  _inherits(TreeGrid, _Component);
+
+	  function TreeGrid(options) {
+	    _classCallCheck(this, TreeGrid);
+
+	    var _this2 = _possibleConstructorReturn(this, (TreeGrid.__proto__ || Object.getPrototypeOf(TreeGrid)).call(this, options));
+
+	    var _this = _this2;
+
+	    _this2.source = options.source;
+	    _this2.onSearch = options.onSearch;
+
+	    var dataAdapter = new $.jqx.dataAdapter(_this2.source, {
+	      formatData: function formatData(data) {
+	        if (_this.onSearch) {
+	          return _this.onSearch(data);
+	        } else {
+	          return data;
+	        }
+	      },
+	      downloadComplete: function downloadComplete(data, status, xhr) {
+	        if (!_this.source.totalRecords) {
+	          _this.source.totalRecords = data.totalRecords;
+	        }
+	      }
+
+	    });
+
+	    _this2.jqxOptions['source'] = dataAdapter;
+	    // this.jqxOptions['pageable'] = true;
+	    _this2.jqxOptions['columnsResize'] = true;
+	    return _this2;
+	  }
+
+	  _createClass(TreeGrid, [{
+	    key: 'render',
+	    value: function render(container) {
+
+	      var _this = this;
+
+	      var treeContainer = $('<div></div>');
+	      treeContainer.appendTo(container);
+
+	      treeContainer.jqxTreeGrid(this.jqxOptions);
+
+	      // treeContainer.on('itemClick',function (event)
+	      // {
+	      //     var args = event.args;
+	      //     var item = treeContainer.jqxTree('getItem', args.element);
+	      //     if(_this.onClick){
+	      //       _this.onClick(item);
+	      //     }
+	      // });
+
+	      this.treeContainer = treeContainer;
+	    }
+	  }, {
+	    key: 'refresh',
+	    value: function refresh() {
+	      console.log('treegrid updateBoundData');
+	      this.treeContainer.jqxTreeGrid('updateBoundData');
+	    }
+	  }]);
+
+	  return TreeGrid;
+	}(_Component3.default);
+
+	exports.default = TreeGrid;
+
+/***/ },
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _Button = __webpack_require__(7);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _SearchText = __webpack_require__(8);
+
+	var _SearchText2 = _interopRequireDefault(_SearchText);
+
+	var _CorporateEntityList = __webpack_require__(44);
+
+	var _CorporateEntityList2 = _interopRequireDefault(_CorporateEntityList);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var CorporateEntityPage = function (_Component) {
+	  _inherits(CorporateEntityPage, _Component);
+
+	  function CorporateEntityPage(options) {
+	    _classCallCheck(this, CorporateEntityPage);
+
+	    var _this2 = _possibleConstructorReturn(this, (CorporateEntityPage.__proto__ || Object.getPrototypeOf(CorporateEntityPage)).call(this, options));
+
+	    var _this = _this2;
+
+	    if (options.title) {
+	      _this2.title = option.title;
+	    } else {
+	      _this2.title = "Corporate Entities";
+	    }
+
+	    _this2.corporateEntityList = new _CorporateEntityList2.default({});
+
+	    _this2.searchText = new _SearchText2.default({
+	      placeHolder: 'Name',
+	      onSearch: function onSearch(value) {
+	        _this.corporateEntityList.filter(value);
+	      }
+	    });
+	    return _this2;
+	  }
+
+	  _createClass(CorporateEntityPage, [{
+	    key: 'render',
+	    value: function render(container) {
+
+	      var _this = this;
+
+	      var table = $('<table style="height: 100%; width: 100%; "></table>');
+	      var tr = $('<tr></tr>');
+	      var td = $('<td colspan="2" style="padding: 10px; padding-bottom: 5px; height: 20px; "></td>');
+	      table.appendTo(container);
+	      tr.appendTo(table);
+	      td.appendTo(tr);
+	      td.html('<span class="page-title">' + this.title + '</span>');
+
+	      // tr = $('<tr></tr>');
+	      // td = $('<td style="padding-left: 8px; height: 20px; width: 30px;"></td>');
+	      // tr.appendTo(table);
+	      // td.appendTo(tr);
+	      // this.searchText.render(td);
+
+	      tr = $('<tr></tr>');
+	      td = $('<td colspan="2" style=""></td>');
+	      tr.appendTo(table);
+	      td.appendTo(tr);
+
+	      this.corporateEntityList.render(td);
+	    }
+	  }]);
+
+	  return CorporateEntityPage;
+	}(_Component3.default);
+
+	exports.default = CorporateEntityPage;
 
 /***/ }
 /******/ ]);

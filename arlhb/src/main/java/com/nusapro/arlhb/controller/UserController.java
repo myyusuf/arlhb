@@ -118,5 +118,14 @@ public class UserController {
 		
         return ResponseHelper.responseSuccess();
     }
+	
+	@RequestMapping(value="/user_block/{userId}", method=RequestMethod.PUT)
+    @ResponseBody 
+    Map<String, String> userBlock(@PathVariable("userId") String userId, @RequestBody Map<String, Object> userParam) {
+		
+		userService.blockUser(userId);
+		
+        return ResponseHelper.responseSuccess();
+    }
 
 }

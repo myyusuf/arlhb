@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.nusapro.arlhb.dto.ResponseDto;
 import com.nusapro.arlhb.model.Role;
 import com.nusapro.arlhb.model.RoleTaskAction;
 

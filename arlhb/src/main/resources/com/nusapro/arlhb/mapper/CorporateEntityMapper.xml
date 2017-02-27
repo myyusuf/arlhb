@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nusapro.arlhb.mapper.CorporateEntityMapper">
+
+	<resultMap id="corporateEntityResultMap" type="com.nusapro.arlhb.model.CorporateEntity">
+	  <id property="corpEntityId" column="corp_entity_id" />
+	  <result property="corpEntityParentId" column="corp_entity_parent_id"/>
+	  <result property="corpEntityName" column="corp_entity_name"/>
+	</resultMap>
+    
+    <select id="findAll" resultMap="corporateEntityResultMap">
+        SELECT * FROM corp_entity WHERE corp_entity_name LIKE #{searchTxt}
+    </select>
+    
+</mapper>

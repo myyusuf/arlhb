@@ -19,5 +19,6 @@ public interface EmployeeMapper {
 	List<Location> findAllLocations();
 	
 	void update(Map<String,Object> employeeParam);
+	void blockUser(Map<String, Object> params);
 
 }

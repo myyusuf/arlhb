@@ -94,4 +94,13 @@ public class UserService {
 	public List<Location> getLocations() {
 		return employeeMapper.findAllLocations();
 	}
+	
+	@Transactional
+	public void blockUser(String userIdParam) {
+		
+		Map<String,Object> params = new HashMap<String, Object>();
+		params.put("employeeId", userIdParam);
+		
+		employeeMapper.blockUser(params);
+	}
 }
