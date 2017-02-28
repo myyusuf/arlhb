@@ -68,9 +68,13 @@
 
 	var _ActiveSessionPage2 = _interopRequireDefault(_ActiveSessionPage);
 
-	var _CorporateEntityPage = __webpack_require__(46);
+	var _CorporateEntityPage = __webpack_require__(44);
 
 	var _CorporateEntityPage2 = _interopRequireDefault(_CorporateEntityPage);
+
+	var _LocationPage = __webpack_require__(47);
+
+	var _LocationPage2 = _interopRequireDefault(_LocationPage);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -79,6 +83,7 @@
 	var activeSessionPaga = new _ActiveSessionPage2.default({});
 	var customerPage = new _CustomerPage2.default({});
 	var corporateEntityPage = new _CorporateEntityPage2.default({});
+	var locationPage = new _LocationPage2.default({});
 
 	var mainMenu = new _MainMenu2.default({
 	  onClick: function onClick(e) {
@@ -93,6 +98,8 @@
 	      customerPage.render($('#content'));
 	    } else if (e == 52) {
 	      corporateEntityPage.render($('#content'));
+	    } else if (e == 56) {
+	      locationPage.render($('#content'));
 	    }
 	  }
 	});
@@ -4753,7 +4760,104 @@
 
 	var _Component3 = _interopRequireDefault(_Component2);
 
-	var _TreeGrid = __webpack_require__(45);
+	var _Button = __webpack_require__(7);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _SearchText = __webpack_require__(8);
+
+	var _SearchText2 = _interopRequireDefault(_SearchText);
+
+	var _CorporateEntityList = __webpack_require__(45);
+
+	var _CorporateEntityList2 = _interopRequireDefault(_CorporateEntityList);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var CorporateEntityPage = function (_Component) {
+	  _inherits(CorporateEntityPage, _Component);
+
+	  function CorporateEntityPage(options) {
+	    _classCallCheck(this, CorporateEntityPage);
+
+	    var _this2 = _possibleConstructorReturn(this, (CorporateEntityPage.__proto__ || Object.getPrototypeOf(CorporateEntityPage)).call(this, options));
+
+	    var _this = _this2;
+
+	    if (options.title) {
+	      _this2.title = option.title;
+	    } else {
+	      _this2.title = "Corporate Entities";
+	    }
+
+	    _this2.corporateEntityList = new _CorporateEntityList2.default({});
+
+	    _this2.searchText = new _SearchText2.default({
+	      placeHolder: 'Name',
+	      onSearch: function onSearch(value) {
+	        _this.corporateEntityList.filter(value);
+	      }
+	    });
+	    return _this2;
+	  }
+
+	  _createClass(CorporateEntityPage, [{
+	    key: 'render',
+	    value: function render(container) {
+
+	      var _this = this;
+
+	      var table = $('<table style="height: 100%; width: 100%; "></table>');
+	      var tr = $('<tr></tr>');
+	      var td = $('<td colspan="2" style="padding: 10px; padding-bottom: 5px; height: 20px; "></td>');
+	      table.appendTo(container);
+	      tr.appendTo(table);
+	      td.appendTo(tr);
+	      td.html('<span class="page-title">' + this.title + '</span>');
+
+	      // tr = $('<tr></tr>');
+	      // td = $('<td style="padding-left: 8px; height: 20px; width: 30px;"></td>');
+	      // tr.appendTo(table);
+	      // td.appendTo(tr);
+	      // this.searchText.render(td);
+
+	      tr = $('<tr></tr>');
+	      td = $('<td colspan="2" style=""></td>');
+	      tr.appendTo(table);
+	      td.appendTo(tr);
+
+	      this.corporateEntityList.render(td);
+	    }
+	  }]);
+
+	  return CorporateEntityPage;
+	}(_Component3.default);
+
+	exports.default = CorporateEntityPage;
+
+/***/ },
+/* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _TreeGrid = __webpack_require__(46);
 
 	var _TreeGrid2 = _interopRequireDefault(_TreeGrid);
 
@@ -4837,7 +4941,7 @@
 	exports.default = CorporateEntityList;
 
 /***/ },
-/* 45 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4931,7 +5035,7 @@
 	exports.default = TreeGrid;
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4954,9 +5058,17 @@
 
 	var _SearchText2 = _interopRequireDefault(_SearchText);
 
-	var _CorporateEntityList = __webpack_require__(44);
+	var _LocationList = __webpack_require__(48);
 
-	var _CorporateEntityList2 = _interopRequireDefault(_CorporateEntityList);
+	var _LocationList2 = _interopRequireDefault(_LocationList);
+
+	var _AddLocationWindow = __webpack_require__(49);
+
+	var _AddLocationWindow2 = _interopRequireDefault(_AddLocationWindow);
+
+	var _EditLocationWindow = __webpack_require__(51);
+
+	var _EditLocationWindow2 = _interopRequireDefault(_EditLocationWindow);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -4966,34 +5078,65 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var CorporateEntityPage = function (_Component) {
-	  _inherits(CorporateEntityPage, _Component);
+	var LocationPage = function (_Component) {
+	  _inherits(LocationPage, _Component);
 
-	  function CorporateEntityPage(options) {
-	    _classCallCheck(this, CorporateEntityPage);
+	  function LocationPage(options) {
+	    _classCallCheck(this, LocationPage);
 
-	    var _this2 = _possibleConstructorReturn(this, (CorporateEntityPage.__proto__ || Object.getPrototypeOf(CorporateEntityPage)).call(this, options));
+	    var _this2 = _possibleConstructorReturn(this, (LocationPage.__proto__ || Object.getPrototypeOf(LocationPage)).call(this, options));
 
 	    var _this = _this2;
 
 	    if (options.title) {
 	      _this2.title = option.title;
 	    } else {
-	      _this2.title = "Corporate Entities";
+	      _this2.title = "Location Management";
 	    }
 
-	    _this2.corporateEntityList = new _CorporateEntityList2.default({});
+	    var onEditButtonClick = function onEditButtonClick(value) {
+	      var editLocationWindow = new _EditLocationWindow2.default({
+	        data: value,
+	        onSaveSuccess: function onSaveSuccess() {
+	          _this.locationList.refresh();
+	        }
+	      });
+	      editLocationWindow.render($('#dialogWindowContainer'));
+	      editLocationWindow.open();
+	    };
+
+	    _this2.locationList = new _LocationList2.default({
+	      onEditButtonClick: onEditButtonClick
+	    });
+
+	    _this2.addLocationButton = new _Button2.default({
+	      title: 'Add Location',
+	      height: 26,
+	      onClick: function onClick(e) {
+	        var addLocationWindow = new _AddLocationWindow2.default({
+	          onSaveSuccess: function onSaveSuccess() {
+	            _this.locationList.refresh();
+	          }
+	        });
+	        addLocationWindow.render($('#dialogWindowContainer'));
+	        addLocationWindow.open();
+	      },
+	      jqxOptions: {
+	        theme: 'light',
+	        template: 'primary'
+	      }
+	    });
 
 	    _this2.searchText = new _SearchText2.default({
-	      placeHolder: 'Name',
+	      placeHolder: 'Location Name',
 	      onSearch: function onSearch(value) {
-	        _this.corporateEntityList.filter(value);
+	        _this.locationList.filter(value);
 	      }
 	    });
 	    return _this2;
 	  }
 
-	  _createClass(CorporateEntityPage, [{
+	  _createClass(LocationPage, [{
 	    key: 'render',
 	    value: function render(container) {
 
@@ -5007,25 +5150,529 @@
 	      td.appendTo(tr);
 	      td.html('<span class="page-title">' + this.title + '</span>');
 
-	      // tr = $('<tr></tr>');
-	      // td = $('<td style="padding-left: 8px; height: 20px; width: 30px;"></td>');
-	      // tr.appendTo(table);
-	      // td.appendTo(tr);
-	      // this.searchText.render(td);
+	      tr = $('<tr></tr>');
+	      td = $('<td style="padding-left: 10px; height: 20px; width: 30px;"></td>');
+	      tr.appendTo(table);
+	      td.appendTo(tr);
+	      this.addLocationButton.render(td);
+
+	      td = $('<td style=""></td>');
+	      td.appendTo(tr);
+	      this.searchText.render(td);
 
 	      tr = $('<tr></tr>');
 	      td = $('<td colspan="2" style=""></td>');
 	      tr.appendTo(table);
 	      td.appendTo(tr);
 
-	      this.corporateEntityList.render(td);
+	      this.locationList.render(td);
 	    }
 	  }]);
 
-	  return CorporateEntityPage;
+	  return LocationPage;
 	}(_Component3.default);
 
-	exports.default = CorporateEntityPage;
+	exports.default = LocationPage;
+
+/***/ },
+/* 48 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _DataGrid = __webpack_require__(11);
+
+	var _DataGrid2 = _interopRequireDefault(_DataGrid);
+
+	var _SearchHeader = __webpack_require__(12);
+
+	var _SearchHeader2 = _interopRequireDefault(_SearchHeader);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LocationList = function (_Component) {
+	  _inherits(LocationList, _Component);
+
+	  function LocationList(options) {
+	    _classCallCheck(this, LocationList);
+
+	    var _this2 = _possibleConstructorReturn(this, (LocationList.__proto__ || Object.getPrototypeOf(LocationList)).call(this, options));
+
+	    var _this = _this2;
+
+	    var source = {
+	      datatype: "json",
+	      datafields: [{ name: 'locationId', type: 'int' }, { name: 'name', type: 'string' }, { name: 'city' }, { name: 'cityName', map: 'city>name', type: 'string' }, { name: 'address', type: 'string' }, { name: 'telp', type: 'string' }, { name: 'branch' }, { name: 'subBranchName', map: 'branch>name', type: 'string' }],
+	      id: "locationId",
+	      url: "/locations"
+	    };
+
+	    var onSearch = function onSearch(data) {
+	      data['searchTxt'] = _this.searchTxt;
+	      return data;
+	    };
+
+	    var onEditButtonClick = function onEditButtonClick(value) {
+	      if (options.onEditButtonClick) {
+	        options.onEditButtonClick(value);
+	      }
+	    };
+
+	    var jqxOptions = {
+	      width: '100%',
+	      height: '100%',
+	      rowsheight: 40,
+	      pageable: true,
+	      altrows: true,
+	      theme: 'metro',
+	      virtualmode: true,
+	      rendergridrows: function rendergridrows(params) {
+	        return params.data;
+	      },
+	      columns: [{ text: 'Id', datafield: 'locationId' }, { text: 'Location Name', datafield: 'name' }, { text: 'Address', datafield: 'address' }, { text: 'Contact No', datafield: 'telp' }, {
+	        text: 'Actions',
+	        datafield: 'actions',
+	        width: '30%',
+	        createwidget: function createwidget(row, column, value, htmlElement) {
+
+	          var rowIndex = $('<input type="hidden" value="" class="myRowIndex"/>');
+	          rowIndex.val(row.boundindex);
+	          rowIndex.appendTo(htmlElement);
+
+	          var table = $('<table style="height: 100%; width: 100%; text-align: center;"></table>');
+	          var tr = $('<tr></tr>');
+	          var td = $('<td style="width: 50%;"></td>');
+	          table.appendTo(htmlElement);
+	          tr.appendTo(table);
+	          td.appendTo(tr);
+
+	          td = $('<td></td>');
+	          td.appendTo(tr);
+	          var button = $("<div style='margin: 5px;'>" + "Edit" + "</div>");
+	          button.appendTo(td);
+	          button.jqxButton({ theme: 'light', template: "success", width: 70 });
+
+	          button.click(function (event) {
+	            var rowIndexVal = $(htmlElement).find(':input.myRowIndex').val();
+	            var rowdata = _this.dataGrid.getDataRow(rowIndexVal);
+	            onEditButtonClick(rowdata);
+	          });
+
+	          td = $('<td style="width: 50%;"></td>');
+	          td.appendTo(tr);
+	        },
+	        initwidget: function initwidget(row, column, value, htmlElement) {
+	          var rowIndexVal = $(htmlElement).find(':input.myRowIndex');
+	          rowIndexVal.val(row);
+	        }
+	      }],
+	      groups: []
+	    };
+
+	    _this2.dataGrid = new _DataGrid2.default({
+	      source: source,
+	      onSearch: onSearch,
+	      jqxOptions: jqxOptions
+	    });
+	    return _this2;
+	  }
+
+	  _createClass(LocationList, [{
+	    key: 'render',
+	    value: function render(container) {
+	      this.dataGrid.render(container);
+	    }
+	  }, {
+	    key: 'refresh',
+	    value: function refresh() {
+	      this.dataGrid.refresh();
+	    }
+	  }, {
+	    key: 'filter',
+	    value: function filter(value) {
+	      this.searchTxt = value;
+	      this.dataGrid.refresh();
+	    }
+	  }]);
+
+	  return LocationList;
+	}(_Component3.default);
+
+	exports.default = LocationList;
+
+/***/ },
+/* 49 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Button = __webpack_require__(7);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _Form = __webpack_require__(14);
+
+	var _Form2 = _interopRequireDefault(_Form);
+
+	var _AddWindow = __webpack_require__(15);
+
+	var _AddWindow2 = _interopRequireDefault(_AddWindow);
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _RestService = __webpack_require__(19);
+
+	var _RestService2 = _interopRequireDefault(_RestService);
+
+	var _LocationForm = __webpack_require__(50);
+
+	var _LocationForm2 = _interopRequireDefault(_LocationForm);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AddLocationWindow = function (_Component) {
+	  _inherits(AddLocationWindow, _Component);
+
+	  function AddLocationWindow(options) {
+	    _classCallCheck(this, AddLocationWindow);
+
+	    var _this2 = _possibleConstructorReturn(this, (AddLocationWindow.__proto__ || Object.getPrototypeOf(AddLocationWindow)).call(this, options));
+
+	    var _this = _this2;
+
+	    _this2.onSaveSuccess = options.onSaveSuccess;
+
+	    var locationForm = new _LocationForm2.default({
+	      onValidationSuccess: function onValidationSuccess(formValue) {
+	        _RestService2.default.post({
+	          url: '/locations',
+	          data: formValue,
+	          onSuccess: function onSuccess() {
+	            if (options.onSaveSuccess) {
+	              options.onSaveSuccess();
+	            }
+	            _this.window.close();
+	          }
+	        }, $("input[name='_csrf']").val());
+	      }
+	    });
+
+	    var jqxOptions = {
+	      width: 430,
+	      height: 430
+	    };
+
+	    _this2.window = new _AddWindow2.default({
+	      title: 'Add Location',
+	      content: locationForm,
+	      onSave: function onSave() {
+	        locationForm.validate();
+	      },
+	      onCancel: function onCancel() {
+	        _this.window.close();
+	      },
+	      jqxOptions: jqxOptions
+	    });
+
+	    return _this2;
+	  }
+
+	  _createClass(AddLocationWindow, [{
+	    key: 'render',
+	    value: function render(container) {
+	      var _this = this;
+	      this.window.render(container);
+	    }
+	  }, {
+	    key: 'open',
+	    value: function open() {
+	      this.window.open();
+	    }
+	  }]);
+
+	  return AddLocationWindow;
+	}(_Component3.default);
+
+	exports.default = AddLocationWindow;
+
+/***/ },
+/* 50 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Button = __webpack_require__(7);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _Form = __webpack_require__(14);
+
+	var _Form2 = _interopRequireDefault(_Form);
+
+	var _AddWindow = __webpack_require__(15);
+
+	var _AddWindow2 = _interopRequireDefault(_AddWindow);
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _TextBox = __webpack_require__(9);
+
+	var _TextBox2 = _interopRequireDefault(_TextBox);
+
+	var _TextArea = __webpack_require__(21);
+
+	var _TextArea2 = _interopRequireDefault(_TextArea);
+
+	var _Label = __webpack_require__(18);
+
+	var _Label2 = _interopRequireDefault(_Label);
+
+	var _AuthoritiesTree = __webpack_require__(22);
+
+	var _AuthoritiesTree2 = _interopRequireDefault(_AuthoritiesTree);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LocationForm = function (_Component) {
+	  _inherits(LocationForm, _Component);
+
+	  function LocationForm(options) {
+	    _classCallCheck(this, LocationForm);
+
+	    var _this2 = _possibleConstructorReturn(this, (LocationForm.__proto__ || Object.getPrototypeOf(LocationForm)).call(this, options));
+
+	    var _this = _this2;
+
+	    var location = {};
+
+	    if (options.data) {
+	      location = options.data;
+	    }
+	    _this2.onValidationSuccess = options.onValidationSuccess;
+
+	    var nameTextBox = new _TextBox2.default({
+	      value: location.name,
+	      jqxOptions: {
+	        height: 25,
+	        width: 270
+	      }
+	    });
+	    var addressTextBox = new _TextBox2.default({
+	      value: location.address,
+	      jqxOptions: {
+	        height: 25,
+	        width: 270
+	      }
+	    });
+	    var telpTextBox = new _TextBox2.default({
+	      value: location.telp,
+	      jqxOptions: {
+	        height: 25,
+	        width: 270
+	      }
+	    });
+
+	    var formItems = [{
+	      name: 'name',
+	      label: 'Name',
+	      content: nameTextBox,
+	      validation: {
+	        type: 'TEXTBOX',
+	        rule: 'required'
+	      }
+	    }, {
+	      name: 'address',
+	      label: 'Address',
+	      content: addressTextBox
+	    }, {
+	      name: 'telp',
+	      label: 'Contact No.',
+	      content: telpTextBox
+	    }];
+	    var formOptions = {
+	      items: formItems,
+	      labelColumnWidth: '120px',
+	      onValidationSuccess: function onValidationSuccess(formValue) {
+	        console.log(formValue);
+	        if (_this.onValidationSuccess) {
+	          _this.onValidationSuccess(formValue);
+	        }
+	      }
+	    };
+
+	    _this2.form = new _Form2.default(formOptions);
+
+	    return _this2;
+	  }
+
+	  _createClass(LocationForm, [{
+	    key: 'render',
+	    value: function render(container) {
+	      this.form.render(container);
+	    }
+	  }, {
+	    key: 'validate',
+	    value: function validate() {
+	      this.form.validate();
+	    }
+	  }]);
+
+	  return LocationForm;
+	}(_Component3.default);
+
+	exports.default = LocationForm;
+
+/***/ },
+/* 51 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Button = __webpack_require__(7);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _Form = __webpack_require__(14);
+
+	var _Form2 = _interopRequireDefault(_Form);
+
+	var _AddWindow = __webpack_require__(15);
+
+	var _AddWindow2 = _interopRequireDefault(_AddWindow);
+
+	var _Component2 = __webpack_require__(5);
+
+	var _Component3 = _interopRequireDefault(_Component2);
+
+	var _LocationForm = __webpack_require__(50);
+
+	var _LocationForm2 = _interopRequireDefault(_LocationForm);
+
+	var _RestService = __webpack_require__(19);
+
+	var _RestService2 = _interopRequireDefault(_RestService);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var EditLocationWindow = function (_Component) {
+	  _inherits(EditLocationWindow, _Component);
+
+	  function EditLocationWindow(options) {
+	    _classCallCheck(this, EditLocationWindow);
+
+	    var _this2 = _possibleConstructorReturn(this, (EditLocationWindow.__proto__ || Object.getPrototypeOf(EditLocationWindow)).call(this, options));
+
+	    var _this = _this2;
+
+	    var locationForm = new _LocationForm2.default({
+	      data: options.data,
+	      onValidationSuccess: function onValidationSuccess(formValue) {
+	        _RestService2.default.put({
+	          url: '/locations/' + options.data.locationId,
+	          data: formValue,
+	          onSuccess: function onSuccess() {
+	            if (options.onSaveSuccess) {
+	              options.onSaveSuccess();
+	            }
+	            _this.window.close();
+	          }
+	        }, $("input[name='_csrf']").val());
+	      }
+	    });
+
+	    var jqxOptions = {
+	      width: 430,
+	      height: 450
+	    };
+
+	    _this2.window = new _AddWindow2.default({
+	      title: 'Edit Location',
+	      content: locationForm,
+	      onSave: function onSave() {
+	        locationForm.validate();
+	      },
+	      onCancel: function onCancel() {
+	        _this.window.close();
+	      },
+	      jqxOptions: jqxOptions
+	    });
+
+	    return _this2;
+	  }
+
+	  _createClass(EditLocationWindow, [{
+	    key: 'render',
+	    value: function render(container) {
+	      var _this = this;
+	      this.window.render(container);
+	    }
+	  }, {
+	    key: 'open',
+	    value: function open() {
+	      this.window.open();
+	    }
+	  }]);
+
+	  return EditLocationWindow;
+	}(_Component3.default);
+
+	exports.default = EditLocationWindow;
 
 /***/ }
 /******/ ]);

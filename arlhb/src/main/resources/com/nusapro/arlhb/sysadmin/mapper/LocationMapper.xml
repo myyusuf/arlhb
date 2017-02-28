@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nusapro.arlhb.sysadmin.mapper.LocationMapper">
+
+	<resultMap id="locationResultMap" type="com.nusapro.arlhb.model.Location">
+	  <id property="locationId" column="location_id" />
+	  <result property="name" column="name"/>
+	  <result property="address" column="address"/>
+	  <result property="telp" column="telp"/>
+	</resultMap>
+	
+    <select id="findAllByPage" resultMap="locationResultMap">
+        SELECT * FROM location WHERE name LIKE #{searchTxt} LIMIT #{start}, #{pageSize}
+    </select>
+    
+    <select id="countAll" resultType="int">
+        SELECT COUNT(1) FROM location WHERE name LIKE #{searchTxt}
+    </select>
+    
+</mapper>

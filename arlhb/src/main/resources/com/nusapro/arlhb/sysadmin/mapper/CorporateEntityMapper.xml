@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.nusapro.arlhb.mapper.CorporateEntityMapper">
+<mapper namespace="com.nusapro.arlhb.sysadmin.mapper.CorporateEntityMapper">
 
 	<resultMap id="corporateEntityResultMap" type="com.nusapro.arlhb.model.CorporateEntity">
 	  <id property="corpEntityId" column="corp_entity_id" />

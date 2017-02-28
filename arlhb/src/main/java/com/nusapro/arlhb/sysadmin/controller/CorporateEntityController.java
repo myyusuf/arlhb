@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nusapro.arlhb.mapper.CorporateEntityMapper;
 import com.nusapro.arlhb.model.CorporateEntity;
+import com.nusapro.arlhb.sysadmin.mapper.CorporateEntityMapper;
 
 @RestController
 @EnableAutoConfiguration

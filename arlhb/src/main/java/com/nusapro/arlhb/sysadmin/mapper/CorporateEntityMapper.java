@@ -1,4 +1,4 @@
-package com.nusapro.arlhb.mapper;
+package com.nusapro.arlhb.sysadmin.mapper;
 
 import java.util.List;
 import java.util.Map;
